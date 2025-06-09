@@ -11,6 +11,22 @@ export default function TabLayout() {
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: 'black',
+          tabBarStyle: {
+            // position: 'absolute',
+            // bottom: 16,
+            // left: 16,
+            // right: 16,
+            borderRadius: 20,
+            paddingHorizontal: 28,
+            height: 68,
+            paddingTop: 12,
+            backgroundColor: '#fffefd',
+            elevation: 7,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+          },
         }}>
         <Tabs.Screen
           name="meals"
