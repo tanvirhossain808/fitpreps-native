@@ -1,10 +1,19 @@
 import { createAnimations } from '@tamagui/animations-react-native';
 import { createInterFont } from '@tamagui/font-inter';
+// import { createInterFont } from '@tamagui/font-inter';
 import { createMedia } from '@tamagui/react-native-media-driver';
 import { shorthands } from '@tamagui/shorthands';
 import { themes, tokens } from '@tamagui/themes';
 
-import { createTamagui, styled, SizableText, H1, YStack, Button as ButtonTamagui } from 'tamagui';
+import {
+  createTamagui,
+  styled,
+  SizableText,
+  H1,
+  YStack,
+  Button as ButtonTamagui,
+  createFont,
+} from 'tamagui';
 
 const animations = createAnimations({
   bouncy: {
@@ -41,14 +50,38 @@ export const Main = styled(YStack, {
   maxWidth: 960,
 });
 
-export const Title = styled(H1, {
-  color: '#000',
-  size: '$12',
-});
+// export const Title = styled(H1, {
+//   color: '#000',
+//   size: '$12',
+// });
 
-export const Subtitle = styled(SizableText, {
-  color: '#38434D',
-  size: '$9',
+// export const Subtitle = styled(SizableText, {
+//   color: '#38434D',
+//   size: '$9',
+// });
+export const fonts = createFont({
+  face: {
+    400: { normal: 'Gilroy-Regular' },
+    500: { normal: 'Gilroy-Medium' },
+    600: { normal: 'Gilroy-SemiBold' },
+    700: { normal: 'Gilroy-Bold' },
+    // 300: { normal: 'ClashDisplayLight' },
+  },
+  body: 'GilroyRegular,GilroyMedium',
+  size: {
+    1: 12,
+    2: 14,
+    3: 16,
+    4: 18,
+    5: 20,
+    6: 24,
+  },
+  weight: {
+    400: '400',
+    500: '500',
+    600: '600',
+    700: '700',
+  },
 });
 
 export const Button = styled(ButtonTamagui, {
@@ -90,24 +123,30 @@ const config = createTamagui({
   themeClassNameOnRoot: true,
   shorthands,
   fonts: {
-    body: bodyFont,
+    // family:""
+    body: fonts,
     heading: headingFont,
   },
   themes,
   tokens,
   media: createMedia({
-    xs: { maxWidth: 660 },
-    sm: { maxWidth: 800 },
+    xs: { maxWidth: 350 },
+    sm: { maxWidth: 420 },
+    smm: { maxWidth: 600 },
+    lm: { maxWidth: 800 },
     md: { maxWidth: 1020 },
     lg: { maxWidth: 1280 },
     xl: { maxWidth: 1420 },
     xxl: { maxWidth: 1600 },
-    gtXs: { minWidth: 660 + 1 },
-    gtSm: { minWidth: 800 + 1 },
-    gtMd: { minWidth: 1020 + 1 },
-    gtLg: { minWidth: 1280 + 1 },
+
+    gtXs: { minWidth: 661 },
+    gtSm: { minWidth: 801 },
+    gtMd: { minWidth: 1021 },
+    gtLg: { minWidth: 1281 },
+
     short: { maxHeight: 820 },
     tall: { minHeight: 820 },
+
     hoverNone: { hover: 'none' },
     pointerCoarse: { pointer: 'coarse' },
   }),

@@ -1,3 +1,5 @@
+import * as Font from 'expo-font';
+
 import React, { useEffect } from 'react';
 import { TamaguiProvider } from 'tamagui';
 import { SplashScreen, Stack } from 'expo-router';
@@ -14,8 +16,10 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const [loaded] = useFonts({
-    Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
-    InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
+    'Gilroy-Regular': require('assets/fonts/Gilroy-Regular.ttf'),
+    'Gilroy-Medium': require('assets/fonts/Gilroy-Medium.ttf'),
+    'Gilroy-SemiBold': require('assets/fonts/Gilroy-SemiBold.ttf'),
+    'Gilroy-Bold': require('assets/fonts/Gilroy-Bold.ttf'),
   });
 
   useEffect(() => {
