@@ -1,4 +1,4 @@
-import { Stack } from 'expo-router';
+import { Stack, router, useRouter } from 'expo-router';
 import { Button, Image, Input, ScrollView, Text, View, XStack, YStack } from 'tamagui';
 import Octicons from '@expo/vector-icons/Octicons';
 import Feather from '@expo/vector-icons/Feather';
@@ -7,9 +7,10 @@ import { TouchableOpacity } from 'react-native';
 import { Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import { selectCategories } from '~/constant';
+import { useState } from 'react';
 export default function Home() {
-  const screenWidth = Dimensions.get('window').width;
-  console.log(screenWidth, 'screenwidth');
+  const [selectCategory, setSelectedCategory] = useState<number | null>(null);
   return (
     <>
       <StatusBar style="dark" />
@@ -20,7 +21,7 @@ export default function Home() {
           contentContainerStyle={{ paddingBottom: 60 }}
           showsVerticalScrollIndicator={false}
           bg={'#fffdf6'}>
-          <YStack flex={1}>
+          <YStack flex={1} pb="$10">
             <XStack p="$4" justifyContent="space-between" gap="$3" flexWrap="wrap" width="100%">
               <XStack
                 bg="white"
@@ -38,6 +39,11 @@ export default function Home() {
                 <Input
                   placeholder="Search here"
                   flex={1}
+                  focusStyle={{
+                    borderColor: 'transparent',
+                    outlineWidth: 0,
+                    shadowColor: 'transparent', // also good to add
+                  }}
                   minWidth={100}
                   bg="transparent"
                   borderColor="$colorTransparent"
@@ -90,60 +96,28 @@ export default function Home() {
                   Pick your journey.
                 </Text>
               </YStack>
-              <YStack px={'$3'} gap={'$5'}>
-                <XStack justifyContent="center" gap="$2">
-                  <TouchableOpacity>
-                    <Image
-                      source={require('public/images/home/cookd.png')}
-                      w={'158'}
-                      h={'126'}
-                      borderRadius={'$3'}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Image
-                      source={require('public/images/home/cookd.png')}
-                      w={'158'}
-                      h={'126'}
-                      borderRadius={'$3'}
-                    />
-                  </TouchableOpacity>
-                </XStack>
-                <XStack justifyContent="center" gap="$2">
-                  <TouchableOpacity>
-                    <Image
-                      source={require('public/images/home/cookd.png')}
-                      w={'158'}
-                      h={'126'}
-                      borderRadius={'$3'}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Image
-                      source={require('public/images/home/cookd.png')}
-                      w={'158'}
-                      h={'126'}
-                      borderRadius={'$3'}
-                    />
-                  </TouchableOpacity>
-                </XStack>
-                <XStack justifyContent="center" gap="$2">
-                  <TouchableOpacity>
-                    <Image
-                      source={require('public/images/home/cookd.png')}
-                      w={'158'}
-                      h={'126'}
-                      borderRadius={'$3'}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Image
-                      source={require('public/images/home/cookd.png')}
-                      w={'158'}
-                      h={'126'}
-                      borderRadius={'$3'}
-                    />
-                  </TouchableOpacity>
+              <YStack px={'$2'} gap={'$5'}>
+                <XStack justifyContent="center" rowGap="$5" gap="$2" flexWrap="wrap">
+                  {selectCategories.map(({ img, name, width, border, pathName, path }, i) => (
+                    <TouchableOpacity
+                      key={i}
+                      style={{
+                        padding: 3.5,
+                        borderWidth: 2,
+                        borderRadius: 12,
+                        borderColor: selectCategory === i ? border : 'transparent',
+                      }}
+                      onPress={() =>
+                        router.push({
+                          pathname: pathName as any,
+                          params: { product: path },
+                        })
+                      }
+                      onPressIn={() => setSelectedCategory(i)}
+                      onPressOut={() => setSelectedCategory(null)}>
+                      <Image source={img} width={width} h={'126'} borderRadius={'$3'} />
+                    </TouchableOpacity>
+                  ))}
                 </XStack>
               </YStack>
             </YStack>
