@@ -124,16 +124,28 @@ export default function ProductLists({
                 borderWidth={1}
                 borderRadius={8}>
                 <View px={9} py={15} alignSelf="stretch" flex={1} bg="#E5F8EA" borderRadius={4}>
-                  <Image
+                  {/* <Image
                     source={food.img}
                     style={{ width: '100%', minWidth: 140, height: 128 }}
                     resizeMode="contain"
-                  />
+                  /> */}
+                  {food.type === 'food' && (
+                    <Image
+                      source={food.img}
+                      style={{ width: '100%', minWidth: 140, height: 128 }}
+                      resizeMode="contain"
+                    />
+                  )}
                 </View>
                 <YStack gap={8}>
-                  <Text fontSize={12} fontWeight={700} color="#1E1F20">
+                  {/* <Text fontSize={12} fontWeight={700} color="#1E1F20">
                     {food.name}
-                  </Text>
+                  </Text> */}
+                  {food.type === 'food' && (
+                    <Text fontSize={12} fontWeight={700} color="#1E1F20">
+                      {food.name}
+                    </Text>
+                  )}
                   <Button
                     fontSize={15}
                     color="white"
