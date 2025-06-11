@@ -39,6 +39,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="meals"
         options={{
+          headerShown: false,
           title: 'Meals',
           tabBarIcon: ({ color, focused }) => {
             return !focused ? (

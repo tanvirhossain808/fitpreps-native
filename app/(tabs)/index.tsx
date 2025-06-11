@@ -1,14 +1,14 @@
-import { Stack, router, useRouter } from 'expo-router';
-import { Button, Image, Input, ScrollView, Text, View, XStack, YStack } from 'tamagui';
+import { Stack, router } from 'expo-router';
+import { Image, Input, ScrollView, Text, XStack, YStack } from 'tamagui';
 import Octicons from '@expo/vector-icons/Octicons';
 import Feather from '@expo/vector-icons/Feather';
 
 import { TouchableOpacity } from 'react-native';
-import { Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { selectCategories } from '~/constant';
 import { useState } from 'react';
+import TopSearchbar from '~/components/shared/TopSearchbar';
 export default function Home() {
   const [selectCategory, setSelectedCategory] = useState<number | null>(null);
   return (
@@ -22,68 +22,7 @@ export default function Home() {
           showsVerticalScrollIndicator={false}
           bg={'#fffdf6'}>
           <YStack flex={1} pb="$10">
-            <XStack p="$4" justifyContent="space-between" gap="$3" flexWrap="wrap" width="100%">
-              <XStack
-                bg="white"
-                alignItems="center"
-                pr={14}
-                flex={1}
-                minWidth={200}
-                borderRadius={20}
-                elevation={1}
-                justifyContent="space-between"
-                shadowColor="#0000000D"
-                shadowOffset={{ width: 0, height: 0.2 }}
-                shadowOpacity={0.05}
-                shadowRadius={1}>
-                <Input
-                  placeholder="Search here"
-                  flex={1}
-                  focusStyle={{
-                    borderColor: 'transparent',
-                    outlineWidth: 0,
-                    shadowColor: 'transparent', // also good to add
-                  }}
-                  minWidth={100}
-                  bg="transparent"
-                  borderColor="$colorTransparent"
-                />
-                <TouchableOpacity>
-                  <Octicons name="search" size={20} color="black" />
-                </TouchableOpacity>
-              </XStack>
-
-              <XStack alignItems="center" gap="$2">
-                <XStack
-                  w={40}
-                  h={40}
-                  alignItems="center"
-                  justifyContent="center"
-                  borderRadius={50}
-                  bg="#ffede5">
-                  <TouchableOpacity>
-                    <Feather name="shopping-cart" size={18} color="#FD4F01" />
-                  </TouchableOpacity>
-                </XStack>
-
-                <XStack
-                  w={40}
-                  h={40}
-                  alignItems="center"
-                  justifyContent="center"
-                  elevation={1}
-                  borderRadius={50}
-                  bg="#ffffff"
-                  shadowColor="#0000000D"
-                  shadowOffset={{ width: 0, height: 2 }}
-                  shadowOpacity={0.1}
-                  shadowRadius={4}>
-                  <TouchableOpacity>
-                    <Feather name="menu" size={18} color="#25272C" />
-                  </TouchableOpacity>
-                </XStack>
-              </XStack>
-            </XStack>
+            <TopSearchbar placeholder="Search here" />
             <YStack flex={1} pt={'$12'} gap={'$7'}>
               <XStack justifyContent="center">
                 <Image source={require('public/images/fitpreps.png')} width={278} height={32} />

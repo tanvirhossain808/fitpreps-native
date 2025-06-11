@@ -8,7 +8,14 @@ import cookdBanner from 'public/images/shared/cookd.png';
 import cookdtitleBanner from 'public/images/shared/cookdbanner.png';
 import fueldTitleBanner from 'public/images/shared/fuledtitlebanner.png';
 import fueldBanner from 'public/images/shared/fueld.png';
-
+import AllImg from 'public/images/mealsSelector/all.png';
+import bundlesImg from 'public/images/mealsSelector/bundles.png';
+import chickenImg from 'public/images/mealsSelector/chicken.png';
+import fishImg from 'public/images/mealsSelector/fish.png';
+import beefImg from 'public/images/mealsSelector/beef.png';
+import vegetarianImg from 'public/images/mealsSelector/vegetarian.png';
+import accessoriesImg from 'public/images/mealsSelector/accesories.png';
+import cookdBreakfast from 'public/images/mealsSelector/cookdbreakfast.png';
 export const selectCategories = [
   {
     img: cookd,
@@ -80,5 +87,61 @@ export const selectedItems = [
     titleBannerWidth: 94,
     titleBannerHeight: 40,
     subtitle: 'How Do You Want to Enjoy  Fuel’d?',
+  },
+];
+export const cookdFoodCategories = [
+  {
+    name: 'All',
+    img: AllImg,
+    id: 1,
+  },
+  {
+    name: 'Bundles',
+    img: bundlesImg,
+    id: 2,
+  },
+  {
+    name: 'Chicken',
+    img: chickenImg,
+    id: 3,
+  },
+  {
+    name: 'Beef',
+    img: beefImg,
+    id: 4,
+  },
+  {
+    name: 'Fish',
+    img: fishImg,
+    id: 5,
+  },
+  {
+    name: 'Vegetarian',
+    img: vegetarianImg,
+    id: 6,
+  },
+  {
+    name: 'Accessories',
+    img: accessoriesImg,
+    id: 7,
+  },
+  {
+    name: 'Breakfast',
+    img: accessoriesImg,
+    id: 8,
+  },
+];
+export const foodSortByOptions = [
+  {
+    name: 'Price: Low to High',
+  },
+  {
+    name: 'Price: High to Low',
+  },
+  {
+    name: 'Newest to Oldest',
+  },
+  {
+    name: 'Oldest to Newest',
   },
 ];
