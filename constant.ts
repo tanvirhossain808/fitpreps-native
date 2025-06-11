@@ -16,7 +16,12 @@ import beefImg from 'public/images/mealsSelector/beef.png';
 import vegetarianImg from 'public/images/mealsSelector/vegetarian.png';
 import accessoriesImg from 'public/images/mealsSelector/accesories.png';
 import cookdBreakfast from 'public/images/mealsSelector/cookdbreakfast.png';
+import foodsliderimg1 from 'public/images/slider/slider1.png';
+import foodsliderimg2 from 'public/images/slider/slider2.png';
+import foodsliderimg3 from 'public/images/slider/slider3.png';
+import foodsliderimg4 from 'public/images/slider/slider4.png';
 import food from 'public/images/food.png';
+import { FoodOrSliderItem } from './type';
 export const selectCategories = [
   {
     img: cookd,
@@ -166,7 +171,7 @@ export const cookdFilter = [
     border: '#009A21',
   },
 ];
-export const foodOfItems = [
+export const foodOfItems: FoodOrSliderItem[] = [
   {
     type: 'food',
     id: 1,
@@ -199,8 +204,34 @@ export const foodOfItems = [
     type: 'slider',
     id: 'slider-1',
     images: [
-      { img: food, caption: 'Special Offer 1' },
-      { img: food, caption: 'Special Offer 2' },
+      {
+        img: foodsliderimg1,
+        caption: 'Up to 10% OFF',
+        title: 'Subscribe & Save!',
+        text: '#FFFFFF',
+        id: 1,
+      },
+      {
+        img: foodsliderimg2,
+        caption: 'Up to 10% OFF',
+        title: 'Subscribe & Save!',
+        text: '#FFFFFF',
+        id: 2,
+      },
+      {
+        img: foodsliderimg3,
+        caption: 'Up to 10% OFF',
+        title: 'Subscribe & Save!',
+        text: '#1E1F20',
+        id: 3,
+      },
+      {
+        img: foodsliderimg4,
+        caption: 'Up to 10% OFF',
+        title: 'Subscribe & Save!',
+        text: '#FFFFFF',
+        id: 4,
+      },
     ],
   },
   {

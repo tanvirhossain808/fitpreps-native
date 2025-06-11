@@ -14,11 +14,12 @@ import { H3, H5, Image, Input, Text, View, XStack, YStack } from 'tamagui';
 import TopSearchbar from '~/components/shared/TopSearchbar';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Sortby from '~/components/shared/Sortby';
-import { cookdFoodCategories, foodSortByOptions } from '~/constant';
+import { cookdFoodCategories, foodOfItems, foodSortByOptions } from '~/constant';
 import SelectedFoodCategories from '~/components/shared/SelectedFoodCategories';
 import Entypo from '@expo/vector-icons/Entypo';
 import { router, useNavigation } from 'expo-router';
 import FilterModal from '~/components/modal/Filter';
+import ProductLists from '~/components/shared/ProductLists';
 
 const defaultTabBarStyle = {
   position: 'absolute',
@@ -345,27 +346,11 @@ export default function Home() {
 
       {/* Main Content */}
       <SafeAreaView style={{ flex: 1, paddingTop: HEADER_HEIGHT }}>
-        <Animated.ScrollView
-          contentContainerStyle={{ paddingBottom: 60 }}
-          showsVerticalScrollIndicator={false}
-          scrollEventThrottle={16}
-          onScroll={combinedOnScroll}>
-          <YStack bg="white" flex={1} gap="$4" p="$4" mt={140}>
-            {dummyMeals.map((meal) => (
-              <XStack
-                key={meal.id}
-                bg="#F2F2F2"
-                borderRadius={12}
-                p="$3"
-                alignItems="center"
-                mb="$2">
-                <Text color="#0A8A23" fontWeight={700} fontSize={16}>
-                  {meal.name}
-                </Text>
-              </XStack>
-            ))}
-          </YStack>
-        </Animated.ScrollView>
+        <Animated.View style={{ flex: 1 }}>
+          {/* <YStack pt={140}> */}
+          <ProductLists onScroll={combinedOnScroll} products={foodOfItems} />
+          {/* </YStack> */}
+        </Animated.View>
       </SafeAreaView>
       <FilterModal
         open={filterOpen}
