@@ -5,33 +5,67 @@ import {
   Platform,
   TouchableOpacity,
   FlatList,
+  StyleSheet,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { H3, H5, Image, Text, View, XStack, YStack } from 'tamagui';
+import { H3, H5, Image, Input, Text, View, XStack, YStack } from 'tamagui';
 import TopSearchbar from '~/components/shared/TopSearchbar';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Sortby from '~/components/shared/Sortby';
 import { cookdFoodCategories, foodSortByOptions } from '~/constant';
+import SelectedFoodCategories from '~/components/shared/SelectedFoodCategories';
+import Entypo from '@expo/vector-icons/Entypo';
+import { router, useNavigation } from 'expo-router';
+import FilterModal from '~/components/modal/Filter';
+
+const defaultTabBarStyle = {
+  position: 'absolute',
+  borderRadius: 20,
+  paddingHorizontal: 28,
+  height: 68,
+  paddingTop: 12,
+  elevation: 7,
+  shadowColor: '#B6BAC3',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 4,
+  backgroundColor: 'rgba(255, 255, 255, 0.85)',
+};
 
 export default function Home() {
   const [showCompact, setShowCompact] = useState(false);
   const [sort, setSort] = useState<null | string>(null);
   const [showSort, setShowSort] = useState(false);
   const [selectFoodCategory, setSelectedFoodCategory] = useState<string | null>(null);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [filters, setFilters] = useState<string[]>([]);
   const scrollY = useRef(new Animated.Value(0)).current;
   const lastScrollY = useRef(0);
   const animation = useRef(new Animated.Value(0)).current;
   const HEADER_HEIGHT = 160;
-  const COMPACT_BAR_HEIGHT = 190;
-  console.log(setShowSort);
+  const COMPACT_BAR_HEIGHT = 140;
+  const navigation = useNavigation();
   // Animate between header and compact bar when showCompact changes
-  useEffect(() => {
-    Animated.timing(animation, {
-      toValue: showCompact ? 1 : 0,
+  const tabBarTranslateY = useRef(new Animated.Value(0)).current;
+  const scrollOffset = useRef(0);
+  const SCROLL_THRESHOLD = 10;
+  const hideTabBar = () => {
+    Animated.timing(tabBarTranslateY, {
+      toValue: 100, // move tab bar down (hide)
       duration: 250,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
-  }, [showCompact, animation]);
+  };
+
+  const showTabBar = () => {
+    Animated.timing(tabBarTranslateY, {
+      toValue: 0, // move tab bar up (show)
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  };
 
   // Track scroll direction and show/hide header/compact bar
   const handleScroll = Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
@@ -67,6 +101,18 @@ export default function Home() {
     name: `Meal ${i + 1}`,
   }));
 
+  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const currentOffset = event.nativeEvent.contentOffset.y;
+    const diff = currentOffset - scrollOffset.current;
+
+    if (diff > SCROLL_THRESHOLD) {
+      hideTabBar();
+    } else if (diff < -SCROLL_THRESHOLD) {
+      showTabBar();
+    }
+
+    scrollOffset.current = currentOffset;
+  };
   // Status bar color
   useEffect(() => {
     RNStatusBar.setBarStyle(showCompact ? 'dark-content' : 'light-content', true);
@@ -74,9 +120,46 @@ export default function Home() {
       RNStatusBar.setBackgroundColor(showCompact ? 'white' : '#0A8A23', true);
     }
   }, [showCompact]);
-
+  useEffect(() => {
+    navigation.setOptions({
+      tabBarStyle: {
+        ...defaultTabBarStyle,
+        display: filterOpen ? 'none' : 'flex',
+      },
+    });
+  }, [filterOpen]);
+  useEffect(() => {
+    Animated.timing(animation, {
+      toValue: showCompact ? 1 : 0,
+      duration: 250,
+      useNativeDriver: false,
+    }).start();
+  }, [showCompact, animation]);
+  useEffect(() => {
+    navigation.setOptions({
+      tabBarStyle: {
+        position: 'absolute',
+        borderRadius: 20,
+        paddingHorizontal: 28,
+        height: 68,
+        paddingTop: 12,
+        elevation: 7,
+        shadowColor: '#B6BAC3',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        backgroundColor: 'rgba(255, 255, 255, 0.85)',
+        transform: [{ translateY: tabBarTranslateY }],
+      },
+    });
+  }, [navigation, tabBarTranslateY]);
+  const combinedOnScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    // Call both handlers with the event
+    handleScroll(event);
+    onScroll(event);
+  };
   return (
-    <View flex={1} bg="white">
+    <View flex={1} bg="white" onTouchStart={() => setShowSort(false)}>
       {/* Animated Header */}
       <Animated.View
         style={{
@@ -99,34 +182,10 @@ export default function Home() {
               What are you looking for today?
             </H5>
           </XStack>
-          <FlatList
-            data={cookdFoodCategories}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingHorizontal: 16 }}
-            renderItem={({ item }) => (
-              <YStack alignItems="center" justifyContent="space-between" mr={4} w={80} h={80}>
-                <XStack
-                  justifyContent="center"
-                  borderWidth={1.5}
-                  borderColor={item.name === selectFoodCategory ? '#FD4F01' : '$colorTransparent'}
-                  borderRadius={50}
-                  alignItems="center"
-                  w={56}
-                  h={56}>
-                  <TouchableOpacity onPress={() => setSelectedFoodCategory(item.name)}>
-                    <Image source={item.img} w={48} h={48} borderRadius={48} />
-                  </TouchableOpacity>
-                </XStack>
-                <Text
-                  color={selectFoodCategory === item.name ? '#FD4F01' : '#25272C'}
-                  fontWeight={selectFoodCategory === item.name ? 700 : 500}
-                  fontSize={12}>
-                  {item.name}
-                </Text>
-              </YStack>
-            )}
+          <SelectedFoodCategories
+            cookdFoodCategories={cookdFoodCategories}
+            selectFoodCategory={selectFoodCategory}
+            setSelectedFoodCategory={setSelectedFoodCategory}
           />
           <View px={16} mt={'$5'}>
             <XStack
@@ -139,7 +198,116 @@ export default function Home() {
               <XStack alignItems="center" gap={12}>
                 <TouchableOpacity
                   activeOpacity={0.5}
+                  style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 4 }}
+                  onPress={() => setFilterOpen(true)}>
+                  <Ionicons name="filter-outline" size={16} color="#25272C" />
+                  <Text color="#25272C" fontSize={12}>
+                    Filters
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setShowSort(!showSort)}
+                  activeOpacity={0.5}
                   style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                  <Text color="#25272C" fontSize={12}>
+                    {sort === null ? 'Sort By' : sort}
+                  </Text>
+                  <Ionicons
+                    name={showSort ? 'chevron-up' : 'chevron-down'}
+                    size={16}
+                    color="#25272C"
+                  />
+                  {showSort && (
+                    <View style={StyleSheet.absoluteFillObject} pointerEvents="box-none">
+                      {/* Backdrop */}
+                      <TouchableOpacity
+                        style={StyleSheet.absoluteFillObject}
+                        activeOpacity={1}
+                        onPress={() => setShowSort(false)}
+                      />
+                      {/* Dropdown */}
+                      <Sortby
+                        data={foodSortByOptions}
+                        setShowSort={setShowSort}
+                        sort={sort}
+                        setSort={setSort}
+                      />
+                    </View>
+                  )}
+                </TouchableOpacity>
+              </XStack>
+              <Text fontSize={11} color="#25272C">
+                48 meal preps to explore
+              </Text>
+            </XStack>
+          </View>
+        </SafeAreaView>
+      </Animated.View>
+
+      {/* Sticky Compact Bar */}
+      <Animated.View
+        style={{
+          position: 'absolute',
+          top: Platform.OS === 'android' ? 0 : 44,
+          left: 0,
+          right: 0,
+          paddingTop: 16,
+          minHeight: COMPACT_BAR_HEIGHT,
+          backgroundColor: 'white',
+          zIndex: 11,
+          borderBottomColor: '#eee',
+          borderBottomWidth: 1,
+          opacity: compactBarOpacity,
+          transform: [{ translateY: compactBarTranslateY }],
+        }}
+        pointerEvents={showCompact ? 'auto' : 'none'}>
+        <SafeAreaView>
+          <YStack gap={20}>
+            <XStack alignItems="center" gap={12} px={16}>
+              <Entypo name="chevron-left" size={24} color="black" onPress={() => router.back()} />
+              <XStack alignItems="center" position="relative" flex={1}>
+                <Input
+                  flex={1}
+                  placeholder="Search your meal here"
+                  placeholderTextColor="#717680"
+                  fontSize={14}
+                  pr={40}
+                  backgroundColor="white"
+                  borderRadius={8}
+                />
+                <TouchableOpacity
+                  style={{ display: 'flex', alignItems: 'center', width: 20, height: 20 }}>
+                  <Ionicons
+                    name="search"
+                    size={20}
+                    color="black"
+                    style={{
+                      position: 'absolute',
+                      right: 30,
+                      pointerEvents: 'none',
+                    }}
+                  />
+                </TouchableOpacity>
+              </XStack>
+            </XStack>
+            <SelectedFoodCategories
+              cookdFoodCategories={cookdFoodCategories}
+              selectFoodCategory={selectFoodCategory}
+              setSelectedFoodCategory={setSelectedFoodCategory}
+            />
+            <XStack
+              justifyContent="space-between"
+              py={12}
+              borderTopWidth={0.5}
+              borderTopColor="#B6BAC3"
+              px={16}
+              borderBottomWidth={0.5}
+              borderBottomColor="#B6BAC3">
+              <XStack alignItems="center" gap={12}>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 4 }}
+                  onPress={() => setFilterOpen(true)}>
                   <Ionicons name="filter-outline" size={16} color="#25272C" />
                   <Text color="#25272C" fontSize={12}>
                     Filters
@@ -171,31 +339,8 @@ export default function Home() {
                 48 meal preps to explore
               </Text>
             </XStack>
-          </View>
+          </YStack>
         </SafeAreaView>
-      </Animated.View>
-
-      {/* Sticky Compact Bar */}
-      <Animated.View
-        style={{
-          position: 'absolute',
-          top: Platform.OS === 'android' ? 0 : 44,
-          left: 0,
-          right: 0,
-          height: COMPACT_BAR_HEIGHT,
-          backgroundColor: 'white',
-          zIndex: 11,
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderBottomColor: '#eee',
-          borderBottomWidth: 1,
-          opacity: compactBarOpacity,
-          transform: [{ translateY: compactBarTranslateY }],
-        }}
-        pointerEvents={showCompact ? 'auto' : 'none'}>
-        <Text color="#0A8A23" fontWeight={700} fontSize={18}>
-          Compact Bar
-        </Text>
       </Animated.View>
 
       {/* Main Content */}
@@ -204,8 +349,8 @@ export default function Home() {
           contentContainerStyle={{ paddingBottom: 60 }}
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={16}
-          onScroll={handleScroll}>
-          <YStack bg="white" flex={1} gap="$4" p="$4">
+          onScroll={combinedOnScroll}>
+          <YStack bg="white" flex={1} gap="$4" p="$4" mt={140}>
             {dummyMeals.map((meal) => (
               <XStack
                 key={meal.id}
@@ -222,6 +367,12 @@ export default function Home() {
           </YStack>
         </Animated.ScrollView>
       </SafeAreaView>
+      <FilterModal
+        open={filterOpen}
+        setOpen={setFilterOpen}
+        filters={filters}
+        setFilters={setFilters}
+      />
     </View>
   );
 }

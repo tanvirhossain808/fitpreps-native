@@ -16,6 +16,7 @@ import beefImg from 'public/images/mealsSelector/beef.png';
 import vegetarianImg from 'public/images/mealsSelector/vegetarian.png';
 import accessoriesImg from 'public/images/mealsSelector/accesories.png';
 import cookdBreakfast from 'public/images/mealsSelector/cookdbreakfast.png';
+import food from 'public/images/food.png';
 export const selectCategories = [
   {
     img: cookd,
@@ -143,5 +144,91 @@ export const foodSortByOptions = [
   },
   {
     name: 'Oldest to Newest',
+  },
+];
+export const cookdFilter = [
+  {
+    name: 'price',
+    filterOption: ['€0 - €10', '€10 - €20', '€20 - €50', '€50 - €100', '€100+'],
+    bg: '#E5F8EA',
+    border: '#009A21',
+  },
+  {
+    name: 'Cuisine',
+    filterOption: ['Italian', 'Mexican', 'Dutch', 'French', 'Spanish', 'Arabic', 'Asian', 'German'],
+    bg: '#E5F8EA',
+    border: '#009A21',
+  },
+  {
+    name: 'General',
+    filterOption: ['Best Seller', 'Sale', 'New'],
+    bg: '#E5F8EA',
+    border: '#009A21',
+  },
+];
+export const foodOfItems = [
+  {
+    type: 'food',
+    id: 1,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [],
+  },
+  {
+    type: 'food',
+    id: 2,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [],
+  },
+  {
+    type: 'food',
+    id: 3,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [],
+  },
+  {
+    type: 'food',
+    id: 4,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [],
+  },
+  {
+    type: 'slider',
+    id: 'slider-1',
+    images: [
+      { img: food, caption: 'Special Offer 1' },
+      { img: food, caption: 'Special Offer 2' },
+    ],
+  },
+  {
+    type: 'food',
+    id: 5,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [],
+  },
+  {
+    type: 'food',
+    id: 6,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [],
+  },
+  {
+    type: 'food',
+    id: 7,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [],
+  },
+  {
+    type: 'food',
+    id: 8,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [],
   },
 ];

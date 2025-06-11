@@ -26,7 +26,7 @@ export default function TopSearchbar({ placeholder }: { placeholder: string }) {
           focusStyle={{
             borderColor: 'transparent',
             outlineWidth: 0,
-            shadowColor: 'transparent', // also good to add
+            shadowColor: 'transparent',
           }}
           minWidth={100}
           bg="transparent"
