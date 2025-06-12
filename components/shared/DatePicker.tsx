@@ -128,7 +128,15 @@ export default function CustomHeaderCalendar() {
         paddingHorizontal="$4"
         paddingVertical="$3"
         justifyContent="space-between"
-        alignItems="center">
+        alignItems="center"
+        borderWidth={1}
+        borderBottomWidth={0}
+        shadowOpacity={0.5}
+        shadowRadius={2}
+        elevation={2}
+        shadowOffset={{ width: 0, height: 1 }}
+        shadowColor="#0A0D12"
+        borderColor={'#E5F8EA'}>
         <TouchableOpacity
           onPress={() => setModalVisible(true)}
           style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
@@ -137,7 +145,6 @@ export default function CustomHeaderCalendar() {
           </Text>
           <AntDesign name="caretdown" size={15} color="#6B7280" />
         </TouchableOpacity>
-
         <XStack space="$3" alignItems="center">
           <TouchableOpacity onPress={() => changeMonth(-1)}>
             <Feather name="chevron-left" size={24} color="#6B7280" />
@@ -157,6 +164,22 @@ export default function CustomHeaderCalendar() {
         hideArrows={true}
         disableMonthChange={false}
         firstDay={1}
+        style={{
+          borderWidth: 1,
+          borderColor: '#E5F8EA',
+          shadowOpacity: 0.05,
+          shadowRadius: 2,
+          borderTopColor: 'transparent',
+          borderTopWidth: 0,
+          elevation: 2,
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowColor: '#0A0D12',
+          borderBottomStartRadius: 12,
+          borderBottomEndRadius: 12,
+        }}
         theme={{
           calendarBackground: '#fff',
           dayTextColor: '#8E95A2',
@@ -175,17 +198,18 @@ export default function CustomHeaderCalendar() {
         <Dialog.Portal>
           <Dialog.Overlay backgroundColor="rgba(0,0,0,0.3)" />
           <Dialog.Content
+            key={modalVisible.toString()}
             borderRadius="$4"
             backgroundColor="#fff"
             maxHeight={300}
             padding="$3"
             width={300}
             marginHorizontal="$5">
-            {/* <FlatList
+            <FlatList
               data={MONTHS}
               keyExtractor={(item, index) => index.toString()}
               renderItem={renderMonthItem}
-            /> */}
+            />
 
             <Button
               onPress={() => setModalVisible(false)}

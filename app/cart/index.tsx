@@ -8,14 +8,17 @@ import Step3Inactive from 'public/images/stepsindicator/step3Inavtive.svg';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
+import Entypo from '@expo/vector-icons/Entypo';
+
 import { LinearGradient } from 'expo-linear-gradient';
 import DatePicker from '~/components/shared/DatePicker';
+import DatePickerCalendar from 'public/images/calendar.svg';
+import { useState } from 'react';
 export default function Cart() {
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View flex={1}>
-        <DatePicker />
-      </View>
       <View padding="$4" pb={'$8'} bg="white">
         <YStack gap={'$7'}>
           <XStack alignItems="center" gap="$2">
@@ -52,7 +55,45 @@ export default function Cart() {
           <Text color="#FD4F01" fontWeight={500} fontSize={12}>
             NOTE: We don’t deliver on Saturday and Sunday.
           </Text>
+          <TouchableOpacity
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              backgroundColor: 'white',
+              borderRadius: 8,
+              paddingHorizontal: 14,
+              paddingVertical: 10,
+              borderWidth: 1,
+              borderColor: '#E5F8EA',
+              shadowOpacity: 0.05,
+              shadowRadius: 2,
+              elevation: 2,
+              shadowOffset: {
+                width: 0,
+                height: 1,
+              },
+              shadowColor: '#0A0D12',
+            }}
+            onPress={() => setShowDatePicker(!showDatePicker)}>
+            <DatePickerCalendar size={20} />
+            <Text alignSelf="stretch" flex={1} color="#8E95A2" fontSize={14}>
+              Pick delivery date
+            </Text>
+            {showDatePicker ? (
+              <Entypo name="chevron-small-up" size={20} color="#1E1F20" />
+            ) : (
+              <Entypo name="chevron-small-down" size={20} color="#1E1F20" />
+            )}
+          </TouchableOpacity>
         </YStack>
+        {showDatePicker && (
+          <View flex={1} position="absolute" top={135} px={36} left={0} right={0} bottom={0}>
+            <DatePicker />
+          </View>
+        )}
       </YStack>
     </SafeAreaView>
   );
