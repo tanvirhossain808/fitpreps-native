@@ -1,5 +1,5 @@
-import { View, Text, Button } from 'tamagui';
-import React from 'react';
+import { View, Text, Button, Select, Adapt, Sheet, XStack } from 'tamagui';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import Carousel from 'react-native-reanimated-carousel';
 import { FlatList, Dimensions, ImageBackground } from 'react-native';
 import { FoodOrSliderItem } from '~/type';
@@ -97,7 +97,6 @@ export default function ProductLists({
     }
   });
   if (row.length) flatListData.push([...row]);
-
   return (
     <FlatList
       data={flatListData}
@@ -124,11 +123,6 @@ export default function ProductLists({
                 borderWidth={1}
                 borderRadius={8}>
                 <View px={9} py={15} alignSelf="stretch" flex={1} bg="#E5F8EA" borderRadius={4}>
-                  {/* <Image
-                    source={food.img}
-                    style={{ width: '100%', minWidth: 140, height: 128 }}
-                    resizeMode="contain"
-                  /> */}
                   {food.type === 'food' && (
                     <Image
                       source={food.img}
@@ -136,15 +130,43 @@ export default function ProductLists({
                       resizeMode="contain"
                     />
                   )}
+                  {food.type === 'food' && (
+                    <Text
+                      position="absolute"
+                      p={'$2'}
+                      top={6}
+                      left={6}
+                      fontSize={10}
+                      fontWeight={700}
+                      color="white"
+                      bg="#01B528"
+                      borderRadius={20}>
+                      {food.badge}
+                    </Text>
+                  )}
                 </View>
                 <YStack gap={8}>
-                  {/* <Text fontSize={12} fontWeight={700} color="#1E1F20">
-                    {food.name}
-                  </Text> */}
                   {food.type === 'food' && (
-                    <Text fontSize={12} fontWeight={700} color="#1E1F20">
+                    <Text fontSize={11.5} fontWeight={700} color="#1E1F20">
                       {food.name}
                     </Text>
+                  )}
+                  {food.type === 'food' && Array.isArray(food.price) ? (
+                    <View>
+                      <SelectPrice values={food.price} />
+                    </View>
+                  ) : (
+                    food.type === 'food' && (
+                      <View>
+                        <Text fontSize={14} fontWeight={700} color="#FD4F01">
+                          {food?.price}
+                        </Text>
+                        <Text fontSize={12} fontWeight={500} color="#1E1F20">
+                          333 kCal <Text> | </Text>
+                          <Text>475 g</Text>
+                        </Text>
+                      </View>
+                    )
                   )}
                   <Button
                     fontSize={15}
@@ -174,5 +196,55 @@ export default function ProductLists({
         paddingTop: 160,
       }}
     />
+  );
+}
+
+function SelectPrice({ values }: { values: { quantity: string; price: string }[] }) {
+  return (
+    <Select defaultValue={values[0].quantity}>
+      <Select.Trigger
+        iconAfter={<AntDesign name="down" size={16} color="#A1A1A1" />}
+        width={'100%'}
+        borderWidth={1}
+        borderColor="#A1A1A1"
+        borderRadius={4}
+        p={8}
+        backgroundColor="$backgroundTransparent">
+        <Select.Value />
+      </Select.Trigger>
+
+      <Adapt when="sm" platform="touch">
+        <Sheet modal dismissOnSnapToBottom>
+          <Sheet.Frame>
+            <Sheet.ScrollView>
+              <Adapt.Contents />
+            </Sheet.ScrollView>
+          </Sheet.Frame>
+          <Sheet.Overlay />
+        </Sheet>
+      </Adapt>
+
+      <Select.Content>
+        <Select.Viewport>
+          <Select.Group>
+            <Select.Label>Options</Select.Label>
+            {values.map((value, index) => (
+              <Select.Item key={index} index={index} value={value.quantity}>
+                <Select.ItemText>
+                  <XStack>
+                    <Text color="#1E1F20" fontWeight={600} fontSize={12}>
+                      {value.quantity} - <Text color="#FD4F01">€{value.price}</Text>
+                    </Text>
+                  </XStack>
+                </Select.ItemText>
+                <Select.ItemIndicator marginLeft="auto">
+                  <AntDesign name="check" size={24} color="black" />
+                </Select.ItemIndicator>
+              </Select.Item>
+            ))}
+          </Select.Group>
+        </Select.Viewport>
+      </Select.Content>
+    </Select>
   );
 }

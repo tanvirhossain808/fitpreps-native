@@ -35,10 +35,11 @@ export default function RootLayout() {
     <TamaguiProvider config={config}>
       <SafeAreaProvider>
         <Stack>
-          {/* <Stack.Screen name="index" options={{ headerShown: false }} /> */}
+          <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
           <Stack.Screen name="(sharedScreens)" options={{ headerShown: false }} />
+          <Stack.Screen name="cart" options={{ headerShown: false }} />
         </Stack>
       </SafeAreaProvider>
     </TamaguiProvider>

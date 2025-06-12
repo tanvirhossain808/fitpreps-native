@@ -60,7 +60,6 @@ export default function TabLayout() {
         options={{
           title: 'Subscription',
           tabBarIcon: ({ color, focused }) => {
-            console.log(focused, 'focused');
             return !focused ? (
               <Image source={require('public/images/subs.png')} width={20} height={22} />
             ) : (
@@ -84,7 +83,6 @@ export default function TabLayout() {
           title: 'Home',
           headerShown: false,
           tabBarIcon: ({ color, focused }) => {
-            console.log(focused, 'focused');
             return !focused ? (
               <Image source={require('public/images/home.png')} width={28} height={28} />
             ) : (
@@ -103,7 +101,6 @@ export default function TabLayout() {
         options={{
           title: 'Shop',
           tabBarIcon: ({ color, focused }) => {
-            console.log(focused, 'focused');
             return !focused ? (
               <Image source={require('public/images/shop.png')} width={28} height={28} />
             ) : (
@@ -117,7 +114,6 @@ export default function TabLayout() {
         options={{
           title: 'Track',
           tabBarIcon: ({ color, focused }) => {
-            console.log(focused, 'focused');
             return !focused ? (
               <Image source={require('public/images/track.png')} width={20} height={20} />
             ) : (

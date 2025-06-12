@@ -177,28 +177,84 @@ export const foodOfItems: FoodOrSliderItem[] = [
     id: 1,
     name: 'STEW - MASHED POTATOES - CARROT MIX',
     img: food,
-    price: [],
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
   },
   {
     type: 'food',
     id: 2,
     name: 'STEW - MASHED POTATOES - CARROT MIX',
     img: food,
-    price: [],
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
   },
   {
     type: 'food',
     id: 3,
     name: 'STEW - MASHED POTATOES - CARROT MIX',
     img: food,
-    price: [],
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
   },
   {
     type: 'food',
     id: 4,
     name: 'STEW - MASHED POTATOES - CARROT MIX',
     img: food,
-    price: [],
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
   },
   {
     type: 'slider',
@@ -239,27 +295,84 @@ export const foodOfItems: FoodOrSliderItem[] = [
     id: 5,
     name: 'STEW - MASHED POTATOES - CARROT MIX',
     img: food,
-    price: [],
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
   },
   {
     type: 'food',
     id: 6,
     name: 'STEW - MASHED POTATOES - CARROT MIX',
     img: food,
-    price: [],
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
   },
   {
     type: 'food',
     id: 7,
     name: 'STEW - MASHED POTATOES - CARROT MIX',
     img: food,
-    price: [],
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
   },
   {
     type: 'food',
     id: 8,
     name: 'STEW - MASHED POTATOES - CARROT MIX',
     img: food,
-    price: [],
+    // price: '€10',
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
   },
 ];

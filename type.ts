@@ -11,6 +11,7 @@ export type FoodOfItem = {
         price: string;
       }[]
     | string;
+  badge?: string;
 };
 
 export type SliderImage = {

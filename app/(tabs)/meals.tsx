@@ -348,7 +348,11 @@ export default function Home() {
       <SafeAreaView style={{ flex: 1, paddingTop: HEADER_HEIGHT }}>
         <Animated.View style={{ flex: 1 }}>
           {/* <YStack pt={140}> */}
-          <ProductLists onScroll={combinedOnScroll} products={foodOfItems} />
+          <ProductLists
+            showsVerticalScrollIndicator={false}
+            onScroll={combinedOnScroll}
+            products={foodOfItems}
+          />
           {/* </YStack> */}
         </Animated.View>
       </SafeAreaView>

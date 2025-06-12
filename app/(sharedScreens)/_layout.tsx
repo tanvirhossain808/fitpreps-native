@@ -3,7 +3,7 @@ import React from 'react';
 import { Stack } from 'expo-router';
 import Header from './partials/Header';
 import Feather from '@expo/vector-icons/Feather';
-export default function copy() {
+export default function sharedScreensLayout() {
   return (
     <Stack>
       <Stack.Screen name="productSelect" options={{ headerShown: false }} />

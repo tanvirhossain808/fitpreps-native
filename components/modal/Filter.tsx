@@ -25,7 +25,6 @@ export default function FilterModal({ open, setOpen, filters, setFilters }: Filt
   useEffect(() => {
     addField();
   }, [cookdFilter]);
-  console.log(selectedKeys);
 
   return (
     <Sheet open={open} onOpenChange={setOpen} snapPoints={[100]} dismissOnSnapToBottom>
