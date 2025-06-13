@@ -441,3 +441,30 @@ export const youMayLike = [
     badge: 'Asian',
   },
 ];
+
+export const address = [
+  {
+    name: 'Address1',
+    streetName: 'Street name, Block no., Locality, City Name, State - 000000.',
+    city: 'New York',
+    state: 'NY',
+    zip: '12345',
+    apartment: '123',
+    houseNo: '123',
+    phone: '1234567890',
+    isDefault: true,
+    badge: 'Home',
+  },
+  {
+    name: 'Address2',
+    streetName: 'Street name, Block no., Locality, City Name, State - 000000.',
+    city: 'New York',
+    state: 'NY',
+    zip: '12345',
+    apartment: '123',
+    houseNo: '123',
+    phone: '1234567890',
+    isDefault: true,
+    badge: 'Home',
+  },
+];

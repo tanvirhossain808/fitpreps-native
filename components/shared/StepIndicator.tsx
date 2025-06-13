@@ -20,7 +20,7 @@ export default function StepIndicator({ currentStep }: StepIndicatorProps) {
   return (
     <>
       <View p="$4">
-        <View pb="$8" bg="white">
+        <View pb="$5" bg="white">
           <YStack gap={'$7'}>
             <XStack alignItems="center" gap="$2">
               <TouchableOpacity onPress={() => router.back()}>
