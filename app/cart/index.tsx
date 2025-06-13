@@ -1,4 +1,4 @@
-import { View, Text, YStack, Progress, XStack, H2 } from 'tamagui';
+import { View, Text, YStack, Progress, XStack, Input } from 'tamagui';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Step1Active from 'public/images/stepsindicator/step1active.svg';
 import Step2Active from 'public/images/stepsindicator/step2Active.svg';
@@ -34,7 +34,7 @@ export default function Cart() {
           </View>
         </YStack>
       </View>
-      <YStack p="$4">
+      <YStack p="$4" gap="$3">
         <YStack gap={12} px="$4" py="$5">
           <LinearGradient
             colors={['rgba(255, 255, 255, 0.2)', 'rgba(255, 184, 23, 0.2)']}
@@ -90,10 +90,26 @@ export default function Cart() {
           </TouchableOpacity>
         </YStack>
         {showDatePicker && (
-          <View flex={1} position="absolute" top={135} px={36} left={0} right={0} bottom={0}>
+          <View
+            flex={1}
+            zIndex={10}
+            position="absolute"
+            top={135}
+            px={36}
+            left={0}
+            right={0}
+            bottom={0}>
             <DatePicker />
           </View>
         )}
+        <YStack gap="$3">
+          <Text color="#1E1F20" fontWeight={700} fontSize={16}>
+            Savings
+          </Text>
+          <XStack>
+            <Input />
+          </XStack>
+        </YStack>
       </YStack>
     </SafeAreaView>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, TouchableOpacity, View, StyleProp, ViewStyle } from 'react-native';
 import { Calendar, LocaleConfig, DateData } from 'react-native-calendars';
 import { Feather } from '@expo/vector-icons';
@@ -36,7 +36,7 @@ export default function CustomHeaderCalendar() {
 
   const year = currentDate.getFullYear();
   const monthIndex = currentDate.getMonth();
-
+  const flatListRef = useRef<FlatList>(null);
   // Number of days in the current month
   const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
 
@@ -64,24 +64,79 @@ export default function CustomHeaderCalendar() {
 
   const isMultipleAfterSelected = (day: number): boolean => {
     if (!selectedDate || !selectedDate.day) return false;
-    const dayStr = String(selectedDate.day); // Ensure we're working with a string
+    const dayStr = String(selectedDate.day);
     const selectedDay = parseInt(dayStr, 10);
     if (isNaN(selectedDay) || selectedDay === 0) return false;
     return day > selectedDay && (day - selectedDay) % 7 === 0 && day <= daysInMonth;
   };
+  const isWeekend = (day: DateData): boolean => {
+    const date = new Date(day.dateString);
+    const dayOfWeek = date.getDay();
+    return dayOfWeek === 0 || dayOfWeek === 6;
+  };
+  const isFromOtherMonth = (day: DateData): boolean => {
+    const date = new Date(day.dateString);
+    return (
+      date.getMonth() !== currentDate.getMonth() || date.getFullYear() !== currentDate.getFullYear()
+    );
+  };
+  useEffect(() => {
+    if (modalVisible && flatListRef.current) {
+      // Delay scrolling to ensure FlatList is rendered
+      setTimeout(() => {
+        flatListRef.current?.scrollToIndex({
+          index: currentDate.getMonth(),
+          animated: true,
+          viewPosition: 0.5, // center the selected month in the list
+        });
+      }, 100); // 100ms delay
+    }
+  }, [modalVisible]);
+  const handleContentSizeChange = () => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToIndex({
+        index: currentDate.getMonth(),
+        animated: true,
+        viewPosition: 0.5,
+      });
+    }
+  };
+  const onScrollToIndexFailed = (info: {
+    index: number;
+    highestMeasuredFrameIndex: number;
+    averageItemLength: number;
+  }) => {
+    flatListRef.current?.scrollToOffset({
+      offset: info.averageItemLength * info.index,
+      animated: true,
+    });
+  };
+  const ITEM_HEIGHT = 50;
+
+  const getItemLayout = (data: ArrayLike<string> | null | undefined, index: number) => ({
+    length: ITEM_HEIGHT,
+    offset: ITEM_HEIGHT * index,
+    index,
+  });
 
   const renderDay = (day: DateData) => {
-    if (!day.dateString) return null;
+    if (!day?.dateString) return null;
 
     const dayNumber = Number(day.day);
-
-    const todayDateString = new Date().toISOString().split('T')[0];
-
+    const isToday = day.dateString === new Date().toISOString().split('T')[0];
     const isSelected = selectedDate?.dateString === day.dateString;
-    const isToday = day.dateString === todayDateString;
     const highlightMultiple = isMultipleAfterSelected(dayNumber);
 
-    // We can type style object as StyleProp<ViewStyle>
+    const weekend = isWeekend(day);
+    const fromOtherMonth = isFromOtherMonth(day);
+
+    const isDisabled = weekend;
+
+    const handlePress = () => {
+      if (isDisabled) return;
+      setSelectedDate(day);
+    };
+
     const dayStyle: StyleProp<ViewStyle> = {
       height: 42,
       width: 42,
@@ -91,14 +146,20 @@ export default function CustomHeaderCalendar() {
       backgroundColor: isSelected ? '#FF7435' : 'transparent',
       borderWidth: isToday && !isSelected ? 2 : isSelected ? 2 : 0,
       borderColor: isSelected ? '#FF7435' : isToday ? '#FF7435' : 'transparent',
+      opacity: isDisabled ? 0.5 : 1,
     };
 
+    const textColor = isSelected
+      ? '#fff'
+      : fromOtherMonth
+        ? '#8E95A2'
+        : highlightMultiple
+          ? '#000'
+          : '#8E95A2';
+
     return (
-      <TouchableOpacity activeOpacity={0.8} onPress={() => setSelectedDate(day)} style={dayStyle}>
-        <Text
-          color={isSelected ? '#fff' : highlightMultiple ? '#000' : '#8E95A2'}
-          fontWeight={isSelected ? 'bold' : 'normal'}
-          fontSize={16}>
+      <TouchableOpacity activeOpacity={isDisabled ? 1 : 0.8} onPress={handlePress} style={dayStyle}>
+        <Text color={textColor} fontWeight={isSelected ? 'bold' : 'normal'} fontSize={16}>
           {dayNumber}
         </Text>
       </TouchableOpacity>
@@ -206,9 +267,14 @@ export default function CustomHeaderCalendar() {
             width={300}
             marginHorizontal="$5">
             <FlatList
+              ref={flatListRef}
               data={MONTHS}
               keyExtractor={(item, index) => index.toString()}
               renderItem={renderMonthItem}
+              getItemLayout={getItemLayout}
+              onContentSizeChange={handleContentSizeChange}
+              onScrollToIndexFailed={onScrollToIndexFailed}
+              // optional from previous suggestion
             />
 
             <Button
