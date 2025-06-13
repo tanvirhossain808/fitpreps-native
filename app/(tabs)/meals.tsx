@@ -4,13 +4,12 @@ import {
   StatusBar as RNStatusBar,
   Platform,
   TouchableOpacity,
-  FlatList,
   StyleSheet,
   NativeScrollEvent,
   NativeSyntheticEvent,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { H3, H5, Image, Input, Text, View, XStack, YStack } from 'tamagui';
+import { H5, Input, Text, View, XStack, YStack } from 'tamagui';
 import TopSearchbar from '~/components/shared/TopSearchbar';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Sortby from '~/components/shared/Sortby';

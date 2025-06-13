@@ -20,8 +20,11 @@ import foodsliderimg1 from 'public/images/slider/slider1.png';
 import foodsliderimg2 from 'public/images/slider/slider2.png';
 import foodsliderimg3 from 'public/images/slider/slider3.png';
 import foodsliderimg4 from 'public/images/slider/slider4.png';
+import extraFoodPic1 from 'public/images/extrafood/Beef teriyaki noodles.png';
+import extraFoodPic2 from 'public/images/extrafood/Beef roti.png';
 import food from 'public/images/food.png';
 import { FoodOrSliderItem } from './type';
+import { ImageSourcePropType } from 'react-native';
 export const selectCategories = [
   {
     img: cookd,
@@ -373,6 +376,68 @@ export const foodOfItems: FoodOrSliderItem[] = [
         price: '€30',
       },
     ],
+    badge: 'Asian',
+  },
+];
+
+export const extraFoods: {
+  name: string;
+  price: number;
+  img: ImageSourcePropType;
+}[] = [
+  {
+    img: extraFoodPic1,
+    price: 9,
+    name: 'Beef Teriyaki Noodles',
+  },
+  {
+    img: extraFoodPic2,
+    price: 9,
+    name: 'Kip Burrito',
+  },
+];
+
+export const youMayLike = [
+  {
+    name: 'Stew - Mashed potatoes - Carrot mix',
+    price: '€9',
+    img: food,
+    badge: 'Asian',
+  },
+  {
+    name: 'Stew - Mashed potatoes - Carrot mix',
+    price: '€9',
+    img: food,
+    badge: 'Asian',
+  },
+  {
+    name: 'Stew - Mashed potatoes - Carrot mix',
+    price: '€9',
+    img: food,
+    badge: 'Asian',
+  },
+  {
+    name: 'Stew - Mashed potatoes - Carrot mix',
+    price: '€9',
+    img: food,
+    badge: 'Asian',
+  },
+  {
+    name: 'Stew - Mashed potatoes - Carrot mix',
+    price: '€9',
+    img: food,
+    badge: 'Asian',
+  },
+  {
+    name: 'Stew - Mashed potatoes - Carrot mix',
+    price: '€9',
+    img: food,
+    badge: 'Asian',
+  },
+  {
+    name: 'Stew - Mashed potatoes - Carrot mix',
+    price: '€9',
+    img: food,
     badge: 'Asian',
   },
 ];

@@ -1,4 +1,4 @@
-import { View, Text, YStack, XStack, Image } from 'tamagui';
+import { Text, YStack, XStack, Image } from 'tamagui';
 import React from 'react';
 import { FlatList, TouchableOpacity } from 'react-native';
 

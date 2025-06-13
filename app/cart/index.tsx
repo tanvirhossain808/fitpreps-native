@@ -1,179 +1,56 @@
-import { View, Text, YStack, Progress, XStack, Input } from 'tamagui';
+import { Button, ButtonText, Text, View } from 'tamagui';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Step1Active from 'public/images/stepsindicator/step1active.svg';
-import Step2Active from 'public/images/stepsindicator/step2Active.svg';
-import Step3Active from 'public/images/stepsindicator/step3Active.svg';
-import Step2Inactive from 'public/images/stepsindicator/step2InActive.svg';
-import Step3Inactive from 'public/images/stepsindicator/step3Inavtive.svg';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { TouchableOpacity } from 'react-native';
-import { router } from 'expo-router';
-import Entypo from '@expo/vector-icons/Entypo';
 
-import { LinearGradient } from 'expo-linear-gradient';
-import DatePicker from '~/components/shared/DatePicker';
-import DatePickerCalendar from 'public/images/calendar.svg';
+import { FlatList } from 'react-native';
+import { extraFoods } from '~/constant';
+import CartFoodList from '~/components/shared/cart/CartFoodList';
+import FooterCart from '~/components/shared/cart/CartFooter';
+import CartHeader from '~/components/shared/cart/CartHeader';
+import StepIndicator from '~/components/shared/StepIndicator';
 import { useState } from 'react';
+import CartStep2 from '~/components/shared/cart/CartStep2';
+import CartStep3 from '~/components/shared/cart/CartStep3';
 export default function Cart() {
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View padding="$4" pb={'$8'} bg="white">
-        <YStack gap={'$7'}>
-          <XStack alignItems="center" gap="$2">
-            <TouchableOpacity onPress={() => router.back()}>
-              <AntDesign name="left" size={24} color="black" />
-            </TouchableOpacity>
-            <Text fontSize={20} fontWeight={700}>
-              Cart
-            </Text>
-          </XStack>
-          <View>
-            <CustomStepIndicator currentStep={0} />
-          </View>
-        </YStack>
-      </View>
-      <YStack p="$4" gap="$3">
-        <YStack gap={12} px="$4" py="$5">
-          <LinearGradient
-            colors={['rgba(255, 255, 255, 0.2)', 'rgba(255, 184, 23, 0.2)']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0.8, y: 1 }}
-            style={{
-              flex: 1,
-              borderRadius: 12,
-              paddingHorizontal: 16,
-              paddingVertical: 20,
-              position: 'absolute',
-              inset: 0,
-            }}></LinearGradient>
-
-          <Text fontSize={16} fontWeight={700} color="#1E1F20">
-            Pick Delivery Date
-          </Text>
-          <Text color="#FD4F01" fontWeight={500} fontSize={12}>
-            NOTE: We don’t deliver on Saturday and Sunday.
-          </Text>
-          <TouchableOpacity
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              backgroundColor: 'white',
-              borderRadius: 8,
-              paddingHorizontal: 14,
-              paddingVertical: 10,
-              borderWidth: 1,
-              borderColor: '#E5F8EA',
-              shadowOpacity: 0.05,
-              shadowRadius: 2,
-              elevation: 2,
-              shadowOffset: {
-                width: 0,
-                height: 1,
-              },
-              shadowColor: '#0A0D12',
-            }}
-            onPress={() => setShowDatePicker(!showDatePicker)}>
-            <DatePickerCalendar size={20} />
-            <Text alignSelf="stretch" flex={1} color="#8E95A2" fontSize={14}>
-              Pick delivery date
-            </Text>
-            {showDatePicker ? (
-              <Entypo name="chevron-small-up" size={20} color="#1E1F20" />
-            ) : (
-              <Entypo name="chevron-small-down" size={20} color="#1E1F20" />
-            )}
-          </TouchableOpacity>
-        </YStack>
-        {showDatePicker && (
+  const [currentStep, setCurrentStep] = useState<number>(0);
+  console.log(currentStep);
+  const cartSteps: { [key: number]: any } = {
+    0: (
+      <FlatList
+        ListFooterComponent={<FooterCart setCurrentStep={setCurrentStep} />}
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={() => <View h={12} />}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingTop: 20,
+          paddingBottom: 20,
+        }}
+        style={{ flex: 1, paddingHorizontal: 16 }}
+        ListHeaderComponent={<CartHeader />}
+        ListHeaderComponentStyle={{ marginBottom: 20 }}
+        data={extraFoods}
+        renderItem={({ item, index }) => (
           <View
-            flex={1}
-            zIndex={10}
-            position="absolute"
-            top={135}
-            px={36}
-            left={0}
-            right={0}
-            bottom={0}>
-            <DatePicker />
+            key={index}
+            style={{
+              marginTop: index === 0 ? 20 : 0,
+              marginBottom: index === extraFoods.length - 1 ? 20 : 0,
+            }}>
+            <CartFoodList item={item} />
           </View>
         )}
-        <YStack gap="$3">
-          <Text color="#1E1F20" fontWeight={700} fontSize={16}>
-            Savings
-          </Text>
-          <XStack>
-            <Input />
-          </XStack>
-        </YStack>
-      </YStack>
-    </SafeAreaView>
-  );
-}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    ),
+    1: <CartStep2 setCurrentStep={setCurrentStep} />,
+    2: <CartStep3 setCurrentStep={setCurrentStep} />,
+  };
 
-const labels = ['Select Date', 'Address', 'Payment'];
-
-type StepIndicatorProps = {
-  currentStep: number;
-};
-
-function CustomStepIndicator({ currentStep }: StepIndicatorProps) {
-  const stepCount = labels.length;
-  const progressPercent = Math.round(((currentStep + 1) / stepCount) * 100);
+  const CurrentStep = cartSteps[currentStep] || cartSteps[0];
 
   return (
-    <View backgroundColor="white" position="relative">
-      <Progress value={progressPercent} zIndex={0} height={6} backgroundColor="#FFEDE5">
-        <Progress.Indicator
-          animation="bouncy"
-          zIndex={1}
-          backgroundColor="#FD4F01"
-          borderRadius={9999}
-          style={{
-            minWidth: progressPercent === 0 ? 12 : undefined,
-          }}
-        />
-      </Progress>
-
-      {/* Step Icons & Labels */}
-      <View
-        position="absolute"
-        left={0}
-        right={0}
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
-        zIndex={1}
-        top={-8}
-        paddingHorizontal="$4">
-        {labels.map((label, index) => {
-          let IconComponent: React.ElementType = Step1Active;
-
-          if (index === 0) {
-            IconComponent = Step1Active;
-          } else if (index === 1) {
-            IconComponent = currentStep >= 1 ? Step2Active : Step2Inactive;
-          } else if (index === 2) {
-            IconComponent = currentStep >= 2 ? Step3Active : Step3Inactive;
-          }
-
-          const isActive = index <= currentStep;
-          const color = isActive ? '#FD4F01' : '#999';
-
-          return (
-            <View key={index} alignItems="center" left={0}>
-              <IconComponent width={20} height={20} />
-              <Text fontSize={12} color={color} marginTop="$1">
-                {label}
-              </Text>
-            </View>
-          );
-        })}
-      </View>
-    </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <StepIndicator currentStep={currentStep} />
+      {CurrentStep}
+    </SafeAreaView>
   );
 }
