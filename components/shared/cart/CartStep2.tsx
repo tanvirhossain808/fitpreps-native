@@ -1,6 +1,5 @@
-import { View, Text } from 'tamagui';
+import { View, Text, Button } from 'tamagui';
 import React from 'react';
-import { Button } from 'tamagui';
 
 export default function CartStep2({
   setCurrentStep,
