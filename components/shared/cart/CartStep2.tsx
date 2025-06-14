@@ -5,6 +5,7 @@ import { TouchableOpacity, Pressable } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
+import { CartAddress } from './CartAddress';
 
 export default function CartStep2({
   setCurrentStep,
@@ -14,14 +15,16 @@ export default function CartStep2({
   const [selectedAddress, setSelectedAddress] = useState<number | null>(null);
   const [pressedItem, setPressedItem] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
 
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(true);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const handleDelete = (index: number) => {
     setSelectedAddress(null);
     setIsDeleteDialogOpen(true);
   };
   const handleEdit = (index: number) => {
     setSelectedAddress(null);
+    setIsAddressModalOpen(true);
     // Add your edit logic here
   };
   const PopoverContent = ({ index }: { index: number }) => (
@@ -190,6 +193,15 @@ export default function CartStep2({
           setIsDeleteDialogOpen(false);
         }}
         onCancel={() => setIsDeleteDialogOpen(false)}
+      />
+      <CartAddress
+        open={isAddressModalOpen}
+        onOpenChange={setIsAddressModalOpen}
+        onSave={(address) => {
+          // Handle save logic here
+          console.log(address);
+          setIsAddressModalOpen(false);
+        }}
       />
     </>
   );

@@ -1,0 +1,352 @@
+import {
+  Button,
+  Dialog,
+  Fieldset,
+  Input,
+  YStack,
+  XStack,
+  ScrollView,
+  Text,
+  RadioGroup,
+  Label,
+} from 'tamagui';
+import React from 'react';
+import { Keyboard, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import Mark from 'public/images/mark.svg';
+interface CartAddressProps {
+  open: boolean;
+  address?: any | false;
+  onOpenChange: (open: boolean) => void;
+  onSave: (address: {
+    name: string;
+    email: string;
+    addressType: 'home' | 'work' | 'other';
+    apartment: string;
+    addressLine2: string;
+    city: string;
+    zipCode: string;
+    state: string;
+  }) => void;
+}
+
+export function CartAddress({ open, onOpenChange, onSave, address = false }: CartAddressProps) {
+  const [formData, setFormData] = React.useState({
+    name: '',
+    email: '',
+    addressType: 'home' as 'home' | 'work' | 'other',
+    apartment: '',
+    addressLine2: '',
+    city: '',
+    zipCode: '',
+    state: '',
+  });
+
+  const inputStyle = {
+    py: 10,
+    elevation: 2,
+    shadowColor: 'rgba(10, 13, 18, 0.05)',
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 2,
+    shadowOpacity: 1,
+    placeholderTextColor: '#8E95A2',
+    backgroundColor: 'white',
+    borderColor: '#EDEEF1',
+    borderRadius: 8,
+    borderWidth: 1,
+  };
+
+  const formFields = [
+    {
+      id: 'apartment',
+      placeholder: 'Enter apartment/house number',
+      fullWidth: true,
+    },
+    {
+      id: 'addressLine2',
+      placeholder: 'Block no., Street name, Area/Locality',
+      fullWidth: true,
+    },
+    {
+      id: 'city',
+      placeholder: 'City',
+      fullWidth: false,
+    },
+    {
+      id: 'zipCode',
+      placeholder: 'ZIP code',
+      keyboardType: 'number-pad' as const,
+      fullWidth: false,
+    },
+    {
+      id: 'state',
+      placeholder: 'State',
+      fullWidth: true,
+    },
+  ];
+
+  const handleSubmit = () => {
+    onSave(formData);
+    onOpenChange(false);
+    setFormData({
+      name: '',
+      email: '',
+      addressType: 'home',
+      apartment: '',
+      addressLine2: '',
+      city: '',
+      zipCode: '',
+      state: '',
+    });
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const renderFormFields = () => {
+    const fields = [];
+    let i = 0;
+
+    while (i < formFields.length) {
+      const currentField = formFields[i];
+
+      if (currentField.id === 'city') {
+        fields.push(
+          <XStack key="city-zip-row" gap="$3" width="100%">
+            {['city', 'zipCode'].map((fieldId) => {
+              const field = formFields.find((f) => f.id === fieldId);
+              return (
+                <Fieldset key={fieldId} flex={1}>
+                  <Input
+                    {...inputStyle}
+                    id={fieldId}
+                    value={formData[fieldId as keyof typeof formData] as string}
+                    onChangeText={(text) => handleInputChange(fieldId, text)}
+                    placeholder={field?.placeholder}
+                    keyboardType={field?.keyboardType}
+                  />
+                </Fieldset>
+              );
+            })}
+          </XStack>
+        );
+        i += 2;
+        continue;
+      }
+
+      if (currentField.fullWidth) {
+        fields.push(
+          <Fieldset key={currentField.id}>
+            <Input
+              {...inputStyle}
+              id={currentField.id}
+              value={formData[currentField.id as keyof typeof formData] as string}
+              onChangeText={(text) => handleInputChange(currentField.id, text)}
+              placeholder={currentField.placeholder}
+              keyboardType={currentField.keyboardType}
+            />
+          </Fieldset>
+        );
+      }
+
+      i++;
+    }
+
+    return fields;
+  };
+
+  return (
+    <Dialog modal open={open} onOpenChange={onOpenChange}>
+      <Dialog.Portal>
+        <Dialog.Overlay
+          pointerEvents="auto"
+          animation="quick"
+          opacity={0}
+          backgroundColor="transparent"
+          borderWidth={0}
+          enterStyle={{ opacity: 0 }}
+          exitStyle={{ opacity: 0 }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1,
+          }}
+        />
+        <Dialog.Content
+          position="absolute"
+          bottom={0}
+          left={0}
+          right={0}
+          top={180}
+          borderWidth={0}
+          borderColor="transparent"
+          outlineWidth={0}
+          outlineColor="transparent"
+          width="100%"
+          borderTopLeftRadius="$4"
+          borderTopRightRadius="$4"
+          borderBottomLeftRadius={0}
+          borderBottomRightRadius={0}
+          borderBottomWidth={0}
+          marginBottom={0}
+          paddingBottom="$4"
+          maxHeight="90%"
+          elevation={0}
+          shadowColor="transparent"
+          animation="quick"
+          enterStyle={{ y: 1000, opacity: 0 }}
+          exitStyle={{ y: 1000, opacity: 0 }}
+          y={0}
+          opacity={1}
+          key="content"
+          backgroundColor="white"
+          style={{
+            borderWidth: 0,
+            borderColor: 'transparent',
+            boxShadow: 'none',
+            shadowOpacity: 0,
+          }}>
+          <ScrollView flex={1} backgroundColor="white" showsVerticalScrollIndicator={false}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <YStack flex={1} gap="$7">
+                <YStack gap={12}>
+                  <Text fontSize={16} fontWeight="bold" color="#1E1F20">
+                    Add New Address
+                  </Text>
+
+                  <Input
+                    placeholder="Name"
+                    value={formData.name}
+                    onChangeText={(text) => handleInputChange('name', text)}
+                    {...inputStyle}
+                  />
+                  <Input
+                    placeholder="Email"
+                    value={formData.email}
+                    onChangeText={(text) => handleInputChange('email', text)}
+                    keyboardType="email-address"
+                    {...inputStyle}
+                  />
+                </YStack>
+
+                <YStack gap={12}>
+                  <XStack flex={1} justifyContent="space-between">
+                    <Text fontSize={16} fontWeight="bold" color="#1E1F20">
+                      Address
+                    </Text>
+                    <TouchableOpacity
+                      style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                      <Mark />
+                      <Text color="#FD4F01" fontSize={14} fontWeight={700}>
+                        Use Current Location
+                      </Text>
+                    </TouchableOpacity>
+                  </XStack>
+                  {renderFormFields()}
+                </YStack>
+
+                <YStack gap="$3">
+                  <Text fontSize={16} fontWeight="bold" color="#1E1F20">
+                    Address Type
+                  </Text>
+                  <RadioGroup
+                    value={formData.addressType}
+                    onValueChange={(value) => handleInputChange('addressType', value)}
+                    flexDirection="row"
+                    gap="$4">
+                    {['home', 'work', 'other'].map((type) => (
+                      <XStack key={type} alignItems="center" space="$2">
+                        <RadioGroup.Item
+                          value={type}
+                          id={type}
+                          borderColor={'#FD4F01'}
+                          borderWidth={1}
+                          width={14}
+                          height={14}
+                          borderRadius={8}>
+                          {formData.addressType === type && (
+                            <RadioGroup.Indicator
+                              backgroundColor="#FD4F01"
+                              width={10}
+                              height={10}
+                              borderRadius={5}
+                            />
+                          )}
+                        </RadioGroup.Item>
+                        <Label htmlFor={type} color={'#1E1F20'} fontSize={14} fontWeight={500}>
+                          {type.charAt(0).toUpperCase() + type.slice(1)}
+                        </Label>
+                      </XStack>
+                    ))}
+                  </RadioGroup>
+                </YStack>
+                <XStack gap={10} mt={20} py={20} justifyContent="space-between" width="100%">
+                  <Dialog.Close asChild>
+                    <XStack flex={1}>
+                      <Button
+                        flex={1}
+                        backgroundColor="white"
+                        variant="outlined"
+                        onPress={() => onOpenChange(false)}
+                        color="#FD4F01"
+                        borderColor="#FD4F01"
+                        borderRadius={8}
+                        fontSize={16}
+                        fontWeight={700}
+                        borderWidth={1}
+                        elevation={2}
+                        shadowColor="rgba(10, 13, 18, 0.05)"
+                        shadowOffset={{ width: 0, height: 1 }}
+                        shadowOpacity={0.05}
+                        shadowRadius={2}
+                        pressStyle={{
+                          elevation: 2,
+                          shadowColor: 'rgba(10, 13, 18, 0.05)',
+                          shadowOffset: { width: 0, height: 1 },
+                          shadowOpacity: 0.05,
+                          shadowRadius: 2,
+                          backgroundColor: 'white',
+                        }}>
+                        Cancel
+                      </Button>
+                    </XStack>
+                  </Dialog.Close>
+                  <XStack flex={1} marginLeft={10}>
+                    <Button
+                      flex={1}
+                      onPress={handleSubmit}
+                      backgroundColor="#FD4F01"
+                      elevation={2}
+                      shadowColor="#FF7435"
+                      shadowOffset={{ width: 0, height: 0 }}
+                      shadowOpacity={1}
+                      shadowRadius={2}
+                      borderRadius={8}
+                      fontSize={16}
+                      fontWeight={700}
+                      borderWidth={1}
+                      borderColor="#FD4F01"
+                      color="white"
+                      pressStyle={{
+                        elevation: 2,
+                        shadowColor: '#FF7435',
+                        shadowOffset: { width: 0, height: 0 },
+                        shadowOpacity: 1,
+                        shadowRadius: 2,
+                        backgroundColor: '#FD4F01', // Prevent dark flash
+                      }}>
+                      Save Address
+                    </Button>
+                  </XStack>
+                </XStack>
+              </YStack>
+            </TouchableWithoutFeedback>
+          </ScrollView>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog>
+  );
+}
