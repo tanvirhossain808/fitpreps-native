@@ -6,25 +6,38 @@ import Entypo from '@expo/vector-icons/Entypo';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
 import { CartAddress } from './CartAddress';
+import { MapModal } from '~/components/modal/MapModal';
 
 export default function CartStep2({
   setCurrentStep,
+  isEditAddress,
+  setIsEditAddress,
+  isShowMapModal,
+  setShowMapModal,
+  setIsAddressModalOpen,
+  isAddressModalOpen,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  isEditAddress: boolean;
+  setIsEditAddress: React.Dispatch<React.SetStateAction<boolean>>;
+  isShowMapModal: boolean;
+  setShowMapModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsAddressModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isAddressModalOpen: boolean;
 }) {
   const [selectedAddress, setSelectedAddress] = useState<number | null>(null);
   const [pressedItem, setPressedItem] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
-
+  const [confirmAddress, setConFirmAddress] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const handleDelete = (index: number) => {
     setSelectedAddress(null);
     setIsDeleteDialogOpen(true);
   };
   const handleEdit = (index: number) => {
-    setSelectedAddress(null);
-    setIsAddressModalOpen(true);
+    setSelectedAddress(() => null);
+    setIsAddressModalOpen(() => true);
+    setIsEditAddress(() => true);
     // Add your edit logic here
   };
   const PopoverContent = ({ index }: { index: number }) => (
@@ -84,125 +97,138 @@ export default function CartStep2({
   return (
     <>
       <SafeAreaView style={{ flex: 1 }}>
-        <YStack flex={1} justifyContent="space-between">
-          <YStack flex={1} px={'$4'} pb="$5" gap="$7">
-            <Button
-              width="100%"
-              fontSize={16}
-              color="#FD4F01"
-              fontWeight={700}
-              borderRadius={8}
-              borderWidth={1}
-              borderColor="#FD4F01"
-              backgroundColor="white"
-              shadowColor="rgba(10, 13, 18, 0.05)"
-              shadowOffset={{ width: 0, height: 1 }}
-              shadowRadius={2}
-              shadowOpacity={1}
-              elevation={2}>
-              Add New Address
-            </Button>
-            <YStack gap="$3">
-              <Text color="#1E1F20" fontSize={16} fontWeight={700}>
-                Saved Address
-              </Text>
+        {confirmAddress ? (
+          <ConfirmAddress />
+        ) : (
+          <YStack flex={1} justifyContent="space-between">
+            <YStack flex={1} px={'$4'} pb="$5" gap="$7">
+              <Button
+                onPress={() => setIsAddressModalOpen(true)}
+                width="100%"
+                fontSize={16}
+                color="#FD4F01"
+                fontWeight={700}
+                borderRadius={8}
+                borderWidth={1}
+                borderColor="#FD4F01"
+                backgroundColor="white"
+                shadowColor="rgba(10, 13, 18, 0.05)"
+                shadowOffset={{ width: 0, height: 1 }}
+                shadowRadius={2}
+                shadowOpacity={1}
+                elevation={2}>
+                Add New Address
+              </Button>
+              <YStack gap="$3">
+                <Text color="#1E1F20" fontSize={16} fontWeight={700}>
+                  Saved Address
+                </Text>
 
-              {address.map((addressDetails, i) => (
-                <TouchableOpacity key={i} onPress={() => setSelectedIndex(i)} activeOpacity={0.4}>
-                  <XStack p="$3" gap="$3" borderRadius={12} bg="#FFF9F7" alignItems="flex-start">
-                    <XStack
-                      mt="8"
-                      alignItems="center"
-                      justifyContent="center"
-                      width={14}
-                      height={14}
-                      borderRadius={50}
-                      borderWidth={1}
-                      borderColor="#FD4F01">
-                      <View
-                        backgroundColor={selectedIndex === i ? '#FD4F01' : 'transparent'}
-                        width={10}
-                        height={10}
-                        borderRadius={selectedIndex === i ? 50 : 0}
-                      />
-                    </XStack>
-                    <YStack flex={1} alignSelf="stretch">
-                      <XStack justifyContent="space-between" alignItems="flex-start">
-                        <XStack gap={4} alignItems="center" flex={1} mr="$2">
-                          <Text color="#1E1F20" fontSize={16} fontWeight={700} numberOfLines={1}>
-                            {addressDetails.name}
-                          </Text>
-                          <Text
-                            color="#009A21"
-                            fontSize={10}
-                            fontWeight={700}
-                            p="$2"
-                            bg="#E5F8EA"
-                            borderRadius={20}>
-                            {addressDetails.badge}
-                          </Text>
-                        </XStack>
-                        <Popover
-                          open={selectedAddress === i}
-                          onOpenChange={(open) => setSelectedAddress(open ? i : null)}
-                          placement="left-start"
-                          offset={{ mainAxis: -25, crossAxis: 20 }}>
-                          <Popover.Trigger asChild>
-                            <TouchableOpacity
-                              onPress={(e) => {
-                                e.stopPropagation();
-                                setSelectedAddress(selectedAddress === i ? null : i);
-                              }}
-                              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-                              <Entypo name="dots-three-horizontal" size={24} color="#FD4F01" />
-                            </TouchableOpacity>
-                          </Popover.Trigger>
-                          <PopoverContent index={i} />
-                        </Popover>
+                {address.map((addressDetails, i) => (
+                  <TouchableOpacity key={i} onPress={() => setSelectedIndex(i)} activeOpacity={0.4}>
+                    <XStack p="$3" gap="$3" borderRadius={12} bg="#FFF9F7" alignItems="flex-start">
+                      <XStack
+                        mt="8"
+                        alignItems="center"
+                        justifyContent="center"
+                        width={14}
+                        height={14}
+                        borderRadius={50}
+                        borderWidth={1}
+                        borderColor="#FD4F01">
+                        <View
+                          backgroundColor={selectedIndex === i ? '#FD4F01' : 'transparent'}
+                          width={10}
+                          height={10}
+                          borderRadius={selectedIndex === i ? 50 : 0}
+                        />
                       </XStack>
-                      <Text fontSize={14} marginTop={4}>
-                        {addressDetails.streetName}
-                      </Text>
-                    </YStack>
-                  </XStack>
-                </TouchableOpacity>
-              ))}
+                      <YStack flex={1} alignSelf="stretch">
+                        <XStack justifyContent="space-between" alignItems="flex-start">
+                          <XStack gap={4} alignItems="center" flex={1} mr="$2">
+                            <Text color="#1E1F20" fontSize={16} fontWeight={700} numberOfLines={1}>
+                              {addressDetails.name}
+                            </Text>
+                            <Text
+                              color="#009A21"
+                              fontSize={10}
+                              fontWeight={700}
+                              p="$2"
+                              bg="#E5F8EA"
+                              borderRadius={20}>
+                              {addressDetails.badge}
+                            </Text>
+                          </XStack>
+                          <Popover
+                            open={selectedAddress === i}
+                            onOpenChange={() => {}}
+                            placement="left-start"
+                            offset={{ mainAxis: -25, crossAxis: 20 }}>
+                            <Popover.Trigger asChild>
+                              <TouchableOpacity
+                                onPress={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedAddress(selectedAddress === i ? null : i);
+                                }}
+                                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                                <Entypo name="dots-three-horizontal" size={24} color="#FD4F01" />
+                              </TouchableOpacity>
+                            </Popover.Trigger>
+                            <PopoverContent index={i} />
+                          </Popover>
+                        </XStack>
+                        <Text fontSize={14} marginTop={4}>
+                          {addressDetails.streetName}
+                        </Text>
+                      </YStack>
+                    </XStack>
+                  </TouchableOpacity>
+                ))}
+              </YStack>
             </YStack>
+            <XStack alignItems="center" px={'$4'} py="$5">
+              <Button
+                disabled={selectedIndex === null}
+                flex={1}
+                mt="$3"
+                bg="#FD4F01"
+                borderRadius={8}
+                fontSize={16}
+                fontWeight={700}
+                color="white"
+                onPress={() => setCurrentStep(2)}>
+                Confirm
+              </Button>
+            </XStack>
           </YStack>
-          <XStack alignItems="center" px={'$4'} py="$5">
-            <Button
-              disabled={selectedIndex === null}
-              flex={1}
-              mt="$3"
-              bg="#FD4F01"
-              borderRadius={8}
-              fontSize={16}
-              fontWeight={700}
-              color="white"
-              onPress={() => setCurrentStep(2)}>
-              Confirm
-            </Button>
-          </XStack>
-        </YStack>
+        )}
       </SafeAreaView>
       <DeleteConfirmationDialog
         open={isDeleteDialogOpen}
-        onOpenChange={setIsDeleteDialogOpen}
+        onOpenChange={() => {}}
         onConfirm={() => {
           // Handle delete logic here
           setIsDeleteDialogOpen(false);
         }}
         onCancel={() => setIsDeleteDialogOpen(false)}
       />
-      <CartAddress
-        open={isAddressModalOpen}
-        onOpenChange={setIsAddressModalOpen}
-        onSave={(address) => {
-          // Handle save logic here
-          console.log(address);
-          setIsAddressModalOpen(false);
-        }}
-      />
+      {isAddressModalOpen && (
+        <CartAddress
+          setConFirmAddress={setConFirmAddress}
+          isEditAddress={isEditAddress}
+          setIsEditAddress={setIsEditAddress}
+          open={isAddressModalOpen}
+          onOpenChange={setIsAddressModalOpen}
+          setIsAddressModalOpen={setIsAddressModalOpen}
+          onSave={(address) => {
+            setIsEditAddress(false);
+            setIsAddressModalOpen(false);
+          }}
+          isShowMapModal={isShowMapModal}
+          setIsShowMapModal={setShowMapModal}
+        />
+      )}
+      <MapModal open={isShowMapModal} onOpenChange={() => setShowMapModal(false)} />
     </>
   );
 }
@@ -305,3 +331,57 @@ function DeleteConfirmationDialog({
     </Dialog>
   );
 }
+
+const ConfirmAddress = () => {
+  return (
+    <YStack px="$4" flex={1} justifyContent="space-between">
+      <YStack>
+        <Text color="#1E1F20" fontWeight={700} fontSize={16}>
+          Deliver to:
+        </Text>
+        <XStack alignItems="center" gap={4}>
+          <Text color="#1E1F20" fontWeight={700} fontSize={16} mt="$3">
+            New Address
+          </Text>
+          <View mt={6} bg="#E5F8EA" borderRadius={20} p="$2">
+            <Text color="#009A21" fontSize={10} fontWeight={700}>
+              Home
+            </Text>
+          </View>
+        </XStack>
+        <Text color="#1E1F20" fontSize={16} mt={6}>
+          Street name, Block no., Locality, City Name, State - 000000.
+        </Text>
+        <TouchableOpacity style={{ marginTop: 8, display: 'flex', alignItems: 'flex-start' }}>
+          <Text
+            color="#FD4F01"
+            borderBottomWidth={2}
+            fontSize={16}
+            fontWeight={700}
+            borderColor="#FD4F01">
+            Change
+          </Text>
+        </TouchableOpacity>
+      </YStack>
+      <YStack py="$5">
+        <YStack pb="$5">
+          <Text color="#1E1F20" fontSize={16} fontWeight={700}>
+            NOTE:
+          </Text>
+          <Text mt="$2" fontSize={16} fontWeight={500}>
+            Your order will be delivered on <Text color="#FD4F01">April 14, Monday.</Text>
+          </Text>
+        </YStack>
+        <Button
+          mt="$5"
+          borderRadius={12}
+          color="white"
+          fontWeight={700}
+          fontSize={16}
+          backgroundColor="#FD4F01">
+          Continue
+        </Button>
+      </YStack>
+    </YStack>
+  );
+};

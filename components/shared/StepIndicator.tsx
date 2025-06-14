@@ -10,25 +10,74 @@ import { router } from 'expo-router';
 
 type StepIndicatorProps = {
   currentStep: number;
+  isEditAddress?: boolean;
+  isShowMapModal?: boolean;
+  setIsEditAddress?: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowMapModal?: React.Dispatch<React.SetStateAction<boolean>>;
+  isAddressModalOpen?: boolean;
+  setIsAddressModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function StepIndicator({ currentStep }: StepIndicatorProps) {
+export default function StepIndicator({
+  currentStep,
+  isEditAddress = false,
+  isShowMapModal = false,
+  setIsEditAddress,
+  setShowMapModal,
+  isAddressModalOpen = false,
+  setIsAddressModalOpen,
+}: StepIndicatorProps) {
   const labels = ['Select Date', 'Address', 'Payment'];
   const stepCount = labels.length;
   const progressPercent = Math.round(((currentStep + 1) / stepCount) * 100);
+  let text = 'Cart';
 
+  if (isEditAddress && !isShowMapModal) {
+    text = 'Edit Address';
+  } else if (isShowMapModal) {
+    text = 'Select Delivery Location';
+  } else if (isAddressModalOpen) {
+    text = 'Add New Address';
+  }
+  const handleBack = () => {
+    if (isShowMapModal && setShowMapModal) {
+      setShowMapModal(false);
+    } else if (isEditAddress && setIsAddressModalOpen && setIsEditAddress && !setShowMapModal) {
+      setIsAddressModalOpen(false);
+      setIsEditAddress(false);
+    } else if (isAddressModalOpen && setIsAddressModalOpen) {
+      setIsAddressModalOpen(false);
+      if (setIsEditAddress) {
+        setIsEditAddress(false);
+      }
+    } else {
+      router.back();
+    }
+  };
   return (
     <>
       <View p="$4">
         <View pb="$5" bg="white">
           <YStack gap={'$7'}>
             <XStack alignItems="center" gap="$2">
-              <TouchableOpacity onPress={() => router.back()}>
+              <TouchableOpacity style={{ zIndex: 20 }} onPress={() => handleBack()}>
                 <AntDesign name="left" size={24} color="black" />
               </TouchableOpacity>
-              <Text fontSize={20} fontWeight={700}>
-                Cart
-              </Text>
+              {text === 'Cart' ? (
+                <Text fontSize={20} fontWeight={700}>
+                  Cart
+                </Text>
+              ) : (
+                <Text
+                  fontSize={20}
+                  fontWeight={700}
+                  position="absolute"
+                  left={0}
+                  right={0}
+                  textAlign="center">
+                  {text}
+                </Text>
+              )}
             </XStack>
             <View>
               <View backgroundColor="white" position="relative">
