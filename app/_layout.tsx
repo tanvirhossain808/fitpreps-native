@@ -40,6 +40,7 @@ export default function RootLayout() {
           <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
           <Stack.Screen name="(sharedScreens)" options={{ headerShown: false }} />
           <Stack.Screen name="cart" options={{ headerShown: false }} />
+          <Stack.Screen name="orderplaced" options={{ headerShown: false }} />
         </Stack>
       </SafeAreaProvider>
     </TamaguiProvider>

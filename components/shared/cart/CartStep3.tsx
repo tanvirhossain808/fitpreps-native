@@ -13,7 +13,7 @@ export default function CartStep3({
 }) {
   const [showPass, setShowPass] = useState(false);
   return (
-    <YStack flex={1} padding={16}>
+    <YStack flex={1} padding={16} justifyContent="space-between">
       <YStack py="$5">
         <Text color="#1E1F20" fontSize={16} fontWeight={700}>
           Payment Options

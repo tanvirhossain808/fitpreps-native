@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-export default function CartLayOut() {
+export default function OrderPlacedLayout() {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />

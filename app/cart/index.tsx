@@ -5,7 +5,7 @@ import CartStep2 from '~/components/shared/cart/CartStep2';
 import CartStep3 from '~/components/shared/cart/CartStep3';
 import CartStep1 from '~/components/shared/cart/CartStep1';
 export default function Cart() {
-  const [currentStep, setCurrentStep] = useState<number>(2);
+  const [currentStep, setCurrentStep] = useState<number>(1);
   const [isShowMapModal, setShowMapModal] = useState<boolean>(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isEditAddress, setIsEditAddress] = useState(false);
