@@ -59,6 +59,7 @@ export default function TabLayout() {
         name="subscription"
         options={{
           title: 'Subscription',
+          headerShown: false,
           tabBarIcon: ({ color, focused }) => {
             return !focused ? (
               <Image source={require('public/images/subs.png')} width={20} height={22} />

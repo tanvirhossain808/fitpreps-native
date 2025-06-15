@@ -1,16 +1,32 @@
-import { Stack, router } from 'expo-router';
+import { Stack, router, useFocusEffect } from 'expo-router';
 import { Image, Input, ScrollView, Text, XStack, YStack } from 'tamagui';
 import Octicons from '@expo/vector-icons/Octicons';
 import Feather from '@expo/vector-icons/Feather';
 
-import { TouchableOpacity } from 'react-native';
+import { Alert, BackHandler, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { selectCategories } from '~/constant';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import TopSearchbar from '~/components/shared/TopSearchbar';
+import { useNavigationState } from '@react-navigation/native';
 export default function Home() {
   const [selectCategory, setSelectedCategory] = useState<number | null>(null);
+  useEffect(() => {
+    const backAction = () => {
+      if (!router.canGoBack()) {
+        // Option 1: Show alert
+        Alert.alert("Can't go back", "You're on the home screen");
+        return true; // Prevent default back behavior
+      }
+      return false; // Allow default back behavior
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => backHandler.remove();
+  }, []);
+
   return (
     <>
       <StatusBar style="dark" />
@@ -48,8 +64,7 @@ export default function Home() {
                       }}
                       onPress={() =>
                         router.push({
-                          pathname: pathName as any,
-                          params: { product: path },
+                          pathname: `${pathName}/${path}` as any,
                         })
                       }
                       onPressIn={() => setSelectedCategory(i)}

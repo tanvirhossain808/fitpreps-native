@@ -1,9 +1,10 @@
 import * as Font from 'expo-font';
-
 import React, { useEffect } from 'react';
 import { TamaguiProvider } from 'tamagui';
 import { SplashScreen, Stack } from 'expo-router';
 import { useFonts } from 'expo-font';
+import { GestureHandlerRootView } from 'react-native-gesture-handler'; // Added import
+import { StyleSheet } from 'react-native'; // Added import
 
 import config from '../tamagui.config';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -11,7 +12,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 SplashScreen.preventAutoHideAsync();
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '(tabs)',
 };
 
@@ -33,16 +33,25 @@ export default function RootLayout() {
 
   return (
     <TamaguiProvider config={config}>
-      <SafeAreaProvider>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-          <Stack.Screen name="(sharedScreens)" options={{ headerShown: false }} />
-          <Stack.Screen name="cart" options={{ headerShown: false }} />
-          <Stack.Screen name="orderplaced" options={{ headerShown: false }} />
-        </Stack>
-      </SafeAreaProvider>
+      <GestureHandlerRootView style={styles.container}>
+        <SafeAreaProvider>
+          <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="(sharedScreens)" options={{ headerShown: false }} />
+            <Stack.Screen name="cart" options={{ headerShown: false }} />
+            <Stack.Screen name="orderplaced" options={{ headerShown: false }} />
+            <Stack.Screen name="h" options={{ headerShown: false }} />
+          </Stack>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
     </TamaguiProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

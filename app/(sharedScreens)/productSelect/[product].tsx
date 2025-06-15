@@ -8,10 +8,13 @@ import { BlurView } from 'expo-blur';
 import { selectedItems } from '~/constant';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSearchParams } from 'expo-router/build/hooks';
+import { useNavigationState } from '@react-navigation/native';
 export default function () {
   const [pressButton, setPressButton] = useState<string | null>(null);
+
   const { product } = useLocalSearchParams();
   const selectedScreen = selectedItems.find((data) => data.name === product);
+  const [badge, setBadge] = useState<string | null>(null);
   if (!selectedScreen) {
     return (
       <View>
@@ -50,15 +53,13 @@ export default function () {
                     {selectedScreen.subtitle}
                   </Text>
                   <XStack justifyContent="center" gap="28">
-                    <TouchableOpacity
-                      onPressIn={() => setPressButton('meal')}
-                      onPressOut={() => setPressButton(null)}>
+                    <TouchableOpacity onPress={() => setPressButton('meal')}>
                       <YStack
                         gap={10}
                         p="$2"
                         backgroundColor={'white'}
                         borderWidth={2}
-                        borderColor={pressButton === 'meal' ? '#FD4F01' : 'transparent'}
+                        borderColor={pressButton === 'meal' ? '#FD4F01' : '$colorTransparent'}
                         borderRadius={20}>
                         <Image
                           source={require('public/images/shared/selecmels.png')}
@@ -68,7 +69,7 @@ export default function () {
                         />
                         <View maxWidth={100}>
                           <Text color="#FD4F01" textAlign="center" fontSize={14} fontWeight={700}>
-                            Buy Meals{' '}
+                            Buy Meals
                           </Text>
                           <Text
                             textAlign="center"
@@ -81,16 +82,16 @@ export default function () {
                         </View>
                       </YStack>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                      onPressIn={() => setPressButton('meal')}
-                      onPressOut={() => setPressButton(null)}>
+                    <TouchableOpacity onPress={() => setPressButton('subscription')}>
                       <YStack
                         flex={1}
                         gap={10}
                         p="$2"
                         backgroundColor={'rgba(255, 255, 255, 0.25)'}
                         borderWidth={2}
-                        borderColor={pressButton === 'meal' ? '#FD4F01' : 'transparent'}
+                        borderColor={
+                          pressButton === 'subscription' ? '#FD4F01' : '$colorTransparent'
+                        }
                         borderRadius={20}>
                         <Image
                           source={require('public/images/shared/selectsub.png')}
@@ -116,6 +117,14 @@ export default function () {
                   </XStack>
                   <XStack justifyContent="center">
                     <Button
+                      disabled={pressButton === null}
+                      onPress={() =>
+                        router.push({
+                          pathname:
+                            pressButton === 'meal' ? '/(tabs)/meals' : '/(tabs)/subscription',
+                          params: { product },
+                        })
+                      }
                       py={'$3'}
                       color="white"
                       fontWeight={700}

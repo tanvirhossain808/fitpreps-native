@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   Animated,
   StatusBar as RNStatusBar,
@@ -16,10 +16,9 @@ import Sortby from '~/components/shared/Sortby';
 import { cookdFoodCategories, foodOfItems, foodSortByOptions } from '~/constant';
 import SelectedFoodCategories from '~/components/shared/SelectedFoodCategories';
 import Entypo from '@expo/vector-icons/Entypo';
-import { router, useLocalSearchParams, useNavigation } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import FilterModal from '~/components/modal/Filter';
 import ProductLists from '~/components/shared/ProductLists';
-import { useFocusEffect, useNavigationState } from '@react-navigation/native';
 
 const defaultTabBarStyle = {
   position: 'absolute',
@@ -45,18 +44,17 @@ export default function Home() {
   const scrollY = useRef(new Animated.Value(0)).current;
   const lastScrollY = useRef(0);
   const animation = useRef(new Animated.Value(0)).current;
-  const HEADER_HEIGHT = showCompact ? 80 : 120;
+  const HEADER_HEIGHT = 120;
   const COMPACT_BAR_HEIGHT = 140;
   const navigation = useNavigation();
   // Animate between header and compact bar when showCompact changes
   const tabBarTranslateY = useRef(new Animated.Value(0)).current;
   const scrollOffset = useRef(0);
   const SCROLL_THRESHOLD = 10;
-  const { product } = useLocalSearchParams();
   const hideTabBar = () => {
     Animated.timing(tabBarTranslateY, {
       toValue: 100, // move tab bar down (hide)
-      duration: 20,
+      duration: 250,
       useNativeDriver: true,
     }).start();
   };
@@ -64,7 +62,7 @@ export default function Home() {
   const showTabBar = () => {
     Animated.timing(tabBarTranslateY, {
       toValue: 0, // move tab bar up (show)
-      duration: 20,
+      duration: 250,
       useNativeDriver: true,
     }).start();
   };
@@ -74,13 +72,13 @@ export default function Home() {
     useNativeDriver: false,
     listener: (event) => {
       //@ts-ignore
-      // const currentY = event.nativeEvent.contentOffset.y;
-      // if (currentY > lastScrollY.current && currentY > HEADER_HEIGHT) {
-      //   setShowCompact(true);
-      // } else if (currentY < lastScrollY.current) {
-      //   setShowCompact(false);
-      // }
-      // lastScrollY.current = currentY;
+      const currentY = event.nativeEvent.contentOffset.y;
+      if (currentY > lastScrollY.current && currentY > HEADER_HEIGHT) {
+        setShowCompact(true);
+      } else if (currentY < lastScrollY.current) {
+        setShowCompact(false);
+      }
+      lastScrollY.current = currentY;
     },
   });
 
@@ -97,6 +95,12 @@ export default function Home() {
     outputRange: [-COMPACT_BAR_HEIGHT, 0],
   });
 
+  // Dummy data for scrolling
+  const dummyMeals = Array.from({ length: 30 }, (_, i) => ({
+    id: i + 1,
+    name: `Meal ${i + 1}`,
+  }));
+
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const currentOffset = event.nativeEvent.contentOffset.y;
     const diff = currentOffset - scrollOffset.current;
@@ -109,7 +113,13 @@ export default function Home() {
 
     scrollOffset.current = currentOffset;
   };
-
+  // Status bar color
+  useEffect(() => {
+    RNStatusBar.setBarStyle(showCompact ? 'dark-content' : 'light-content', true);
+    if (Platform.OS === 'android') {
+      RNStatusBar.setBackgroundColor(showCompact ? 'white' : '#0A8A23', true);
+    }
+  }, [showCompact]);
   useEffect(() => {
     navigation.setOptions({
       tabBarStyle: {
@@ -119,11 +129,11 @@ export default function Home() {
     });
   }, [filterOpen]);
   useEffect(() => {
-    // Animated.timing(animation, {
-    //   toValue: showCompact ? 1 : 0,
-    //   duration: 500,
-    //   useNativeDriver: false,
-    // }).start();
+    Animated.timing(animation, {
+      toValue: showCompact ? 1 : 0,
+      duration: 250,
+      useNativeDriver: false,
+    }).start();
   }, [showCompact, animation]);
   useEffect(() => {
     navigation.setOptions({
@@ -148,26 +158,6 @@ export default function Home() {
     handleScroll(event);
     onScroll(event);
   };
-
-  const state = useNavigationState((state) => state);
-
-  // Log the full navigation state
-
-  // Get just the route names
-
-  useFocusEffect(
-    useCallback(() => {
-      RNStatusBar.setBackgroundColor('#0A8A23');
-      return () => {
-        RNStatusBar.setBarStyle('light-content', true);
-
-        if (Platform.OS === 'android') {
-          RNStatusBar.setBackgroundColor('transparent', true);
-        }
-      };
-    }, [])
-  );
-  useEffect(() => {});
   return (
     <SafeAreaView style={{ flex: 1 }} onTouchStart={() => setShowSort(false)}>
       {/* Animated Header */}
@@ -187,19 +177,16 @@ export default function Home() {
           <XStack bg="#0A8A23" borderBottomStartRadius={20} borderBottomEndRadius={20}>
             <TopSearchbar placeholder="Search your meal here" />
           </XStack>
-
-          <XStack px={16} py={showCompact ? 0 : 20}>
+          <XStack px={16} py={20}>
             <H5 color="#25272C" fontWeight={700} size={16}>
               What are you looking for today?
             </H5>
           </XStack>
-
           <SelectedFoodCategories
             cookdFoodCategories={cookdFoodCategories}
             selectFoodCategory={selectFoodCategory}
             setSelectedFoodCategory={setSelectedFoodCategory}
           />
-
           <View px={16} mt={'$5'}>
             <XStack
               justifyContent="space-between"
@@ -308,7 +295,14 @@ export default function Home() {
               selectFoodCategory={selectFoodCategory}
               setSelectedFoodCategory={setSelectedFoodCategory}
             /> */}
-            <XStack justifyContent="space-between" py={12} px={16}>
+            {/* <XStack
+              justifyContent="space-between"
+              py={12}
+              borderTopWidth={0.5}
+              borderTopColor="#B6BAC3"
+              px={16}
+              borderBottomWidth={0.5}
+              borderBottomColor="#B6BAC3">
               <XStack alignItems="center" gap={12}>
                 <TouchableOpacity
                   activeOpacity={0.5}
@@ -344,7 +338,7 @@ export default function Home() {
               <Text fontSize={11} color="#25272C">
                 48 meal preps to explore
               </Text>
-            </XStack>
+            </XStack> */}
           </YStack>
         </SafeAreaView>
       </Animated.View>

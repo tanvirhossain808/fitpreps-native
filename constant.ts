@@ -31,7 +31,7 @@ export const selectCategories = [
     name: 'cookd',
     width: '158',
     border: '#FD4F01',
-    pathName: '/(sharedScreens)/productSelect/[product]',
+    pathName: '/(sharedScreens)/productSelect',
     path: 'cookd',
   },
   {
@@ -39,7 +39,7 @@ export const selectCategories = [
     name: 'fueld',
     width: '158',
     border: '#FD4F01',
-    pathName: '/(sharedScreens)/productSelect/[product]',
+    pathName: '/(sharedScreens)/productSelect',
     path: 'fueld',
   },
   {
@@ -48,7 +48,7 @@ export const selectCategories = [
     name: 'suppd',
     width: '158',
     border: '#FD4F01',
-    pathName: '/(sharedScreens)/productSelect/[product]',
+    pathName: '/(sharedScreens)/productSelect/',
   },
   {
     path: 'fueld',
@@ -56,7 +56,7 @@ export const selectCategories = [
     name: 'shaped',
     width: '158',
     border: '#FD4F01',
-    pathName: '/(sharedScreens)/productSelect/[product]',
+    pathName: '/(sharedScreens)/productSelect ',
   },
   {
     path: 'fueld',
@@ -64,7 +64,7 @@ export const selectCategories = [
     name: 'subscription',
     width: '158',
     border: '#FD4F01',
-    pathName: '/(sharedScreens)/productSelect/[product]',
+    pathName: '/(sharedScreens)/productSelect',
   },
   {
     path: 'fueld',
@@ -72,7 +72,7 @@ export const selectCategories = [
     name: 'tracking',
     width: '158',
     border: '#FD4F01',
-    pathName: '/(sharedScreens)/productSelect/[product]',
+    pathName: '/(sharedScreens)/productSelect',
   },
 ];
 
@@ -378,6 +378,412 @@ export const foodOfItems: FoodOrSliderItem[] = [
     ],
     badge: 'Asian',
   },
+  {
+    type: 'food',
+    id: 1,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
+  },
+  {
+    type: 'food',
+    id: 2,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
+  },
+  {
+    type: 'food',
+    id: 3,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
+  },
+  {
+    type: 'food',
+    id: 4,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
+  },
+  {
+    type: 'slider',
+    id: 'slider-1',
+    images: [
+      {
+        img: foodsliderimg1,
+        caption: 'Up to 10% OFF',
+        title: 'Subscribe & Save!',
+        text: '#FFFFFF',
+        id: 1,
+      },
+      {
+        img: foodsliderimg2,
+        caption: 'Up to 10% OFF',
+        title: 'Subscribe & Save!',
+        text: '#FFFFFF',
+        id: 2,
+      },
+      {
+        img: foodsliderimg3,
+        caption: 'Up to 10% OFF',
+        title: 'Subscribe & Save!',
+        text: '#1E1F20',
+        id: 3,
+      },
+      {
+        img: foodsliderimg4,
+        caption: 'Up to 10% OFF',
+        title: 'Subscribe & Save!',
+        text: '#FFFFFF',
+        id: 4,
+      },
+    ],
+  },
+  {
+    type: 'food',
+    id: 5,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
+  },
+  {
+    type: 'food',
+    id: 6,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
+  },
+  {
+    type: 'food',
+    id: 7,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
+  },
+  {
+    type: 'food',
+    id: 8,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    // price: '€10',
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
+  },
+  {
+    type: 'food',
+    id: 1,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
+  },
+  {
+    type: 'food',
+    id: 2,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
+  },
+  {
+    type: 'food',
+    id: 3,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
+  },
+  {
+    type: 'food',
+    id: 4,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
+  },
+  {
+    type: 'slider',
+    id: 'slider-1',
+    images: [
+      {
+        img: foodsliderimg1,
+        caption: 'Up to 10% OFF',
+        title: 'Subscribe & Save!',
+        text: '#FFFFFF',
+        id: 1,
+      },
+      {
+        img: foodsliderimg2,
+        caption: 'Up to 10% OFF',
+        title: 'Subscribe & Save!',
+        text: '#FFFFFF',
+        id: 2,
+      },
+      {
+        img: foodsliderimg3,
+        caption: 'Up to 10% OFF',
+        title: 'Subscribe & Save!',
+        text: '#1E1F20',
+        id: 3,
+      },
+      {
+        img: foodsliderimg4,
+        caption: 'Up to 10% OFF',
+        title: 'Subscribe & Save!',
+        text: '#FFFFFF',
+        id: 4,
+      },
+    ],
+  },
+  {
+    type: 'food',
+    id: 5,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
+  },
+  {
+    type: 'food',
+    id: 6,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
+  },
+  {
+    type: 'food',
+    id: 7,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
+  },
+  {
+    type: 'food',
+    id: 8,
+    name: 'STEW - MASHED POTATOES - CARROT MIX',
+    img: food,
+    // price: '€10',
+    price: [
+      {
+        quantity: '300 gr',
+        price: '€10',
+      },
+      {
+        quantity: '600 gr',
+        price: '€20',
+      },
+      {
+        quantity: '1 kg',
+        price: '€30',
+      },
+    ],
+    badge: 'Asian',
+  },
 ];
 
 export const extraFoods: {
@@ -467,4 +873,74 @@ export const address = [
     isDefault: true,
     badge: 'Home',
   },
+];
+
+export const subscriptionPlans = [
+  {
+    name: 'Weekly Plan',
+    plans: [
+      {
+        name: 'Starter Pack',
+        badge: 'Current',
+        price: '€126',
+        coins: '1260',
+        bonusCoins: '120',
+        id: 'weekly1',
+      },
+      {
+        name: 'Balance Pack',
+        badge: 'Current',
+        price: '€252',
+        coins: '2520',
+        bonusCoins: '250',
+        id: 'weekly2',
+      },
+      {
+        name: 'Elite Pack',
+        badge: 'Current',
+        price: '€504',
+        coins: '5040',
+        bonusCoins: '500',
+        id: 'weekly3',
+      },
+    ],
+    save: '10',
+  },
+  {
+    name: 'Monthly Plan',
+    plans: [
+      {
+        name: 'Starter Pack',
+        badge: 'Current',
+        price: '€126',
+        coins: '1660',
+        bonusCoins: '120',
+        id: 'monthly1',
+      },
+      {
+        name: 'Balance Pack',
+        badge: 'Current',
+        price: '€252',
+        coins: '2520',
+        bonusCoins: '250',
+        id: 'monthly2',
+      },
+      {
+        name: 'Elite Pack',
+        badge: 'Current',
+        price: '€504',
+        coins: '5040',
+        bonusCoins: '500',
+        id: 'monthly3',
+      },
+    ],
+    save: '10',
+  },
+
+  // {
+  //   name: 'Yearly',
+  //   price: '€9',
+  //   img: food,
+  //   badge: 'Asian',
+  // },
 ];

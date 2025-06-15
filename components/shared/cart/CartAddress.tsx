@@ -62,7 +62,6 @@ export function CartAddress({
     state: '',
   });
   const [isEditSuccessOpen, setIsEditSuccessOpen] = React.useState(false);
-  console.log(setIsAddressModalOpen, 'setIsAddressModalOpen');
   const inputStyle = {
     py: 10,
     elevation: 2,
@@ -135,7 +134,6 @@ export function CartAddress({
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
-  console.log(isEditAddress, 'edit');
 
   const renderFormFields = () => {
     const fields = [];
