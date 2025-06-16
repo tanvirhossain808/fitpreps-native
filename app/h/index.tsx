@@ -115,28 +115,28 @@ export default function Home() {
     scrollOffset.current = currentOffset;
   };
   // Status bar color
-  useFocusEffect(
-    useCallback(() => {
-      // Smooth transition using a delay
-      setTimeout(() => {
-        RNStatusBar.setBarStyle(showCompact ? 'dark-content' : 'light-content', true);
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     // Smooth transition using a delay
+  //     setTimeout(() => {
+  //       RNStatusBar.setBarStyle(showCompact ? 'dark-content' : 'light-content', true);
 
-        if (Platform.OS === 'android') {
-          RNStatusBar.setBackgroundColor(showCompact ? 'white' : '#0A8A23', true);
-        }
-      }, 350); // Delay 350ms
+  //       if (Platform.OS === 'android') {
+  //         RNStatusBar.setBackgroundColor(showCompact ? 'white' : '#0A8A23', true);
+  //       }
+  //     }, 350); // Delay 350ms
 
-      return () => {
-        setTimeout(() => {
-          RNStatusBar.setBarStyle('light-content', true);
+  //     return () => {
+  //       setTimeout(() => {
+  //         RNStatusBar.setBarStyle('light-content', true);
 
-          if (Platform.OS === 'android') {
-            RNStatusBar.setBackgroundColor('white', true);
-          }
-        }, 350);
-      };
-    }, [showCompact])
-  );
+  //         if (Platform.OS === 'android') {
+  //           RNStatusBar.setBackgroundColor('white', true);
+  //         }
+  //       }, 350);
+  //     };
+  //   }, [showCompact])
+  // );
 
   useEffect(() => {
     navigation.setOptions({
@@ -200,11 +200,7 @@ export default function Home() {
               What are you looking for today?
             </H5>
           </XStack>
-          <SelectedFoodCategories
-            cookdFoodCategories={cookdFoodCategories}
-            selectFoodCategory={selectFoodCategory}
-            setSelectedFoodCategory={setSelectedFoodCategory}
-          />
+          <SelectedFoodCategories cookdFoodCategories={cookdFoodCategories} />
           <View px={16} mt={'$5'}>
             <XStack
               justifyContent="space-between"
@@ -310,6 +306,7 @@ export default function Home() {
             </XStack>
             <SelectedFoodCategories
               cookdFoodCategories={cookdFoodCategories}
+              // @ts-ignore
               selectFoodCategory={selectFoodCategory}
               setSelectedFoodCategory={setSelectedFoodCategory}
             />

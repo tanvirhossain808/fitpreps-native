@@ -25,6 +25,13 @@ import extraFoodPic2 from 'public/images/extrafood/Beef roti.png';
 import food from 'public/images/food.png';
 import { FoodOrSliderItem } from './type';
 import { ImageSourcePropType } from 'react-native';
+import barChart12 from 'public/images/subscription/bar-chart-12.svg';
+import coinsStacked02 from 'public/images/subscription/coins-stacked-02.svg';
+import award03 from 'public/images/subscription/award-03.svg';
+import clockRewind from 'public/images/subscription/clock-rewind.svg';
+import noodles from 'public/images/subscription/noodles.svg';
+import target04 from 'public/images/subscription/target-04.svg';
+import coin from 'public/images/coin.svg';
 export const selectCategories = [
   {
     img: cookd,
@@ -943,4 +950,52 @@ export const subscriptionPlans = [
   //   img: food,
   //   badge: 'Asian',
   // },
+];
+
+export const weeklyPlans = [
+  {
+    name: 'Quick results & flexibility',
+    img: barChart12,
+  },
+  {
+    name: 'Total 630–2520 points',
+    img: coinsStacked02,
+  },
+  {
+    name: '+60 to +250 Bonus points',
+    img: award03,
+  },
+];
+export const monthlyPlans = [
+  {
+    name: 'Consistency & savings',
+    img: barChart12,
+  },
+  {
+    name: 'Total 1260–5040 points',
+    img: coinsStacked02,
+  },
+  {
+    name: '+120 to +500 Bonus points',
+    img: award03,
+  },
+];
+
+export const subcriptionBadges = [
+  {
+    name: 'Each € is equivalent to 10 points',
+    icon: coin,
+  },
+  {
+    name: 'Points are added every Monday',
+    icon: clockRewind,
+  },
+  {
+    name: 'Select meals by 23:59 every Sunday',
+    icon: noodles,
+  },
+  {
+    name: 'Cancel, upgrade anytime',
+    icon: target04,
+  },
 ];

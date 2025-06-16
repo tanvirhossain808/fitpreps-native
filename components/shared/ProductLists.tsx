@@ -1,14 +1,22 @@
 import { View, Text, Button, Select, Adapt, Sheet, XStack } from 'tamagui';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Carousel from 'react-native-reanimated-carousel';
-import { FlatList, Dimensions, ImageBackground } from 'react-native';
+import {
+  FlatList,
+  Dimensions,
+  ImageBackground,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from 'react-native';
 import { FoodOrSliderItem } from '~/type';
 import { Image, YStack } from 'tamagui';
+import { useEffect, useMemo, useRef } from 'react';
+import { useNavigation } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
 type SliderImage = {
-  img: any; // Should be ImageSourcePropType
+  img: any;
   caption: string;
   title: string;
   text: string;
@@ -64,41 +72,101 @@ function SliderCarousel({ images }: SliderCarouselProps) {
     </View>
   );
 }
-
+const defaultTabBarStyle = {
+  position: 'absolute',
+  borderRadius: 20,
+  paddingHorizontal: 28,
+  height: 68,
+  paddingTop: 12,
+  elevation: 7,
+  shadowColor: '#B6BAC3',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 4,
+  backgroundColor: 'rgba(255, 255, 255, 0.85)',
+};
 export default function ProductLists({
   products,
   contentContainerStyle,
   showsVerticalScrollIndicator,
   scrollEventThrottle,
-  onScroll,
 }: {
   products: FoodOrSliderItem[];
   contentContainerStyle?: any;
   showsVerticalScrollIndicator?: boolean;
   scrollEventThrottle?: number;
-  onScroll?: any;
 }) {
-  // Group food items into rows of 2, keep slider as its own row
-  const flatListData: any[] = [];
-  let row: any[] = [];
-  products.forEach((item) => {
-    if (item.type === 'food') {
-      row.push(item);
-      if (row.length === 2) {
-        flatListData.push([...row]);
-        row = [];
-      }
-    } else {
-      if (row.length) {
-        flatListData.push([...row]);
-        row = [];
-      }
-      flatListData.push([item]);
+  const navigation = useNavigation();
+  const scrollOffset = useRef(0);
+  const isTabBarVisible = useRef(true);
+  const toggleTabBar = (visible: boolean) => {
+    if (isTabBarVisible.current !== visible) {
+      isTabBarVisible.current = visible;
+      navigation.setOptions({
+        tabBarStyle: visible ? defaultTabBarStyle : { ...defaultTabBarStyle, display: 'none' },
+      });
     }
-  });
-  if (row.length) flatListData.push([...row]);
+  };
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const currentOffset = event.nativeEvent.contentOffset.y;
+    const diff = currentOffset - scrollOffset.current;
+    scrollOffset.current = currentOffset;
+
+    if (diff > 10 && isTabBarVisible.current) {
+      toggleTabBar(false);
+    } else if (diff < -10 && !isTabBarVisible.current) {
+      toggleTabBar(true);
+    }
+  };
+
+  // Reset tab bar when component unmounts
+  useEffect(() => {
+    return () => {
+      navigation.setOptions({ tabBarStyle: defaultTabBarStyle });
+    };
+  }, [navigation]);
+  useEffect(() => {
+    return () => {
+      navigation.setOptions({ tabBarStyle: defaultTabBarStyle });
+    };
+  }, [navigation]);
+  // Group food items into rows of 2, keep slider as its own row
+  type Row = FoodOrSliderItem[];
+
+  const flatListData = useMemo(() => {
+    const result: Row[] = [];
+    let row: FoodOrSliderItem[] = [];
+
+    const pushRow = () => {
+      if (row.length > 0) {
+        result.push([...row]);
+        row = [];
+      }
+    };
+
+    for (const item of products) {
+      if (item.type === 'slider') {
+        pushRow();
+        result.push([item]);
+      } else {
+        row.push(item);
+        if (row.length === 2) {
+          pushRow();
+        }
+      }
+    }
+
+    pushRow();
+
+    return result;
+  }, [products]);
   return (
     <FlatList
+      initialNumToRender={6}
+      windowSize={6}
+      maxToRenderPerBatch={10}
+      updateCellsBatchingPeriod={50}
       data={flatListData}
       keyExtractor={(_, idx) => idx.toString()}
       renderItem={({ item }) => {
@@ -184,16 +252,12 @@ export default function ProductLists({
           </YStack>
         );
       }}
-      contentContainerStyle={[
-        { paddingBottom: 180 }, // <-- Add paddingBottom here
-        contentContainerStyle,
-      ]}
+      contentContainerStyle={[{ paddingBottom: 50 }, contentContainerStyle]}
       showsVerticalScrollIndicator={showsVerticalScrollIndicator}
       scrollEventThrottle={scrollEventThrottle}
-      onScroll={onScroll}
+      onScroll={handleScroll}
       style={{
         padding: 16,
-        paddingTop: 160,
       }}
     />
   );

@@ -4,13 +4,10 @@ import { FlatList, TouchableOpacity } from 'react-native';
 
 export default function SelectedFoodCategories({
   cookdFoodCategories,
-  selectFoodCategory,
-  setSelectedFoodCategory,
 }: {
   cookdFoodCategories: { name: string; img: number | { uri: string }; id: number }[];
-  selectFoodCategory: string | null;
-  setSelectedFoodCategory: (value: React.SetStateAction<string | null>) => void;
 }) {
+  const [selectFoodCategory, setSelectedFoodCategory] = React.useState<string | null>(null);
   return (
     <FlatList
       data={cookdFoodCategories}
