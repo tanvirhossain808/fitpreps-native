@@ -10,7 +10,7 @@ import DatePicker from '~/components/shared/DatePicker';
 import DatePickerCalendar from 'public/images/calendar.svg';
 import { DateData } from 'react-native-calendars';
 
-export default function CartHeader() {
+export default function CartDatePicker({ cartType = 'meals' }: { cartType?: string }) {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState<DateData | null>(null);
 
@@ -42,7 +42,7 @@ export default function CartHeader() {
             }}></LinearGradient>
 
           <Text fontSize={16} fontWeight={700} color="#1E1F20">
-            Pick Delivery Date
+            {cartType === 'meals' ? 'Pick Delivery Date' : 'Pick subscription start date'}
           </Text>
           <Text color="#FD4F01" fontWeight={500} fontSize={12}>
             NOTE: We don’t deliver on Saturday and Sunday.

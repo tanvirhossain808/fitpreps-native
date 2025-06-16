@@ -6,19 +6,28 @@ import Am from 'public/images/payment/am.svg';
 import { Feather } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import Paypal from 'public/images/payment/paypal.svg';
+import { router } from 'expo-router';
 export default function CartStep3({
   setCurrentStep,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const [showPass, setShowPass] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('creditCard');
   return (
     <YStack flex={1} padding={16} justifyContent="space-between">
       <YStack py="$5">
         <Text color="#1E1F20" fontSize={16} fontWeight={700}>
           Payment Options
         </Text>
-        <YStack py={8} mt="20" gap="$3" borderWidth={1} borderColor="$B6BAC3" borderRadius={12}>
+        <YStack
+          py={8}
+          mt="20"
+          gap="$3"
+          borderWidth={1}
+          borderColor="$B6BAC3"
+          borderRadius={12}
+          onPress={() => setSelectedPaymentMethod('creditCard')}>
           <XStack py={8} alignItems="center" justifyContent="space-between" px={16}>
             <XStack alignItems="center" gap="$2">
               <XStack
@@ -29,7 +38,13 @@ export default function CartStep3({
                 borderRadius={6}
                 borderColor="#FD4F01"
                 borderWidth={1}>
-                <View width={8} height={8} borderRadius={6} backgroundColor="#FD4F01"></View>
+                <View
+                  width={8}
+                  height={8}
+                  borderRadius={selectedPaymentMethod === 'creditCard' ? 6 : 0}
+                  backgroundColor={
+                    selectedPaymentMethod === 'creditCard' ? '#FD4F01' : 'transparent'
+                  }></View>
               </XStack>
               <Text color="#1E1F20" fontWeight={500}>
                 Credit Card
@@ -110,6 +125,7 @@ export default function CartStep3({
           </YStack>
         </YStack>
         <XStack
+          onPress={() => setSelectedPaymentMethod('paypal')}
           py={8}
           borderWidth={1}
           borderColor="#B6BAC3"
@@ -127,7 +143,13 @@ export default function CartStep3({
               borderRadius={6}
               borderColor="#FD4F01"
               borderWidth={1}>
-              <View width={8} height={8} borderRadius={6} backgroundColor="#FD4F01"></View>
+              <View
+                width={8}
+                height={8}
+                borderRadius={selectedPaymentMethod === 'paypal' ? 6 : 0}
+                backgroundColor={
+                  selectedPaymentMethod === 'paypal' ? '#FD4F01' : 'transparent'
+                }></View>
             </XStack>
             <Text color="#1E1F20" fontWeight={500}>
               Paypal
@@ -137,7 +159,12 @@ export default function CartStep3({
         </XStack>
       </YStack>
       <Button
-        onPress={() => setCurrentStep(0)}
+        onPress={() =>
+          router.push({
+            pathname: '/orderplaced',
+            params: { status: 'success', type: 'subscription' },
+          })
+        }
         backgroundColor="#FD4F01"
         height={44}
         borderRadius={12}

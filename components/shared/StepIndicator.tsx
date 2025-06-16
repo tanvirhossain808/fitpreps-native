@@ -7,6 +7,7 @@ import Step3Inactive from 'public/images/stepsindicator/step3Inavtive.svg';
 import { TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useEffect } from 'react';
 
 type StepIndicatorProps = {
   currentStep: number;
@@ -16,6 +17,7 @@ type StepIndicatorProps = {
   setShowMapModal?: React.Dispatch<React.SetStateAction<boolean>>;
   isAddressModalOpen?: boolean;
   setIsAddressModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  cartType?: string;
 };
 
 export default function StepIndicator({
@@ -26,18 +28,32 @@ export default function StepIndicator({
   setShowMapModal,
   isAddressModalOpen = false,
   setIsAddressModalOpen,
+  cartType,
 }: StepIndicatorProps) {
   const labels = ['Select Date', 'Address', 'Payment'];
+  const labelsSubscribed = ['Select Date', 'Address'];
   const stepCount = labels.length;
-  const progressPercent = Math.round(((currentStep + 1) / stepCount) * 100);
-  let text = 'Cart';
+  let progressPercent = Math.round(((currentStep + 1) / stepCount) * 100);
+  let subscriped = false;
 
-  if (isEditAddress && !isShowMapModal) {
+  let text = 'Cart';
+  useEffect(() => {
+    if (subscriped) {
+      progressPercent = Math.round(((currentStep + 1) / stepCount) * 100);
+    } else {
+      progressPercent = Math.round(((currentStep + 1) / stepCount) * 100);
+    }
+  }, [cartType]);
+
+  if (isEditAddress && !isShowMapModal && cartType === 'meals') {
     text = 'Edit Address';
   } else if (isShowMapModal) {
     text = 'Select Delivery Location';
   } else if (isAddressModalOpen) {
     text = 'Add New Address';
+  }
+  if (cartType === 'subscription') {
+    text = 'Buy Subscription';
   }
   const handleBack = () => {
     if (isShowMapModal && setShowMapModal) {
@@ -63,9 +79,9 @@ export default function StepIndicator({
               <TouchableOpacity style={{ zIndex: 20 }} onPress={() => handleBack()}>
                 <AntDesign name="left" size={24} color="black" />
               </TouchableOpacity>
-              {text === 'Cart' ? (
+              {text === 'Cart' || text === 'Buy Subscription' ? (
                 <Text fontSize={20} fontWeight={700}>
-                  Cart
+                  {text}
                 </Text>
               ) : (
                 <Text
@@ -93,40 +109,76 @@ export default function StepIndicator({
                   />
                 </Progress>
 
-                <View
-                  position="absolute"
-                  left={0}
-                  right={0}
-                  flexDirection="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  zIndex={1}
-                  top={-8}
-                  paddingHorizontal="$4">
-                  {labels.map((label, index) => {
-                    let IconComponent: React.ElementType = Step1Active;
+                {!subscriped && (
+                  <View
+                    position="absolute"
+                    left={0}
+                    right={0}
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    zIndex={1}
+                    top={-8}
+                    paddingHorizontal="$4">
+                    {labels.map((label, index) => {
+                      let IconComponent: React.ElementType = Step1Active;
 
-                    if (index === 0) {
-                      IconComponent = Step1Active;
-                    } else if (index === 1) {
-                      IconComponent = currentStep >= 1 ? Step2Active : Step2Inactive;
-                    } else if (index === 2) {
-                      IconComponent = currentStep >= 2 ? Step3Active : Step3Inactive;
-                    }
+                      if (index === 0) {
+                        IconComponent = Step1Active;
+                      } else if (index === 1) {
+                        IconComponent = currentStep >= 1 ? Step2Active : Step2Inactive;
+                      } else if (index === 2) {
+                        IconComponent = currentStep >= 2 ? Step3Active : Step3Inactive;
+                      }
 
-                    const isActive = index <= currentStep;
-                    const color = isActive ? '#FD4F01' : '#999';
+                      const isActive = index <= currentStep;
+                      const color = isActive ? '#FD4F01' : '#999';
 
-                    return (
-                      <View key={index} alignItems="center" left={0}>
-                        <IconComponent width={20} height={20} />
-                        <Text fontSize={12} color={color} marginTop="$1">
-                          {label}
-                        </Text>
-                      </View>
-                    );
-                  })}
-                </View>
+                      return (
+                        <View key={index} alignItems="center" left={0}>
+                          <IconComponent width={20} height={20} />
+                          <Text fontSize={12} color={color} marginTop="$1">
+                            {label}
+                          </Text>
+                        </View>
+                      );
+                    })}
+                  </View>
+                )}
+                {subscriped && (
+                  <View
+                    position="absolute"
+                    left={0}
+                    right={0}
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    zIndex={1}
+                    top={-8}
+                    paddingHorizontal="$4">
+                    {labelsSubscribed.map((label, index) => {
+                      let IconComponent: React.ElementType = Step1Active;
+
+                      if (index === 0) {
+                        IconComponent = Step1Active;
+                      } else if (index === 1) {
+                        IconComponent = currentStep >= 1 ? Step2Active : Step2Inactive;
+                      }
+
+                      const isActive = index <= currentStep;
+                      const color = isActive ? '#FD4F01' : '#999';
+
+                      return (
+                        <View key={index} alignItems="center" left={0}>
+                          <IconComponent width={20} height={20} />
+                          <Text fontSize={12} color={color} marginTop="$1">
+                            {label}
+                          </Text>
+                        </View>
+                      );
+                    })}
+                  </View>
+                )}
               </View>
             </View>
           </YStack>

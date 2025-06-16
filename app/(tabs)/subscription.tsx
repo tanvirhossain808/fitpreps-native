@@ -137,7 +137,22 @@ export default function Home() {
                   }, [])}
                 </YStack>
               </YStack>
-              <Button borderRadius={12} bg="#FD4F01" color="white" fontSize={14} fontWeight={700}>
+              <Button
+                borderRadius={12}
+                bg="#FD4F01"
+                color="white"
+                fontSize={14}
+                fontWeight={700}
+                onPress={() =>
+                  router.push({
+                    pathname: '/cart',
+                    params: {
+                      cartType: 'subscription',
+                      subscriptionType: selectedPlan.name === 'Weekly plan' ? 'weekly' : 'monthly',
+                      packId: selectedPlan.plans[0].id,
+                    },
+                  })
+                }>
                 {selectedPlan.name === 'Weekly Plan' ? 'Buy Weekly Plan' : 'Buy Monthly Plan'}
               </Button>
             </YStack>

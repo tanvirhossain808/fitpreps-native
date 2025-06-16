@@ -999,3 +999,14 @@ export const subcriptionBadges = [
     icon: target04,
   },
 ];
+
+export const activeMealsStatusBarColor = [
+  {
+    name: 'cookd',
+    color: '#0A8A23',
+  },
+  {
+    name: 'fueld',
+    color: '#FD4F01',
+  },
+];

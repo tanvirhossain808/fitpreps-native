@@ -4,8 +4,10 @@ import { FlatList, TouchableOpacity } from 'react-native';
 
 export default function SelectedFoodCategories({
   cookdFoodCategories,
+  activeStatsBarInfo,
 }: {
   cookdFoodCategories: { name: string; img: number | { uri: string }; id: number }[];
+  activeStatsBarInfo: { name: string; color: string } | null;
 }) {
   const [selectFoodCategory, setSelectedFoodCategory] = React.useState<string | null>(null);
   return (
@@ -20,7 +22,9 @@ export default function SelectedFoodCategories({
           <XStack
             justifyContent="center"
             borderWidth={1.5}
-            borderColor={item.name === selectFoodCategory ? '#FD4F01' : '$colorTransparent'}
+            borderColor={
+              item.name === selectFoodCategory ? activeStatsBarInfo?.color : '$colorTransparent'
+            }
             borderRadius={50}
             alignItems="center"
             w={56}
@@ -30,7 +34,7 @@ export default function SelectedFoodCategories({
             </TouchableOpacity>
           </XStack>
           <Text
-            color={selectFoodCategory === item.name ? '#FD4F01' : '#25272C'}
+            color={selectFoodCategory === item.name ? activeStatsBarInfo?.color : '#25272C'}
             fontWeight={selectFoodCategory === item.name ? 700 : 500}
             fontSize={12}>
             {item.name}

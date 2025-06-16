@@ -22,7 +22,7 @@ export default function () {
       </View>
     );
   }
-
+  console.log(product, 'producr');
   return (
     <>
       <StatusBar style="light" />

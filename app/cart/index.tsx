@@ -4,14 +4,15 @@ import { useState } from 'react';
 import CartStep2 from '~/components/shared/cart/CartStep2';
 import CartStep3 from '~/components/shared/cart/CartStep3';
 import CartStep1 from '~/components/shared/cart/CartStep1';
+import { useLocalSearchParams } from 'expo-router';
 export default function Cart() {
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const [isShowMapModal, setShowMapModal] = useState<boolean>(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isEditAddress, setIsEditAddress] = useState(false);
-
+  const { cartType = 'meals', subscriptionType, packId } = useLocalSearchParams() || {};
   const cartSteps: { [key: number]: any } = {
-    0: <CartStep1 setCurrentStep={setCurrentStep} />,
+    0: <CartStep1 setCurrentStep={setCurrentStep} cartType={cartType as string} />,
     1: (
       <CartStep2
         isAddressModalOpen={isAddressModalOpen}
@@ -31,6 +32,7 @@ export default function Cart() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <StepIndicator
+        cartType={cartType as string}
         setIsEditAddress={setIsEditAddress}
         currentStep={currentStep}
         isEditAddress={isEditAddress}

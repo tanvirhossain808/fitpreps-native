@@ -98,7 +98,7 @@ export default function CartStep2({
     <>
       <SafeAreaView style={{ flex: 1 }}>
         {confirmAddress ? (
-          <ConfirmAddress />
+          <ConfirmAddress setCurrentStep={setCurrentStep} />
         ) : (
           <YStack flex={1} justifyContent="space-between">
             <YStack flex={1} px={'$4'} pb="$5" gap="$7">
@@ -332,7 +332,11 @@ function DeleteConfirmationDialog({
   );
 }
 
-const ConfirmAddress = () => {
+const ConfirmAddress = ({
+  setCurrentStep,
+}: {
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+}) => {
   return (
     <YStack px="$4" flex={1} justifyContent="space-between">
       <YStack>
@@ -373,6 +377,7 @@ const ConfirmAddress = () => {
           </Text>
         </YStack>
         <Button
+          onPress={() => setCurrentStep(2)}
           mt="$5"
           borderRadius={12}
           color="white"
