@@ -100,6 +100,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="shop"
         options={{
+          headerShown: false,
           title: 'Shop',
           tabBarIcon: ({ color, focused }) => {
             return !focused ? (

@@ -1,15 +1,12 @@
-import { Stack, router, useFocusEffect } from 'expo-router';
-import { Image, Input, ScrollView, Text, XStack, YStack } from 'tamagui';
-import Octicons from '@expo/vector-icons/Octicons';
-import Feather from '@expo/vector-icons/Feather';
+import { Stack, router } from 'expo-router';
+import { Image, ScrollView, Text, XStack, YStack } from 'tamagui';
 
 import { Alert, BackHandler, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { selectCategories } from '~/constant';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import TopSearchbar from '~/components/shared/TopSearchbar';
-import { useNavigationState } from '@react-navigation/native';
 export default function Home() {
   const [selectCategory, setSelectedCategory] = useState<number | null>(null);
   useEffect(() => {
@@ -53,25 +50,34 @@ export default function Home() {
               </YStack>
               <YStack px={'$2'} gap={'$5'}>
                 <XStack justifyContent="center" rowGap="$5" gap="$2" flexWrap="wrap">
-                  {selectCategories.map(({ img, name, width, border, pathName, path }, i) => (
-                    <TouchableOpacity
-                      key={i}
-                      style={{
-                        padding: 3.5,
-                        borderWidth: 2,
-                        borderRadius: 12,
-                        borderColor: selectCategory === i ? border : 'transparent',
-                      }}
-                      onPress={() =>
-                        router.push({
-                          pathname: `${pathName}/${path}` as any,
-                        })
-                      }
-                      onPressIn={() => setSelectedCategory(i)}
-                      onPressOut={() => setSelectedCategory(null)}>
-                      <Image source={img} width={width} h={'126'} borderRadius={'$3'} />
-                    </TouchableOpacity>
-                  ))}
+                  {selectCategories.map(
+                    ({ img, name, width, border, pathName, path, sharedScreen }, i) => (
+                      <TouchableOpacity
+                        key={i}
+                        style={{
+                          padding: 3.5,
+                          borderWidth: 2,
+                          borderRadius: 12,
+                          borderColor: selectCategory === i ? border : 'transparent',
+                        }}
+                        onPress={() => {
+                          if (sharedScreen) {
+                            router.push({
+                              pathname: `/(sharedScreens)/productSelect/${path}` as any,
+                            });
+                          } else {
+                            router.push({
+                              pathname: pathName as any,
+                              params: { product: path },
+                            });
+                          }
+                        }}
+                        onPressIn={() => setSelectedCategory(i)}
+                        onPressOut={() => setSelectedCategory(null)}>
+                        <Image source={img} width={width} h={'126'} borderRadius={'$3'} />
+                      </TouchableOpacity>
+                    )
+                  )}
                 </XStack>
               </YStack>
             </YStack>

@@ -184,6 +184,7 @@ export default function Home() {
           </XStack>
           <SelectedFoodCategories
             cookdFoodCategories={cookdFoodCategories}
+            // @ts-ignore
             selectFoodCategory={selectFoodCategory}
             setSelectedFoodCategory={setSelectedFoodCategory}
           />
@@ -349,6 +350,7 @@ export default function Home() {
           {/* <YStack pt={140}> */}
           <ProductLists
             showsVerticalScrollIndicator={false}
+            // @ts-ignore
             onScroll={combinedOnScroll}
             products={foodOfItems}
           />
@@ -358,7 +360,9 @@ export default function Home() {
       <FilterModal
         open={filterOpen}
         setOpen={setFilterOpen}
+        // @ts-ignore
         filters={filters}
+        // @ts-ignore
         setFilters={setFilters}
       />
     </SafeAreaView>

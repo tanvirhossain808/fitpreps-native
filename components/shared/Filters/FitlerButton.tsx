@@ -1,16 +1,21 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Portal, Text } from 'tamagui';
 import FilterModal from '~/components/modal/Filter';
-import { useState } from 'react';
+import { filterItems } from '~/helper';
 
-export default function () {
+export default function ({ productType }: { productType: string }) {
   const [filterOpen, setFilterOpen] = useState(false);
-  const [filters, setFilters] = useState<string[]>([]);
+  const [filters, setFilters] = useState<{ [key: string]: string[] }>({});
   const handleFilterPress = useCallback(() => {
     setFilterOpen(true);
   }, []);
+  const totalFilters = Object.values(filters).reduce(
+    (total, category) => total + category.length,
+    0
+  );
+  const filterOption = filterItems(productType);
   return (
     <>
       <TouchableOpacity
@@ -19,16 +24,25 @@ export default function () {
         onPress={handleFilterPress}>
         <Ionicons name="filter-outline" size={16} color="#25272C" />
         <Text color="#25272C" fontSize={12}>
-          Filters
+          Filters{' '}
+          {totalFilters > 0 ? (
+            <Text fontSize={12} color="#FD4F01">
+              ({totalFilters})
+            </Text>
+          ) : (
+            ''
+          )}
         </Text>
       </TouchableOpacity>
       {filterOpen && (
         <Portal>
           <FilterModal
+            filterOption={filterOption}
             open={filterOpen}
             setOpen={setFilterOpen}
             filters={filters}
             setFilters={setFilters}
+            totalFilters={totalFilters}
           />
         </Portal>
       )}

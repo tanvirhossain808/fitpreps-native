@@ -39,6 +39,26 @@ const headingFont = createInterFont();
 
 const bodyFont = createInterFont();
 
+const oswaldFont = createFont({
+  face: {
+    700: { normal: 'Oswald-bold', fontWeight: '700' },
+  },
+  size: {
+    1: 12,
+    2: 14,
+    3: 16,
+    4: 18,
+    5: 20,
+    6: 24,
+  },
+  weight: {
+    400: '400',
+    500: '500',
+    600: '600',
+    700: '700',
+  },
+});
+
 export const Container = styled(YStack, {
   flex: 1,
   padding: 24,
@@ -65,9 +85,11 @@ export const fonts = createFont({
     500: { normal: 'Gilroy-Medium' },
     600: { normal: 'Gilroy-SemiBold' },
     700: { normal: 'Gilroy-Bold' },
+    800: { normal: 'Gilroy-ExtraBold' },
+    oswald: { normal: 'Oswald-bold', fontWeight: '700' },
     // 300: { normal: 'ClashDisplayLight' },
   },
-  body: 'GilroyRegular,GilroyMedium',
+  body: 'Gilroy-Regular,Gilroy-Medium',
   size: {
     1: 12,
     2: 14,
@@ -126,6 +148,7 @@ const config = createTamagui({
     // family:""
     body: fonts,
     heading: headingFont,
+    oswald: oswaldFont,
   },
   themes,
   tokens,

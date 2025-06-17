@@ -5,22 +5,32 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { TouchableOpacity } from 'react-native';
 import { cookdFilter } from '~/constant';
 import Entypo from '@expo/vector-icons/Entypo';
+import { FilterOption } from '~/type';
 
 type FilterModalProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
-  filters: string[];
-  setFilters: React.Dispatch<React.SetStateAction<string[]>>;
+  filters: { [key: string]: string[] };
+  setFilters: React.Dispatch<React.SetStateAction<{ [key: string]: string[] }>>;
+  filterOption: FilterOption[];
+  totalFilters: number;
 };
 
-export default function FilterModal({ open, setOpen, filters, setFilters }: FilterModalProps) {
-  const [selectedKeys, setSelectedKeys] = useState<{ [key: string]: string[] }>({});
+export default function FilterModal({
+  open,
+  setOpen,
+  filters,
+  setFilters,
+  totalFilters,
+  filterOption,
+}: FilterModalProps) {
+  // const [selectedKeys, setSelectedKeys] = useState<{ [key: string]: string[] }>({});
   const addField = () => {
     const initialKeys: { [key: string]: string[] } = {};
-    cookdFilter.forEach((data) => {
+    filterOption.forEach((data) => {
       initialKeys[data.name] = [];
     });
-    setSelectedKeys(initialKeys);
+    setFilters(initialKeys);
   };
   useEffect(() => {
     addField();
@@ -36,7 +46,7 @@ export default function FilterModal({ open, setOpen, filters, setFilters }: Filt
               <YStack gap={28}>
                 <XStack justifyContent="space-between" alignItems="center">
                   <H4 color="#1E1F20" size={16} fontWeight={700}>
-                    Filters ({cookdFilter.length})
+                    Filters ({totalFilters})
                   </H4>
                   <TouchableOpacity onPress={() => setOpen(false)}>
                     <Ionicons name="close" size={24} color="black" />
@@ -47,8 +57,8 @@ export default function FilterModal({ open, setOpen, filters, setFilters }: Filt
                   overflow="hidden"
                   width="100%"
                   type="multiple"
-                  defaultValue={cookdFilter.map((f) => f.name)}>
-                  {cookdFilter.map((data, i) => (
+                  defaultValue={filterOption.map((f) => f.name)}>
+                  {filterOption.map((data, i) => (
                     <Accordion.Item value={data.name} key={i}>
                       <Accordion.Trigger
                         flexDirection="row"
@@ -80,18 +90,18 @@ export default function FilterModal({ open, setOpen, filters, setFilters }: Filt
                               borderRadius={8}
                               key={i}
                               bg={
-                                selectedKeys[data.name]?.includes(option)
+                                filters[data.name]?.includes(option)
                                   ? data.bg
                                   : '$backgroundTransparent'
                               }
                               borderColor={
-                                selectedKeys[data.name]?.includes(option) ? data.border : '#B6BAC3'
+                                filters[data.name]?.includes(option) ? data.border : '#B6BAC3'
                               }
                               minWidth={0}
                               px={12}
                               py={8}
                               onPress={() =>
-                                setSelectedKeys((prev) => {
+                                setFilters((prev) => {
                                   const alreadySelected = prev[data.name]?.includes(option);
                                   return {
                                     ...prev,

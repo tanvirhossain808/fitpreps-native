@@ -4,11 +4,8 @@ import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Button, Image, Text, View, XStack, YStack } from 'tamagui';
 import Feather from '@expo/vector-icons/Feather';
-import { BlurView } from 'expo-blur';
 import { selectedItems } from '~/constant';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useSearchParams } from 'expo-router/build/hooks';
-import { useNavigationState } from '@react-navigation/native';
 export default function () {
   const [pressButton, setPressButton] = useState<string | null>(null);
 
@@ -22,7 +19,6 @@ export default function () {
       </View>
     );
   }
-  console.log(product, 'producr');
   return (
     <>
       <StatusBar style="light" />

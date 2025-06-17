@@ -1,78 +1,57 @@
 import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { H5, Text, View, XStack } from 'tamagui';
-import TopSearchbar from '~/components/shared/TopSearchbar';
-import SelectedFoodCategories from '~/components/shared/SelectedFoodCategories';
+import { View } from 'tamagui';
 import ProductLists from '~/components/shared/ProductLists';
-import { activeMealsStatusBarColor, cookdFoodCategories, foodOfItems } from '~/constant';
-import FitlerButton from '~/components/shared/Filters/FitlerButton';
-import SortButton from '~/components/shared/Sort/SortButton';
-import { StatusBar } from 'expo-status-bar';
-import { useLocalSearchParams } from 'expo-router';
+import { foodOfItems, fueldFoodOfItems, statusBarColor } from '~/constant';
+import { setStatusBarStyle, StatusBar } from 'expo-status-bar';
+import { useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { FoodOfItem, fueld, SliderItem } from '~/type';
+import ProductHeader from '~/components/shared/ProductHeader';
+import { Suspense } from 'react';
+import { activeStatsBarInfo } from '~/helper';
+import LoadingSpinner from '~/components/shared/Loading';
+
+export const unstable_settings = {
+  lazy: true,
+};
 
 export default function Home() {
   const insets = useSafeAreaInsets();
   const { product = 'cookd' } = useLocalSearchParams();
-  const activeStatsBarInfo = activeMealsStatusBarColor.find((data) => data.name === product);
+  const statusBarInfo = activeStatsBarInfo(product as string);
+  useFocusEffect(() => {
+    setStatusBarStyle('light', true);
+  });
   return (
     <>
       <StatusBar style="light" />
-      <View style={{ flex: 1 }}>
-        {/* Header Section */}
-        <View>
-          <View>
-            <XStack
-              {...{
-                backgroundColor: activeStatsBarInfo?.color ? activeStatsBarInfo.color : '',
-                borderBottomStartRadius: 20,
-                borderBottomEndRadius: 20,
-                paddingTop: insets.top,
-              }}>
-              <TopSearchbar placeholder="Search your meal here" />
-            </XStack>
+      <Suspense
+        fallback={
+          <LoadingSpinner color={statusBarColor[product as keyof typeof statusBarColor]} />
+        }>
+        <View style={{ flex: 1 }}>
+          <ProductHeader
+            productType={product as string}
+            activeStatsBarInfo={statusBarInfo as { name: string; color: string } | null}
+            insets={insets}
+          />
 
-            <XStack px={16} py={20}>
-              <H5 color="#25272C" fontWeight={700} size={16}>
-                What are you looking for today?
-              </H5>
-            </XStack>
-
-            <SelectedFoodCategories
-              activeStatsBarInfo={activeStatsBarInfo}
-              cookdFoodCategories={cookdFoodCategories}
-            />
-
-            <View px={16} mt={20}>
-              <XStack
-                justifyContent="space-between"
-                py={12}
-                borderTopWidth={0.5}
-                borderTopColor="#B6BAC3"
-                borderBottomWidth={0.5}
-                borderBottomColor="#B6BAC3">
-                <XStack alignItems="center" gap={12}>
-                  <FitlerButton />
-                  <SortButton />
-                </XStack>
-                <Text fontSize={11} color="#25272C">
-                  48 meal preps to explore
-                </Text>
-              </XStack>
+          <View style={styles.contentContainer}>
+            <View style={{ flex: 1 }} zIndex={0}>
+              <ProductLists
+                productType={product as string}
+                showsVerticalScrollIndicator={false}
+                scrollEventThrottle={16}
+                products={
+                  product === 'cookd'
+                    ? (foodOfItems as (FoodOfItem | SliderItem | fueld)[])
+                    : (fueldFoodOfItems as (FoodOfItem | SliderItem | fueld)[])
+                }
+              />
             </View>
           </View>
         </View>
-
-        {/* Main Content */}
-        <View style={styles.contentContainer}>
-          <View style={{ flex: 1 }} zIndex={0}>
-            <ProductLists
-              showsVerticalScrollIndicator={false}
-              scrollEventThrottle={16}
-              products={foodOfItems}
-            />
-          </View>
-        </View>
-      </View>
+      </Suspense>
     </>
   );
 }
@@ -87,11 +66,5 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-  },
-  filterButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
   },
 });
