@@ -34,7 +34,7 @@ export default function ProductHeader({
           }}>
           <TopSearchbar placeholder="Search your meal here" />
         </XStack>
-        {(productType === 'suppd' || productType === 'shapped') && (
+        {(selectCategory === 'Supplements' || selectCategory === 'Gym Wear') && (
           <View px={16} py={20}>
             <ShopSwitchingHeader
               product={productType}
