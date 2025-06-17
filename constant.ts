@@ -45,6 +45,14 @@ import shappdSliderimg1 from 'public/images/suppd/sliders/slider1.png';
 import shappdSliderimg2 from 'public/images/suppd/sliders/slider2.png';
 import shappdSliderimg3 from 'public/images/suppd/sliders/slider3.png';
 import shappdSliderimg4 from 'public/images/suppd/sliders/slider4.png';
+import forMenImg from 'public/images/shop/shopbycategory/men.png';
+import forWomenImg from 'public/images/shop/shopbycategory/women.png';
+import shopByCategorySliderImg1 from 'public/images/shop/shopbycategory/slider/slider1.png';
+import shopByCategorySliderImg2 from 'public/images/shop/shopbycategory/slider/slider2.png';
+import shopByCategorySliderImg3 from 'public/images/shop/shopbycategory/slider/slider3.png';
+import shopByCategorySliderImg4 from 'public/images/shop/shopbycategory/slider/slider4.png';
+import modelImg1 from 'public/images/shop/model/model1.png';
+import modelImg2 from 'public/images/shop/model/model2.png';
 const SuppdAll = React.lazy(() => import('public/images/suppd/all.svg'));
 const Protein = React.lazy(() => import('public/images/suppd/protien.svg'));
 const Suppliments = React.lazy(() => import('public/images/suppd/suppliments.svg'));
@@ -1289,12 +1297,12 @@ export const activeMealsStatusBarColor = [
   {
     name: 'suppd',
     color: '#F9DFC2',
-    tentColor: '#FD4F01',
+    tentColor: '#F9DFC2',
   },
   {
     name: 'shaped',
     color: '#7D3CFF',
-    tentColor: '#FD4F01',
+    tentColor: '#7D3CFF',
   },
   {
     name: 'subscription',
@@ -1486,5 +1494,151 @@ export const suppdProductCategories = [
     weight: '300 g',
     protein: '',
     subBadge: 'SKIN HEALTH',
+  },
+];
+
+export const shopByCategory = [
+  {
+    name: 'For Men',
+    Img: forMenImg,
+  },
+  {
+    name: 'For Women',
+    Img: forWomenImg,
+  },
+];
+
+export const shopByCategorySlider = [
+  {
+    img: shopByCategorySliderImg1,
+    caption: 'Move with Purpose',
+    title: 'Gear up in style and performance.',
+    textPostion: 'left',
+  },
+  {
+    img: shopByCategorySliderImg2,
+    caption: 'Move with Purpose',
+    title: 'Gear up in style and performance.',
+    textPostion: 'right',
+  },
+  {
+    img: shopByCategorySliderImg3,
+    caption: 'Move with Purpose',
+    title: 'Gear up in style and performance.',
+    textPostion: 'left',
+  },
+  {
+    img: shopByCategorySliderImg4,
+    caption: 'Move with Purpose',
+    title: 'Gear up in style and performance.',
+    textPostion: 'left',
+  },
+];
+export const shopProductSection = [
+  {
+    name: 'Shop Best Sellers',
+    items: [
+      {
+        badge: 'new',
+        img: modelImg1,
+        badgeBg: '#7A62E9',
+        color: 'white',
+        subBadgeBg: '#E4E0FB',
+        subBadgeColor: '#1E1F20',
+        subBadge: 'HIIT',
+        ratings: '4.8',
+        name: 'PRODUCT NAME',
+        price: '€XX',
+      },
+      {
+        badge: 'new',
+        img: modelImg1,
+        badgeBg: '#7A62E9',
+        color: 'white',
+        subBadgeBg: '#E4E0FB',
+        subBadgeColor: '#1E1F20',
+        subBadge: 'HIIT',
+        ratings: '4.8',
+        name: 'PRODUCT NAME',
+        price: '€XX',
+      },
+      {
+        badge: 'new',
+        img: modelImg1,
+        badgeBg: '#7A62E9',
+        color: 'white',
+        subBadgeBg: '#E4E0FB',
+        subBadgeColor: '#1E1F20',
+        subBadge: 'HIIT',
+        ratings: '4.8',
+        name: 'PRODUCT NAME',
+        price: '€XX',
+      },
+      {
+        badge: 'new',
+        img: modelImg1,
+        badgeBg: '#7A62E9',
+        color: 'white',
+        subBadgeBg: '#E4E0FB',
+        subBadgeColor: '#1E1F20',
+        subBadge: 'HIIT',
+        ratings: '4.8',
+        name: 'PRODUCT NAME',
+        price: '€XX',
+      },
+    ],
+  },
+  {
+    name: 'Shop Best Sellers',
+    items: [
+      {
+        badge: 'Sale',
+        img: modelImg2,
+        badgeBg: '#E4E0FB',
+        color: '#1E1F20',
+        subBadgeBg: '#E4E0FB',
+        subBadgeColor: '#1E1F20',
+        subBadge: 'HIIT',
+        ratings: '4.8',
+        name: 'PRODUCT NAME',
+        price: '€XX',
+      },
+      {
+        badge: 'Sale',
+        img: modelImg2,
+        badgeBg: '#E4E0FB',
+        color: '#1E1F20',
+        subBadgeBg: '#E4E0FB',
+        subBadgeColor: '#1E1F20',
+        subBadge: 'HIIT',
+        ratings: '4.8',
+        name: 'PRODUCT NAME',
+        price: '€XX',
+      },
+      {
+        badge: 'Sale',
+        img: modelImg2,
+        badgeBg: '#E4E0FB',
+        color: '#1E1F20',
+        subBadgeBg: '#E4E0FB',
+        subBadgeColor: '#1E1F20',
+        subBadge: 'HIIT',
+        ratings: '4.8',
+        name: 'PRODUCT NAME',
+        price: '€XX',
+      },
+      {
+        badge: 'Sale',
+        img: modelImg2,
+        badgeBg: '#E4E0FB',
+        color: '#1E1F20',
+        subBadgeBg: '#E4E0FB',
+        subBadgeColor: '#1E1F20',
+        subBadge: 'HIIT',
+        ratings: '4.8',
+        name: 'PRODUCT NAME',
+        price: '€XX',
+      },
+    ],
   },
 ];
