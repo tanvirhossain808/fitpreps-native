@@ -32,7 +32,7 @@ export default function Shop() {
   const statusBarInfo = activeStatsBarInfo(selectCategory === 'Supplements' ? 'suppd' : 'shaped');
 
   return (
-    <>
+    <YStack flex={1}>
       <StatusBar style="dark" />
       <Suspense fallback={<LoadingSpinner color={statusBarInfo?.color as string} />}>
         <YStack flex={1} bg="white">
@@ -55,12 +55,12 @@ export default function Shop() {
               }
             />
           ) : (
-            <ScrollView px={16} flex={1} pb={200}>
+            <YStack flex={1} paddingBottom={80}>
               <ShopByCategoryList />
-            </ScrollView>
+            </YStack>
           )}
         </YStack>
       </Suspense>
-    </>
+    </YStack>
   );
 }

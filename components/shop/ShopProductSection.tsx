@@ -1,14 +1,15 @@
 import React, { useRef } from 'react';
-import { Dimensions, FlatList, PanResponder, View } from 'react-native';
+import { Dimensions, FlatList } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
-import { Button, H2, Text, XStack, YStack, Image } from 'tamagui';
+import { Button, Text, XStack, YStack, Image, View } from 'tamagui';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Title from '../shared/Title';
-
+import ShopGymWearCarosel from './ShopGymWearCarosel';
+import ShopByCategory from './ShopByCategory';
+import Entypo from '@expo/vector-icons/Entypo';
 const { width } = Dimensions.get('window');
-const CARD_WIDTH = (width - 32) / 2;
-const CARD_HEIGHT = 280;
-const SPACING = 16;
+const CARD_WIDTH = width - 32;
+const CARD_HEIGHT = 310;
 
 type ItemType = {
   badge: string;
@@ -20,6 +21,7 @@ type ItemType = {
   subBadge: string;
   ratings: string;
   name: string;
+  discount: string;
   price: string;
 };
 
@@ -31,6 +33,13 @@ type SectionType = {
 export default function BestSellerSection({ data }: { data: SectionType[] }) {
   return (
     <FlatList
+      style={{ flex: 1 }}
+      ListHeaderComponent={
+        <YStack flex={1}>
+          <ShopByCategory />
+          <ShopGymWearCarosel />
+        </YStack>
+      }
       data={data}
       keyExtractor={(_, index) => `section-${index}`}
       renderItem={({ item }) => <SingleCarouselSection section={item} />}
@@ -44,171 +53,162 @@ function SingleCarouselSection({ section }: { section: SectionType }) {
   const carouselRef = useRef<any>(null);
   const [currentIndex, setCurrentIndex] = React.useState(0);
 
-  // Group items into pairs using map
-  const groupedItems = section.items
-    .map((item, index) => {
-      if (index % 2 === 0) {
-        return [item, section.items[index + 1]];
-      }
-      return null;
-    })
-    .filter((pair): pair is ItemType[] => pair !== null);
+  const handleNext = () => {
+    if (currentIndex < groupedItems.length - 1) {
+      const newIndex = currentIndex + 1;
+      setCurrentIndex(newIndex);
+      carouselRef.current?.scrollTo({ index: newIndex, animated: true });
+    }
+  };
 
   const handlePrev = () => {
     if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-      carouselRef.current?.scrollTo({
-        index: currentIndex - 1,
-        animated: true,
-      });
+      const newIndex = currentIndex - 1;
+      setCurrentIndex(newIndex);
+      carouselRef.current?.scrollTo({ index: newIndex, animated: true });
     }
   };
 
-  const handleNext = () => {
-    if (currentIndex < groupedItems.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-      carouselRef.current?.scrollTo({
-        index: currentIndex + 1,
-        animated: true,
-      });
+  const groupedItems = section.items.reduce((result, item, index) => {
+    if (index % 2 === 0) {
+      result.push([item, section.items[index + 1]].filter(Boolean));
     }
-  };
-
-  const panResponder = PanResponder.create({
-    onMoveShouldSetPanResponder: (evt, gestureState) => {
-      // Allow vertical scrolling when swiping vertically
-      if (Math.abs(gestureState.dy) > Math.abs(gestureState.dx)) {
-        return true;
-      }
-      return false;
-    },
-  });
-
-  const handleScrollEnd = (index: number) => {
-    setCurrentIndex(index);
-  };
+    return result;
+  }, [] as ItemType[][]);
 
   return (
-    <YStack space="$4">
+    <YStack gap={12} flex={1}>
       <XStack alignItems="center" justifyContent="space-between">
         <Title text={section.name} />
-        <XStack space="$2">
+        <XStack gap="$2">
           <Button
-            size="$2"
             onPress={handlePrev}
-            backgroundColor="#eee"
+            backgroundColor={currentIndex === 0 ? '#F2F4F7' : '#EDEEF1'}
             circular
+            width={32}
+            height={32}
             disabled={currentIndex === 0}
-            icon={<AntDesign name="left" size={16} color="black" />}
+            icon={
+              <AntDesign name="left" size={16} color={currentIndex === 0 ? '#98A2B3' : '#1E1F20'} />
+            }
           />
           <Button
-            size="$2"
+            disabled={currentIndex >= groupedItems.length - 1}
+            width={32}
+            height={32}
             onPress={handleNext}
-            backgroundColor="#eee"
+            backgroundColor={currentIndex >= groupedItems.length - 1 ? '#F2F4F7' : '#EDEEF1'}
             circular
-            disabled={currentIndex === groupedItems.length - 1}
-            icon={<AntDesign name="right" size={16} color="black" />}
+            icon={
+              <AntDesign
+                name="right"
+                size={16}
+                color={currentIndex >= groupedItems.length - 1 ? '#98A2B3' : '#1E1F20'}
+              />
+            }
           />
         </XStack>
       </XStack>
-
-      <View {...panResponder.panHandlers}>
-        <Carousel
-          ref={carouselRef}
-          loop={false}
-          width={width - 32}
-          height={CARD_HEIGHT}
-          data={groupedItems}
-          scrollAnimationDuration={500}
-          onScrollEnd={handleScrollEnd}
-          renderItem={({ item }) => (
-            <XStack space={SPACING} width="100%">
-              {item.map((product, index) => (
-                <YStack
-                  key={index}
-                  width={CARD_WIDTH}
-                  borderWidth={1}
-                  borderColor="#eee"
-                  borderRadius="$4"
-                  backgroundColor="white"
-                  overflow="hidden">
-                  {/* Top Badge */}
-                  <View
-                    backgroundColor={product.badgeBg}
-                    position="absolute"
-                    top={8}
-                    left={8}
-                    paddingHorizontal="$2"
-                    paddingVertical="$1"
-                    borderRadius="$2"
-                    zIndex={1}>
-                    <Text color={product.color} fontSize="$2" fontWeight="bold">
-                      {product.badge}
-                    </Text>
-                  </View>
-
-                  {/* Image */}
+      <Carousel
+        ref={carouselRef}
+        loop={false}
+        width={CARD_WIDTH}
+        data={groupedItems}
+        style={{ minHeight: CARD_HEIGHT }}
+        scrollAnimationDuration={500}
+        onSnapToItem={setCurrentIndex}
+        enabled={false}
+        renderItem={({ item: items }) => (
+          <XStack width={CARD_WIDTH} gap={8} pb={20}>
+            {items.map((item, idx) => (
+              <YStack
+                key={idx}
+                p={8}
+                flex={1}
+                borderWidth={1}
+                borderColor="#B6BAC3"
+                gap={12}
+                borderRadius={8}
+                overflow="hidden">
+                <View>
                   <Image
-                    source={product.img}
-                    width="100%"
-                    height={150}
+                    height={170}
+                    borderRadius={8}
+                    width={'100%'}
+                    source={item.img}
                     resizeMode="cover"
-                    borderRadius="$4"
                   />
+                  <Text
+                    top={4}
+                    left={4}
+                    color={item.color}
+                    p={'$2'}
+                    borderRadius={20}
+                    bg={item.badgeBg}
+                    position="absolute">
+                    {item.badge}
+                  </Text>
+                  <XStack
+                    alignItems="center"
+                    bg="white"
+                    p={4}
+                    borderRadius={4}
+                    gap={2}
+                    bottom={4}
+                    right={4}
+                    position="absolute">
+                    <Entypo name="star" size={10} color="#FDB022" />
+                    <Text fontSize={10} fontWeight={500}>
+                      {item.ratings}
+                    </Text>
+                  </XStack>
+                </View>
+                <YStack gap={8}>
+                  <XStack>
+                    <Text
+                      textAlign="left"
+                      paddingHorizontal={8}
+                      paddingVertical={6}
+                      borderRadius={4}
+                      bg={item.subBadgeBg}
+                      fontWeight="500"
+                      fontSize={10}
+                      color={item.subBadgeColor}>
+                      {item.subBadge}
+                    </Text>
+                  </XStack>
 
-                  <YStack padding="$3" space="$2" flex={1} justifyContent="space-between">
-                    {/* Ratings */}
-                    <XStack alignItems="center" justifyContent="flex-end">
-                      <Text fontSize="$2" color="orange">
-                        ⭐ {product.ratings}
+                  <Text fontSize={12} fontWeight={700} color="black">
+                    {item.name}
+                  </Text>
+                  <XStack alignItems="center" justifyContent="space-between">
+                    <XStack alignItems="center" gap={4}>
+                      <Text color="#FD4F01" fontSize={14} fontWeight={700}>
+                        €XX
+                      </Text>
+                      <Text fontSize={14} color="#383A42">
+                        €XX
                       </Text>
                     </XStack>
-
-                    {/* Sub Badge */}
-                    <Text
-                      backgroundColor={product.subBadgeBg}
-                      color={product.subBadgeColor}
-                      paddingHorizontal="$2"
-                      paddingVertical="$1"
-                      fontSize="$2"
-                      borderRadius="$2"
-                      alignSelf="flex-start">
-                      {product.subBadge}
-                    </Text>
-
-                    {/* Product Name */}
-                    <Text fontWeight="bold" fontSize="$4">
-                      {product.name}
-                    </Text>
-
-                    {/* Price */}
-                    <Text color="red" fontSize="$5" fontWeight="bold">
-                      {product.price}
-                    </Text>
-
-                    {/* Add Button */}
-                    <Button
-                      backgroundColor="orange"
-                      borderRadius="$2"
-                      padding="$2"
-                      width="100%"
-                      onPress={() => console.log('Add pressed')}>
-                      Add
-                    </Button>
-                  </YStack>
+                    {item.discount && (
+                      <Text
+                        bg=""
+                        color="#7A62E9"
+                        fontWeight={600}
+                        backgroundColor="#EDEEF1"
+                        px={8}
+                        borderRadius={20}
+                        py={4}>
+                        {item.discount}% off
+                      </Text>
+                    )}
+                  </XStack>
                 </YStack>
-              ))}
-            </XStack>
-          )}
-          mode="parallax"
-          modeConfig={{
-            parallaxScrollingOffset: 80,
-            parallaxScrollingScale: 0.9,
-            enableMomentum: true,
-            enableSnap: true,
-          }}
-        />
-      </View>
+              </YStack>
+            ))}
+          </XStack>
+        )}
+      />
     </YStack>
   );
 }
