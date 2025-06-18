@@ -1,13 +1,14 @@
 import { useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { StatusBar, setStatusBarStyle } from 'expo-status-bar';
-import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ScrollView, YStack } from 'tamagui';
+import { YStack } from 'tamagui';
 import LoadingSpinner from '~/components/shared/Loading';
 import ProductHeader from '~/components/shared/ProductHeader';
 import ProductLists from '~/components/shared/ProductLists';
+import GymProductsForWomen from '~/components/shared/shop/GymProductsForWomen';
 import ShopByCategoryList from '~/components/shop/ShopByCategoryList';
-import { foodOfItems, fueldFoodOfItems, suppdProductCategories } from '~/constant';
+import { foodOfItems, suppdProductCategories } from '~/constant';
 
 import { activeStatsBarInfo } from '~/helper';
 import { FoodOfItem, fueld, SliderItem, suppd } from '~/type';
@@ -19,15 +20,28 @@ export default function Shop() {
   const [selectCategory, setSelectCategory] = useState<string>(
     product === 'suppd' ? 'Supplements' : 'Gym Wear'
   );
-  const [productType, setProductType] = useState<string | null>();
+  const [productType, setProductType] = useState<string | null>(product as string);
+  const [gender, setGender] = useState<'male' | 'female' | null>(null);
   const insets = useSafeAreaInsets();
+
   useFocusEffect(
     useCallback(() => {
       setStatusBarStyle(product === 'suppd' ? 'dark' : 'light');
+      setSelectCategory(() => (product === 'suppd' ? 'Supplements' : 'Gym Wear'));
+      return () => {
+        setSelectCategory(() => 'Supplements');
+        setProductType(() => 'suppd');
+        setGender(null);
+      };
     }, [product])
   );
   useEffect(() => {
     setStatusBarStyle(selectCategory === 'Supplements' ? 'dark' : 'light');
+    if (selectCategory === 'Gym Wear') {
+      setProductType(() => 'shaped');
+    } else if (selectCategory === 'Supplements') {
+      setProductType(() => 'suppd');
+    }
   }, [productType, selectCategory, product]);
   const statusBarInfo = activeStatsBarInfo(selectCategory === 'Supplements' ? 'suppd' : 'shaped');
 
@@ -37,13 +51,15 @@ export default function Shop() {
       <Suspense fallback={<LoadingSpinner color={statusBarInfo?.color as string} />}>
         <YStack flex={1} bg="white">
           <ProductHeader
+            gender={gender}
+            setGender={setGender}
             selectCategory={selectCategory as string}
             setSelectCategory={setSelectCategory}
-            productType={product as string}
+            productType={productType as string}
             activeStatsBarInfo={statusBarInfo as { name: string; color: string } | null}
             insets={insets}
           />
-          {selectCategory !== 'Gym Wear' ? (
+          {selectCategory !== 'Gym Wear' && gender === null ? (
             <ProductLists
               productType={product as string}
               showsVerticalScrollIndicator={false}
@@ -55,8 +71,15 @@ export default function Shop() {
               }
             />
           ) : (
-            <YStack flex={1} paddingBottom={80}>
-              <ShopByCategoryList />
+            <YStack flex={1}>
+              {selectCategory === 'Gym Wear' && gender === null && (
+                <ShopByCategoryList setGender={setGender} />
+              )}
+              {selectCategory === 'Gym Wear' && gender === 'female' && (
+                <YStack flex={1}>
+                  <GymProductsForWomen />
+                </YStack>
+              )}
             </YStack>
           )}
         </YStack>

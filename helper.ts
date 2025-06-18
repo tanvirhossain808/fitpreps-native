@@ -4,6 +4,7 @@ import {
   cookdFoodCategories,
   fueldFilter,
   fueldSelectedCategories,
+  shapedSelecteCategories,
   suppdFilter,
   suppdSelectedCategories,
 } from './constant';
@@ -18,6 +19,8 @@ export const selectSuppdProductType = (product: string) => {
     return fueldSelectedCategories;
   } else if (product === 'suppd') {
     return suppdSelectedCategories;
+  } else if (product === 'shaped') {
+    return shapedSelecteCategories;
   } else {
     return cookdFoodCategories;
   }

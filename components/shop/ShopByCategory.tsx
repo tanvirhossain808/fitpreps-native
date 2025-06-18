@@ -1,9 +1,14 @@
 import { Dimensions, TouchableOpacity } from 'react-native';
-import { Image, Text, View, XStack, YStack } from 'tamagui';
+import { Image, Text, XStack, YStack } from 'tamagui';
 import { shopByCategory } from '~/constant';
 import Title from '../shared/Title';
+import { Dispatch } from 'react';
 
-export default function ShopByCategory() {
+export default function ShopByCategory({
+  setGender,
+}: {
+  setGender: Dispatch<React.SetStateAction<'male' | 'female' | null>>;
+}) {
   const gap = 16;
   const containerWidth = Dimensions.get('window').width - 16 * 2;
   const imageWidth = (containerWidth - gap) / 2;
@@ -14,6 +19,8 @@ export default function ShopByCategory() {
         {shopByCategory.map((category, i) => (
           <YStack key={i}>
             <TouchableOpacity
+              onPress={() => setGender(category.gender as 'male' | 'female')}
+              disabled={category.gender === 'male'}
               style={{
                 width: imageWidth,
                 alignSelf: 'stretch',

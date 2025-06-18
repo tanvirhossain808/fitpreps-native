@@ -1,17 +1,16 @@
-import { ScrollView, Text, View, XStack, YStack } from 'tamagui';
-import ShopByCategory from './ShopByCategory';
-import Carousel from 'react-native-reanimated-carousel';
-import { Dimensions, ImageBackground, TouchableOpacity } from 'react-native';
-import { shopByCategorySlider, shopProductSection } from '~/constant';
+import { YStack } from 'tamagui';
+import { shopProductSection } from '~/constant';
 import ShopByProductSection from './ShopProductSection';
-import ShopGymWearCarosel from './ShopGymWearCarosel';
+import { Dispatch } from 'react';
 
-export default function ShopByCategoryList() {
-  const { width } = Dimensions.get('window');
-
+export default function ShopByCategoryList({
+  setGender,
+}: {
+  setGender: Dispatch<React.SetStateAction<'male' | 'female' | null>>;
+}) {
   return (
     <YStack flex={1}>
-      <ShopByProductSection data={shopProductSection} />
+      <ShopByProductSection data={shopProductSection} setGender={setGender} />
     </YStack>
   );
 }

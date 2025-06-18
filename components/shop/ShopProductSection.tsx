@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { Dispatch, useRef } from 'react';
 import { Dimensions, FlatList } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import { Button, Text, XStack, YStack, Image, View } from 'tamagui';
@@ -30,13 +30,19 @@ type SectionType = {
   items: ItemType[];
 };
 
-export default function BestSellerSection({ data }: { data: SectionType[] }) {
+export default function BestSellerSection({
+  data,
+  setGender,
+}: {
+  data: SectionType[];
+  setGender: Dispatch<React.SetStateAction<'male' | 'female' | null>>;
+}) {
   return (
     <FlatList
       style={{ flex: 1 }}
       ListHeaderComponent={
         <YStack flex={1}>
-          <ShopByCategory />
+          <ShopByCategory setGender={setGender} />
           <ShopGymWearCarosel />
         </YStack>
       }
@@ -44,7 +50,7 @@ export default function BestSellerSection({ data }: { data: SectionType[] }) {
       keyExtractor={(_, index) => `section-${index}`}
       renderItem={({ item }) => <SingleCarouselSection section={item} />}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ padding: 16 }}
+      contentContainerStyle={{ padding: 16, paddingBottom: 60 }}
     />
   );
 }

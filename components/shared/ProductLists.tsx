@@ -44,7 +44,6 @@ export default function ProductLists({
       });
     }
   };
-  console.log(productType, 'type');
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const currentOffset = event.nativeEvent.contentOffset.y;
     const diff = currentOffset - scrollOffset.current;

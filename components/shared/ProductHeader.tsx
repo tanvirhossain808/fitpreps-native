@@ -1,9 +1,8 @@
 import { Dispatch, lazy } from 'react';
-import { cookdFoodCategories, fueldSelectedCategories } from '~/constant';
 import { Text, View, XStack } from 'tamagui';
 import { selectSuppdProductType } from '~/helper';
 import ShopSwitchingHeader from './shop/ShopSwitchingHeader';
-import ShopByCategory from '../shop/ShopByCategory';
+import ShopWomenHeader from './shop/ShopWomenHeader';
 const TopSearchbar = lazy(() => import('./TopSearchbar'));
 const SelectedFoodCategories = lazy(() => import('./SelectedFoodCategories'));
 const FitlerButton = lazy(() => import('./Filters/FitlerButton'));
@@ -15,11 +14,15 @@ export default function ProductHeader({
   insets,
   selectCategory = '',
   setSelectCategory = () => {},
+  gender = null,
+  setGender = () => {},
 }: {
   productType: string;
   selectCategory?: string;
   setSelectCategory?: Dispatch<React.SetStateAction<string>>;
   activeStatsBarInfo: { name: string; color: string } | null;
+  gender?: string | null;
+  setGender?: Dispatch<React.SetStateAction<'male' | 'female' | null>>;
   insets: { top: number };
 }) {
   return (
@@ -34,16 +37,18 @@ export default function ProductHeader({
           }}>
           <TopSearchbar placeholder="Search your meal here" />
         </XStack>
-        {(selectCategory === 'Supplements' || selectCategory === 'Gym Wear') && (
+        {(selectCategory === 'Supplements' || selectCategory === 'Gym Wear') && gender === null && (
           <View px={16} py={20}>
             <ShopSwitchingHeader
+              setGender={setGender}
               product={productType}
               selectCategory={selectCategory}
               setSelectCategory={setSelectCategory}
             />
           </View>
         )}
-        {selectCategory !== 'Gym Wear' && (
+        {selectCategory === 'Gym Wear' && gender === 'female' && <ShopWomenHeader />}
+        {(selectCategory !== 'Gym Wear' || gender !== null) && (
           <>
             <XStack px={16} py={productType === 'suppd' || productType === 'shapped' ? 10 : 20}>
               <Text color="#25272C" fontWeight={700} fontSize={16}>

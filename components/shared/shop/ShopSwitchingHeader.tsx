@@ -5,16 +5,22 @@ export default function SwitchHeader({
   product,
   selectCategory = '',
   setSelectCategory = () => {},
+  setGender,
 }: {
   product: string;
   selectCategory?: string;
   setSelectCategory?: Dispatch<React.SetStateAction<string>>;
+  setGender: Dispatch<React.SetStateAction<'male' | 'female' | null>>;
 }) {
   const bg = selectCategory === 'Supplements' ? '#FF7435' : '#BDB0F4';
+  const handleOnPress = () => {
+    setSelectCategory(() => 'Supplements');
+    setGender(() => null);
+  };
   return (
     <XStack width={'100%'} p={4} borderRadius={8} borderWidth={1} borderColor="#B6BAC3">
       <Button
-        onPress={() => setSelectCategory('Supplements')}
+        onPress={handleOnPress}
         width={'50%'}
         color={selectCategory === 'Supplements' ? 'white' : '#1E1F20'}
         fontWeight={selectCategory === 'Supplements' ? 700 : 500}

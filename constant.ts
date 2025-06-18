@@ -32,13 +32,6 @@ import clockRewind from 'public/images/subscription/clock-rewind.svg';
 import noodles from 'public/images/subscription/noodles.svg';
 import target04 from 'public/images/subscription/target-04.svg';
 import coin from 'public/images/coin.svg';
-import AllFood from 'public/images/categoryselector/all.svg';
-import Meal from 'public/images/categoryselector/meals.svg';
-import MuscleGain from 'public/images/categoryselector/muscleGain.svg';
-import Cutting from 'public/images/categoryselector/cutting.svg';
-import Accessories from 'public/images/categoryselector/acceserois.svg';
-import Breakfast from 'public/images/categoryselector/breakfast.svg';
-import Snacks from 'public/images/categoryselector/snacks.svg';
 import productImg from 'public/images/suppd/shuppdproduct.png';
 import Juice from 'public/images/categoryselector/juice.svg';
 import shappdSliderimg1 from 'public/images/suppd/sliders/slider1.png';
@@ -53,13 +46,24 @@ import shopByCategorySliderImg3 from 'public/images/shop/shopbycategory/slider/s
 import shopByCategorySliderImg4 from 'public/images/shop/shopbycategory/slider/slider4.png';
 import modelImg1 from 'public/images/shop/model/model1.png';
 import modelImg2 from 'public/images/shop/model/model2.png';
+const ShappedAll = React.lazy(() => import('public/images/shop/shapped/all.svg'));
+const ShappedLeggins = React.lazy(() => import('public/images/shop/shapped/leggins.svg'));
+const ShappedShorts = React.lazy(() => import('public/images/shop/shapped/shorts.svg'));
+const ShappedSportsBras = React.lazy(() => import('public/images/shop/shapped/sport-bras.svg'));
+const ShappedTops = React.lazy(() => import('public/images/shop/shapped/tops.svg'));
 const SuppdAll = React.lazy(() => import('public/images/suppd/all.svg'));
 const Protein = React.lazy(() => import('public/images/suppd/protien.svg'));
 const Suppliments = React.lazy(() => import('public/images/suppd/suppliments.svg'));
 const Creatine = React.lazy(() => import('public/images/suppd/creatine6.svg'));
 const Gummy = React.lazy(() => import('public/images/suppd/gummy-3.svg'));
 const Bundles = React.lazy(() => import('public/images/suppd/bundles.svg'));
-
+const AllFood = React.lazy(() => import('public/images/categoryselector/all.svg'));
+const Meal = React.lazy(() => import('public/images/categoryselector/meals.svg'));
+const MuscleGain = React.lazy(() => import('public/images/categoryselector/muscleGain.svg'));
+const Cutting = React.lazy(() => import('public/images/categoryselector/cutting.svg'));
+const Accessories = React.lazy(() => import('public/images/categoryselector/acceserois.svg'));
+const Breakfast = React.lazy(() => import('public/images/categoryselector/breakfast.svg'));
+const Snacks = React.lazy(() => import('public/images/categoryselector/snacks.svg'));
 export const selectCategories = [
   {
     img: cookd,
@@ -240,6 +244,56 @@ export const fueldSelectedCategories = [
     img: '',
     id: 9,
     svg: () => createElement(Juice),
+  },
+];
+export const shapedSelecteCategories = [
+  {
+    name: 'All',
+    img: '',
+    svg: () => createElement(SuppdAll),
+    id: 1,
+  },
+  {
+    name: 'Leggings',
+    img: '',
+    svg: () => createElement(SuppdAll),
+    id: 8,
+  },
+  {
+    img: '',
+    name: 'Shorts',
+    svg: () => createElement(SuppdAll),
+    id: 2,
+  },
+  {
+    img: '',
+    name: 'Sports Bras ',
+    svg: () => createElement(SuppdAll),
+    id: 3,
+  },
+  {
+    img: '',
+    name: 'Tops',
+    svg: () => createElement(SuppdAll),
+    id: 4,
+  },
+  {
+    img: '',
+    name: 'Sportjacks',
+    svg: () => createElement(SuppdAll),
+    id: 5,
+  },
+  {
+    img: '',
+    name: 'Hoodies ',
+    svg: () => createElement(SuppdAll),
+    id: 6,
+  },
+  {
+    img: '',
+    name: 'Accessories ',
+    svg: () => createElement(SuppdAll),
+    id: 7,
   },
 ];
 
@@ -1501,10 +1555,12 @@ export const shopByCategory = [
   {
     name: 'For Men',
     Img: forMenImg,
+    gender: 'male',
   },
   {
     name: 'For Women',
     Img: forWomenImg,
+    gender: 'female',
   },
 ];
 
@@ -1700,5 +1756,111 @@ export const shopProductSection = [
         discount: '5',
       },
     ],
+  },
+];
+export const gymProductsForWomen = [
+  {
+    badge: 'new',
+    img: modelImg1,
+    badgeBg: '#7A62E9',
+    color: 'white',
+    subBadgeBg: '#E4E0FB',
+    subBadgeColor: '#1E1F20',
+    subBadge: 'HIIT',
+    ratings: '4.8',
+    name: 'PRODUCT NAME',
+    price: '€XX',
+    discount: '5',
+  },
+  {
+    badge: 'new',
+    img: modelImg1,
+    badgeBg: '#7A62E9',
+    color: 'white',
+    subBadgeBg: '#E4E0FB',
+    subBadgeColor: '#1E1F20',
+    subBadge: 'HIIT',
+    ratings: '4.8',
+    name: 'PRODUCT NAME',
+    price: '€XX',
+    discount: '5',
+  },
+  {
+    badge: 'new',
+    img: modelImg1,
+    badgeBg: '#7A62E9',
+    color: 'white',
+    subBadgeBg: '#E4E0FB',
+    subBadgeColor: '#1E1F20',
+    subBadge: 'HIIT',
+    ratings: '4.8',
+    name: 'PRODUCT NAME',
+    price: '€XX',
+    discount: '5',
+  },
+  {
+    badge: 'new',
+    img: modelImg1,
+    badgeBg: '#7A62E9',
+    color: 'white',
+    subBadgeBg: '#E4E0FB',
+    subBadgeColor: '#1E1F20',
+    subBadge: 'HIIT',
+    ratings: '4.8',
+    name: 'PRODUCT NAME',
+    price: '€XX',
+    discount: '5',
+  },
+  {
+    badge: 'new',
+    img: modelImg1,
+    badgeBg: '#7A62E9',
+    color: 'white',
+    subBadgeBg: '#E4E0FB',
+    subBadgeColor: '#1E1F20',
+    subBadge: 'HIIT',
+    ratings: '4.8',
+    name: 'PRODUCT NAME',
+    price: '€XX',
+    discount: '5',
+  },
+  {
+    badge: 'new',
+    img: modelImg1,
+    badgeBg: '#7A62E9',
+    color: 'white',
+    subBadgeBg: '#E4E0FB',
+    subBadgeColor: '#1E1F20',
+    subBadge: 'HIIT',
+    ratings: '4.8',
+    name: 'PRODUCT NAME',
+    price: '€XX',
+    discount: '5',
+  },
+  {
+    badge: 'new',
+    img: modelImg1,
+    badgeBg: '#7A62E9',
+    color: 'white',
+    subBadgeBg: '#E4E0FB',
+    subBadgeColor: '#1E1F20',
+    subBadge: 'HIIT',
+    ratings: '4.8',
+    name: 'PRODUCT NAME',
+    price: '€XX',
+    discount: '5',
+  },
+  {
+    badge: 'new',
+    img: modelImg1,
+    badgeBg: '#7A62E9',
+    color: 'white',
+    subBadgeBg: '#E4E0FB',
+    subBadgeColor: '#1E1F20',
+    subBadge: 'HIIT',
+    ratings: '4.8',
+    name: 'PRODUCT NAME',
+    price: '€XX',
+    discount: '5',
   },
 ];

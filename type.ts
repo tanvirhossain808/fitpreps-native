@@ -53,3 +53,17 @@ export type FilterOption = {
   bg: string;
   border: string;
 };
+
+export interface GymProduct {
+  badge: string;
+  img: any;
+  badgeBg: string;
+  color: string;
+  subBadgeBg: string;
+  subBadgeColor: string;
+  subBadge: string;
+  ratings: string;
+  name: string;
+  price: string;
+  discount: string;
+}
