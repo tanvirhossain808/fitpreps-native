@@ -46,24 +46,24 @@ import shopByCategorySliderImg3 from 'public/images/shop/shopbycategory/slider/s
 import shopByCategorySliderImg4 from 'public/images/shop/shopbycategory/slider/slider4.png';
 import modelImg1 from 'public/images/shop/model/model1.png';
 import modelImg2 from 'public/images/shop/model/model2.png';
-const ShappedAll = React.lazy(() => import('public/images/shop/shapped/all.svg'));
-const ShappedLeggins = React.lazy(() => import('public/images/shop/shapped/leggins.svg'));
-const ShappedShorts = React.lazy(() => import('public/images/shop/shapped/shorts.svg'));
-const ShappedSportsBras = React.lazy(() => import('public/images/shop/shapped/sport-bras.svg'));
-const ShappedTops = React.lazy(() => import('public/images/shop/shapped/tops.svg'));
-const SuppdAll = React.lazy(() => import('public/images/suppd/all.svg'));
-const Protein = React.lazy(() => import('public/images/suppd/protien.svg'));
-const Suppliments = React.lazy(() => import('public/images/suppd/suppliments.svg'));
-const Creatine = React.lazy(() => import('public/images/suppd/creatine6.svg'));
-const Gummy = React.lazy(() => import('public/images/suppd/gummy-3.svg'));
-const Bundles = React.lazy(() => import('public/images/suppd/bundles.svg'));
-const AllFood = React.lazy(() => import('public/images/categoryselector/all.svg'));
-const Meal = React.lazy(() => import('public/images/categoryselector/meals.svg'));
-const MuscleGain = React.lazy(() => import('public/images/categoryselector/muscleGain.svg'));
-const Cutting = React.lazy(() => import('public/images/categoryselector/cutting.svg'));
-const Accessories = React.lazy(() => import('public/images/categoryselector/acceserois.svg'));
-const Breakfast = React.lazy(() => import('public/images/categoryselector/breakfast.svg'));
-const Snacks = React.lazy(() => import('public/images/categoryselector/snacks.svg'));
+import ShappedAll from 'public/images/shop/shapped/img/all.png';
+import ShappedLeggins from 'public/images/shop/shapped/img/leggins.png';
+import ShappedShorts from 'public/images/shop/shapped/img/shorts.png';
+import ShappedSportsBras from 'public/images/shop/shapped/img/sports-bras.png';
+import ShappedTops from 'public/images/shop/shapped/img/tops.png';
+import SuppdAll from 'public/images/suppd/all.svg';
+import Protein from 'public/images/suppd/protien.svg';
+import Suppliments from 'public/images/suppd/suppliments.svg';
+import Creatine from 'public/images/suppd/creatine6.svg';
+import Gummy from 'public/images/suppd/gummy-3.svg';
+import Bundles from 'public/images/suppd/bundles.svg';
+import AllFood from 'public/images/categoryselector/all.svg';
+import Meal from 'public/images/categoryselector/meals.svg';
+import MuscleGain from 'public/images/categoryselector/muscleGain.svg';
+import Cutting from 'public/images/categoryselector/cutting.svg';
+import Accessories from 'public/images/categoryselector/acceserois.svg';
+import Breakfast from 'public/images/categoryselector/breakfast.svg';
+import Snacks from 'public/images/categoryselector/snacks.svg';
 export const selectCategories = [
   {
     img: cookd,
@@ -249,50 +249,50 @@ export const fueldSelectedCategories = [
 export const shapedSelecteCategories = [
   {
     name: 'All',
-    img: '',
-    svg: () => createElement(SuppdAll),
+    img: ShappedAll,
+    svg: '',
     id: 1,
   },
   {
     name: 'Leggings',
-    img: '',
-    svg: () => createElement(SuppdAll),
+    img: ShappedLeggins,
+    svg: '',
     id: 8,
   },
   {
-    img: '',
+    img: ShappedShorts,
     name: 'Shorts',
-    svg: () => createElement(SuppdAll),
+    svg: () => createElement(ShappedShorts),
     id: 2,
   },
   {
-    img: '',
+    img: ShappedSportsBras,
     name: 'Sports Bras ',
-    svg: () => createElement(SuppdAll),
+    svg: '',
     id: 3,
   },
   {
-    img: '',
+    img: ShappedTops,
     name: 'Tops',
-    svg: () => createElement(SuppdAll),
+    svg: '',
     id: 4,
   },
   {
-    img: '',
+    img: ShappedAll,
     name: 'Sportjacks',
-    svg: () => createElement(SuppdAll),
+    svg: '',
     id: 5,
   },
   {
-    img: '',
+    img: ShappedAll,
     name: 'Hoodies ',
-    svg: () => createElement(SuppdAll),
+    svg: '',
     id: 6,
   },
   {
-    img: '',
+    img: ShappedAll,
     name: 'Accessories ',
-    svg: () => createElement(SuppdAll),
+    svg: '',
     id: 7,
   },
 ];
@@ -1862,5 +1862,33 @@ export const gymProductsForWomen = [
     name: 'PRODUCT NAME',
     price: '€XX',
     discount: '5',
+  },
+];
+
+export const onBoardingScreen = [
+  {
+    id: 1,
+    img: 'public/images/on-boarding/onboarding1',
+    statusBar: 'light',
+  },
+  {
+    id: 2,
+    img: 'public/images/on-boarding/onboarding2',
+    statusBar: 'dark',
+  },
+  {
+    id: 3,
+    img: 'public/images/on-boarding/onboarding3',
+    statusBar: 'light',
+  },
+  {
+    id: 4,
+    img: 'public/images/on-boarding/onboarding4',
+    statusBar: 'light',
+  },
+  {
+    id: 5,
+    img: 'public/images/on-boarding/onboarding5',
+    statusBar: 'light',
   },
 ];
