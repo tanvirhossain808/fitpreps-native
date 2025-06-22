@@ -1,5 +1,5 @@
 import { Button, Text, View, YStack } from 'tamagui';
-import { SliderImage } from '~/type';
+import { SliderImage } from '~/types/type';
 import { Dimensions, ImageBackground, TouchableOpacity } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 

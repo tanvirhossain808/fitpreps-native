@@ -53,7 +53,7 @@ export default function OnboardingScreen() {
   const navigateToHome = useCallback(() => {
     if (!navigatedRef.current) {
       navigatedRef.current = true;
-      router.replace('/(tabs)');
+      router.replace('/(auth)');
     }
   }, []);
 

@@ -1,12 +1,16 @@
 import { Entypo } from '@expo/vector-icons';
 import Feather from '@expo/vector-icons/Feather';
 import Octicons from '@expo/vector-icons/Octicons';
+import { useNavigation } from '@react-navigation/native';
 import { router } from 'expo-router';
-import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Input, XStack } from 'tamagui';
+import { DrawerNavigation } from '~/types/navigation';
 
 export default function TopSearchbar({ placeholder }: { placeholder: string }) {
+  const navigation = useNavigation<DrawerNavigation>();
+  // console.log(navigation, 'dra');
+
   return (
     <XStack p="$4" justifyContent="space-between" gap="$3" flexWrap="wrap" width="100%">
       <XStack flex={1} alignItems="center" gap="1">
@@ -68,7 +72,10 @@ export default function TopSearchbar({ placeholder }: { placeholder: string }) {
           shadowOffset={{ width: 0, height: 2 }}
           shadowOpacity={0.1}
           shadowRadius={4}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.openDrawer();
+            }}>
             <Feather name="menu" size={18} color="#25272C" />
           </TouchableOpacity>
         </XStack>

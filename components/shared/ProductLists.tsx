@@ -1,6 +1,13 @@
 import { View, Text, Button, Image, YStack } from 'tamagui';
 import { FlatList, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
-import { FoodOfItem, FoodOrSliderItem, fueld, fueldOrSliderItem, SliderItem, suppd } from '~/type';
+import {
+  FoodOfItem,
+  FoodOrSliderItem,
+  fueld,
+  fueldOrSliderItem,
+  SliderItem,
+  suppd,
+} from '~/types/type';
 import { useEffect, useMemo, useRef } from 'react';
 import { useNavigation } from 'expo-router';
 import SelectPrice from './SelectPrice';

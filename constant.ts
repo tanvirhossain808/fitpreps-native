@@ -23,7 +23,7 @@ import foodsliderimg4 from 'public/images/slider/slider4.png';
 import extraFoodPic1 from 'public/images/extrafood/Beef teriyaki noodles.png';
 import extraFoodPic2 from 'public/images/extrafood/Beef roti.png';
 import food from 'public/images/food.png';
-import { FoodOrSliderItem } from './type';
+import { FoodOrSliderItem } from './types/type';
 import { ImageSourcePropType } from 'react-native';
 import barChart12 from 'public/images/subscription/bar-chart-12.svg';
 import coinsStacked02 from 'public/images/subscription/coins-stacked-02.svg';
@@ -250,49 +250,49 @@ export const shapedSelecteCategories = [
   {
     name: 'All',
     img: ShappedAll,
-    svg: '',
+    svg: () => createElement(AllFood),
     id: 1,
   },
   {
     name: 'Leggings',
     img: ShappedLeggins,
-    svg: '',
+    svg: () => createElement(AllFood),
     id: 8,
   },
   {
     img: ShappedShorts,
     name: 'Shorts',
-    svg: () => createElement(ShappedShorts),
+    svg: () => createElement(AllFood),
     id: 2,
   },
   {
     img: ShappedSportsBras,
     name: 'Sports Bras ',
-    svg: '',
+    svg: () => createElement(AllFood),
     id: 3,
   },
   {
     img: ShappedTops,
     name: 'Tops',
-    svg: '',
+    svg: () => createElement(AllFood),
     id: 4,
   },
   {
     img: ShappedAll,
     name: 'Sportjacks',
-    svg: '',
+    svg: () => createElement(AllFood),
     id: 5,
   },
   {
     img: ShappedAll,
     name: 'Hoodies ',
-    svg: '',
+    svg: () => createElement(AllFood),
     id: 6,
   },
   {
     img: ShappedAll,
     name: 'Accessories ',
-    svg: '',
+    svg: () => createElement(AllFood),
     id: 7,
   },
 ];

@@ -12,6 +12,7 @@ import { foodOfItems, suppdProductCategories } from '~/constant';
 
 import { activeStatsBarInfo } from '~/helper';
 import { FoodOfItem, fueld, SliderItem, suppd } from '~/types/type';
+
 export const unstable_settings = {
   lazy: true,
 };
@@ -23,7 +24,7 @@ export default function Shop() {
   const [productType, setProductType] = useState<string | null>(product as string);
   const [gender, setGender] = useState<'male' | 'female' | null>(null);
   const insets = useSafeAreaInsets();
-
+  console.log(product, 'product');
   useFocusEffect(
     useCallback(() => {
       setStatusBarStyle(product === 'suppd' ? 'dark' : 'light');

@@ -5,7 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { TouchableOpacity } from 'react-native';
 import { cookdFilter } from '~/constant';
 import Entypo from '@expo/vector-icons/Entypo';
-import { FilterOption } from '~/type';
+import { FilterOption } from '~/types/type';
 
 type FilterModalProps = {
   open: boolean;

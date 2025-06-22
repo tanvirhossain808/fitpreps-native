@@ -1,6 +1,6 @@
 import { Button, Image } from 'tamagui';
 import { Text, View, YStack } from 'tamagui';
-import { FoodOfItem, fueld, SliderItem, suppd } from '~/type';
+import { FoodOfItem, fueld, SliderItem, suppd } from '~/types/type';
 import SelectPrice from '../shared/SelectPrice';
 
 export default function SupplementLists({

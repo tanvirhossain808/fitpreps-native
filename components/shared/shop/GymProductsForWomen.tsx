@@ -2,7 +2,7 @@ import { View, Text, YStack, Image, XStack } from 'tamagui';
 import React, { useEffect, useRef } from 'react';
 import { FlatList, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 import { gymProductsForWomen } from '~/constant';
-import { GymProduct } from '~/type';
+import { GymProduct } from '~/types/type';
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
 const defaultTabBarStyle = {
