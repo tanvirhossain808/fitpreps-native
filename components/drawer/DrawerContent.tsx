@@ -1,7 +1,7 @@
 import { TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Button, ScrollView, Text, XStack, YStack } from 'tamagui';
+import { Button, ScrollView, Text, View, XStack, YStack } from 'tamagui';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Feather from '@expo/vector-icons/Feather';
 import { DrawerNavigation } from '~/types/navigation';
@@ -15,11 +15,16 @@ import Phone from '~/public/images/drawer/phone.svg';
 import Chat from '~/public/images/drawer/message-chat-square.svg';
 import Settings from '~/public/images/drawer/settings-01.svg';
 import LogOut from '~/public/images/drawer/log-out-02.svg';
+import { AppRoute } from '~/types/type';
+
 export default function DrawerContent({ navigation }: { navigation: DrawerNavigation }) {
   const { top } = useSafeAreaInsets();
-  //   const navigation = useNavigation<DrawerNavigation>();
-  //   console.log(navigation, 'props');
-  console.log(navigation, 'navigation');
+  const [activeRoute, setActiveRoute] = useState<string | null>(null);
+  console.log(activeRoute, 'navigation');
+  const handleNavigation = (route: string) => {
+    setActiveRoute(route);
+    router.push(route as AppRoute);
+  };
   return (
     <YStack bg="white">
       <YStack bg="#FD4F01" pt={top} borderBottomLeftRadius={20} borderBottomRightRadius={20}>
@@ -41,18 +46,32 @@ export default function DrawerContent({ navigation }: { navigation: DrawerNaviga
       </YStack>
       <SafeAreaView edges={['bottom']}>
         <ScrollView py={40} px={16}>
-          <YStack gap={20}>
+          <YStack gap={12}>
             {drawerList.map((item, index) => (
-              <TouchableOpacity key={index}>
-                <XStack justifyContent="space-between">
-                  <XStack gap={10}>
-                    <item.icon />
-                    <Text>{item.name}</Text>
-                  </XStack>
+              <View
+                key={index}
+                px={14}
+                py={10}
+                borderRadius={8}
+                bg="#FAFAFB"
+                elevationAndroid={1}
+                shadowColor="rgba(10, 13, 18, 0.10)"
+                shadowRadius={2}
+                shadowOffset={{ width: 0, height: 1 }}
+                shadowOpacity={1}>
+                <TouchableOpacity onPress={() => handleNavigation(item.path)}>
+                  <XStack justifyContent="space-between">
+                    <XStack gap={10}>
+                      <item.icon />
+                      <Text fontSize={16} fontWeight={500}>
+                        {item.name}
+                      </Text>
+                    </XStack>
 
-                  <Text>df</Text>
-                </XStack>
-              </TouchableOpacity>
+                    <Feather name="chevron-right" size={20} color="black" />
+                  </XStack>
+                </TouchableOpacity>
+              </View>
             ))}
           </YStack>
         </ScrollView>
@@ -65,37 +84,46 @@ const drawerList = [
   {
     name: 'My Profile',
     icon: User,
+    path: '/(navigator)/my-profile',
   },
   {
     name: 'Manage Subscription',
     icon: Group,
+    path: '/(navigator)/manage-subscription',
   },
   {
     name: 'My Orders',
     icon: ShoppingCart,
+    path: '/(navigator)/(tabs)/orders',
   },
   {
     name: 'Addresses',
     icon: MarkerPin,
+    path: '/(navigator)/addresses',
   },
   {
     name: 'Payment Methods',
     icon: CreditCard,
+    path: '/(navigator)/payment-methods',
   },
   {
     name: 'Contact Us',
     icon: Phone,
+    path: '/(navigator)/contact-us',
   },
   {
     name: 'FAQs',
     icon: Chat,
+    path: '/(navigator)/faqs',
   },
   {
     name: 'Settings',
     icon: Settings,
+    path: '/(navigator)/settings',
   },
   {
     name: 'Log Out',
     icon: LogOut,
+    path: '/(navigator)/logout',
   },
 ];

@@ -67,3 +67,16 @@ export interface GymProduct {
   price: string;
   discount: string;
 }
+
+export type AppRoute =
+  | '/(navigator)/index'
+  | '/(navigator)/(tabs)/index'
+  | '/(navigator)/(tabs)/cart'
+  | '/(navigator)/(tabs)/orders'
+  | '/(navigator)/my-profile'
+  | '/(navigator)/manage-subscription'
+  | '/(navigator)/addresses'
+  | '/(navigator)/payment-methods'
+  | '/(navigator)/contact-us'
+  | '/(navigator)/faqs'
+  | '/(navigator)/settings';
