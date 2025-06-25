@@ -39,9 +39,11 @@ export default function CustomHeaderCalendar({
   toggleDatePicker,
   selectedDate,
   setSelectedDate,
+  title = '',
 }: {
   toggleDatePicker: () => void;
   selectedDate: DateData | null;
+  title?: string;
   setSelectedDate: React.Dispatch<React.SetStateAction<DateData | null>>;
 }) {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());

@@ -24,7 +24,7 @@ export default function Cart() {
         setShowMapModal={setShowMapModal}
       />
     ),
-    2: <CartStep3 setCurrentStep={setCurrentStep} />,
+    2: <CartStep3 setCurrentStep={setCurrentStep} subsType={subscriptionType as string} />,
   };
 
   const CurrentStep = cartSteps[currentStep] || cartSteps[0];

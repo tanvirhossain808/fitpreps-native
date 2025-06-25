@@ -9,8 +9,10 @@ import Paypal from 'public/images/payment/paypal.svg';
 import { router } from 'expo-router';
 export default function CartStep3({
   setCurrentStep,
+  subsType,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  subsType?: string | undefined;
 }) {
   const [showPass, setShowPass] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('creditCard');
@@ -162,7 +164,10 @@ export default function CartStep3({
         onPress={() =>
           router.push({
             pathname: '/orderplaced',
-            params: { status: 'success', type: 'subscription' },
+            params: {
+              status: 'success',
+              type: subsType === 'upgrade' ? 'upgrade' : 'subscription',
+            },
           })
         }
         backgroundColor="#FD4F01"

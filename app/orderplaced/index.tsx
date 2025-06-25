@@ -10,6 +10,7 @@ import CartPlaced from '~/components/orderplaced/CartPlaced';
 export default function OrderPlaced() {
   const screenWidth = Dimensions.get('window').width;
   const { type } = useLocalSearchParams() || {};
+  console.log(type);
   return (
     <YStack flex={1} bg="white">
       <YStack flex={1} position="relative" width="100%" aspectRatio={390 / 844}>
@@ -61,6 +62,12 @@ export default function OrderPlaced() {
                   <Text textAlign="center" color="#1E1F20" fontSize={16} fontWeight={500}>
                     You have successfully bought a subscription plan! Now you can continue to add
                     your favourite meals.
+                  </Text>
+                )}
+                {type === 'upgrade' && (
+                  <Text textAlign="center" color="#1E1F20" fontSize={16} fontWeight={500}>
+                    You have successfully upgraded your subscription plan! Now you can continue to
+                    add your favourite meals.
                   </Text>
                 )}
                 <XStack justifyContent="center">

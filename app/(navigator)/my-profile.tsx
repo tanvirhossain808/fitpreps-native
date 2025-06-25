@@ -16,6 +16,8 @@ import { Alert, KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity } f
 import Feather from '@expo/vector-icons/Feather';
 import DrawerPageHeader from '~/components/drawer/DrawerPageHeader';
 import * as ImagePicker from 'expo-image-picker';
+import CartDatePicker from '~/components/shared/cart/CartDatePicker';
+import SelectDate from '~/components/shared/SelectDate';
 
 export default function MyProfile() {
   const [image, setImage] = useState<string | null>(null);
@@ -49,77 +51,40 @@ export default function MyProfile() {
   };
 
   return (
-    <YStack flex={1}>
-      <ScrollView bg="white">
-        <SafeAreaView style={style.container}>
-          <DrawerPageHeader title="My Profile" />
-          <YStack py="$7" px="$4" gap={32}>
-            <TouchableOpacity onPress={pickImage}>
-              <XStack justifyContent="center">
-                {image ? (
-                  <Image width={100} height={100} borderRadius={50} source={{ uri: image }} />
-                ) : (
-                  <Image
-                    width={100}
-                    height={100}
-                    borderRadius={50}
-                    source={require('public/images/drawer/avatar.png')}
-                  />
-                )}
-              </XStack>
-            </TouchableOpacity>
-            <YStack gap="$5">
-              {fieldInfo.map(({ placeHolder, label, value, id }) => (
-                <ProfileFields placeHolder={placeHolder} key={id} label={label} value={value} />
-              ))}
-              <Fieldset flex={1} display="flex" gap={6}>
-                <Label color="#8E95A2" fontWeight={500} fontSize={12}>
-                  df
-                </Label>
-                <XStack
-                  borderWidth={1}
-                  borderRadius={8}
-                  bg="white"
-                  borderColor="#EDEEF1"
-                  alignItems="center"
-                  flex={1}
-                  px={14}
-                  py={10}
-                  shadowColor="#0a0d12"
-                  shadowOpacity={0.05}
-                  shadowOffset={{ width: 0, height: 1 }}
-                  shadowRadius={2}
-                  elevation="$2">
-                  <Input
-                    minHeight={0}
-                    height="$2"
-                    color="#1E1F20"
-                    fontSize={14}
-                    px={0}
-                    py={0}
-                    flex={1}
-                    placeholder="df"
-                    bg="$backgroundTransparent"
-                    borderWidth={0}
-                    outlineWidth={0}
-                  />
-                  <TouchableOpacity>
-                    <Text
-                      color="#FD4F01"
-                      fontSize={16}
-                      fontWeight={700}
-                      borderBottomWidth={2}
-                      borderColor="#FD4F01">
-                      Edit
-                    </Text>
-                  </TouchableOpacity>
+    <KeyboardAvoidingView
+      style={style.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}>
+      <YStack flex={1}>
+        <ScrollView bg="white">
+          <SafeAreaView>
+            <DrawerPageHeader title="My Profile" />
+            <YStack py="$7" px="$4" gap={32}>
+              <TouchableOpacity onPress={pickImage}>
+                <XStack justifyContent="center">
+                  {image ? (
+                    <Image width={100} height={100} borderRadius={50} source={{ uri: image }} />
+                  ) : (
+                    <Image
+                      width={100}
+                      height={100}
+                      borderRadius={50}
+                      source={require('public/images/drawer/avatar.png')}
+                    />
+                  )}
                 </XStack>
-              </Fieldset>
+              </TouchableOpacity>
+              <YStack gap="$5">
+                {fieldInfo.map(({ placeHolder, label, value, id }) => (
+                  <ProfileFields placeHolder={placeHolder} key={id} label={label} value={value} />
+                ))}
+                <SelectDate title="Date Of Birth" />
+              </YStack>
             </YStack>
-          </YStack>
-        </SafeAreaView>
-      </ScrollView>
-    </YStack>
+          </SafeAreaView>
+        </ScrollView>
+      </YStack>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -149,7 +114,7 @@ function ProfileFields({
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}>
-      <YStack gap={20}>
+      <YStack gap={20} flex={1}>
         <Fieldset flex={1} display="flex" gap={0} m={0} p={0}>
           <Label h={40} m={0} color="#8E95A2" fontWeight={500} fontSize={12}>
             {label}
@@ -158,7 +123,7 @@ function ProfileFields({
             borderWidth={1}
             borderRadius={8}
             bg="white"
-            borderColor="#EDEEF1"
+            borderColor={isEdit ? '#FFEDE5' : '#EDEEF1'}
             alignItems="center"
             flex={1}
             px={14}

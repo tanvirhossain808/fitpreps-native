@@ -1,15 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, ScrollView, Text, XStack, YStack } from 'tamagui';
+import { ScrollView, Text, XStack, YStack } from 'tamagui';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { router } from 'expo-router';
-import { useState } from 'react';
-import { subcriptionBadges, subscriptionPlans, weeklyPlans } from '~/constant';
-import Coin from 'public/images/coin.svg';
+import { subcriptionBadges, weeklyPlans } from '~/constant';
+import SelectSubscriptionPlan from '~/components/subscription.tsx/SelectSubscriptionplan';
 export default function Home() {
-  const [selectedPlan, setSelectedPlan] = useState(subscriptionPlans[0]);
-  const [packId, setPackId] = useState<string | null>('weekly1');
   return (
     <>
       <StatusBar style="dark" />
@@ -36,7 +33,7 @@ export default function Home() {
                 meals delivered to your door.
               </Text>
             </YStack>
-            <YStack gap="$7" py="$5" px="$4" backgroundColor="#fff3d7" borderRadius={12} w={'100%'}>
+            {/* <YStack gap="$7" py="$5" px="$4" backgroundColor="#fff3d7" borderRadius={12} w={'100%'}>
               <YStack w={'100%'}>
                 <XStack gap={12} width="100%">
                   {subscriptionPlans.map((plan, i) => (
@@ -155,7 +152,8 @@ export default function Home() {
                 }>
                 {selectedPlan.name === 'Weekly Plan' ? 'Buy Weekly Plan' : 'Buy Monthly Plan'}
               </Button>
-            </YStack>
+            </YStack> */}
+            <SelectSubscriptionPlan />
             <YStack>
               <XStack alignItems="center">
                 <XStack bg="rgba(248, 210, 68, 0.49)" py={8} borderTopStartRadius={12} width="50%">

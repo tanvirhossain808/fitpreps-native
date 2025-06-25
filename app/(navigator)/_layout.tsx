@@ -36,6 +36,17 @@ export default function Layout() {
         }}
       />
       <Drawer.Screen
+        name="manage-subscription"
+        options={{
+          drawerLabel: 'My Profile',
+          headerShown: false,
+          title: 'overview',
+          drawerItemStyle: {
+            display: 'none',
+          },
+        }}
+      />
+      <Drawer.Screen
         name="(tabs)"
         options={{
           drawerLabel: 'User',
