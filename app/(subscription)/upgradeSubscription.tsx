@@ -10,7 +10,7 @@ export default function upgradeSubscription() {
   return (
     <YStack flex={1} bg="white">
       <SafeAreaView style={{ flex: 1 }}>
-        <DrawerPageHeader title="Manage Subscription" />
+        <DrawerPageHeader title="Upgrade Subscription" />
         <ScrollView>
           <YStack px={'$4'} py="$5" gap="$7">
             <CurrentlySubscription showPlan={true} />

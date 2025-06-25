@@ -1,4 +1,3 @@
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Drawer } from 'expo-router/drawer';
 import DrawerContent from '~/components/drawer/DrawerContent';
 
@@ -38,7 +37,18 @@ export default function Layout() {
       <Drawer.Screen
         name="manage-subscription"
         options={{
-          drawerLabel: 'My Profile',
+          drawerLabel: 'Manage Subscription',
+          headerShown: false,
+          title: 'overview',
+          drawerItemStyle: {
+            display: 'none',
+          },
+        }}
+      />
+      <Drawer.Screen
+        name="orders"
+        options={{
+          drawerLabel: 'Orders',
           headerShown: false,
           title: 'overview',
           drawerItemStyle: {

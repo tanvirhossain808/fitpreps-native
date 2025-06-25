@@ -2,13 +2,14 @@ import { TouchableOpacity } from 'react-native';
 import { Text, View, XStack, YStack } from 'tamagui';
 import Feather from '@expo/vector-icons/Feather';
 import { BlurView } from 'expo-blur';
+import { router } from 'expo-router';
 
 export default function SubscriptionAction() {
   return (
     <YStack bg="white" gap="$7">
       <YStack gap={12}>
         {action.map(({ name, path }, i) => (
-          <TouchableOpacity key={i}>
+          <TouchableOpacity key={i} onPress={() => router.push(path)}>
             <BlurView intensity={30}>
               <XStack
                 backgroundColor="#F6F6F8"
@@ -41,7 +42,7 @@ export default function SubscriptionAction() {
 }
 
 const action = [
-  { name: 'Upgrade Subscription', path: '' },
-  { name: 'Pause Subscription', path: '' },
-  { name: 'Pause Subscription', path: '' },
+  { name: 'Upgrade Subscription', path: '/(subscription)/upgradeSubscription' as const },
+  { name: 'Pause Subscription', path: '/(subscription)/pauseSubscription' as const },
+  { name: 'Cancel Subscription', path: '/(subscription)/cancelSubscription' as const },
 ];
