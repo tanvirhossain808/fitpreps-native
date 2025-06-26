@@ -35,3 +35,10 @@ export const filterItems = (productType: string) => {
   }
   return [];
 };
+
+export const truncateText = (text: string, length: number = 19) => {
+  if (text.length > length) {
+    return text.substring(0, 19) + '...';
+  }
+  return text;
+};
