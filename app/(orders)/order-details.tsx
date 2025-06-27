@@ -10,7 +10,10 @@ export default function OrderDetails() {
       <SafeAreaView style={style.container}>
         <DrawerPageHeader title="My Orders" />
         <YStack px="$4" justifyContent="space-between" flex={1}>
-          <ScrollView style={style.container}>
+          <ScrollView
+            style={style.container}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}>
             <YStack
               px="$4"
               py="$5"
