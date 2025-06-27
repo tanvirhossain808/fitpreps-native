@@ -1,11 +1,24 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Pressable, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, ScrollView, Text, XStack, YStack } from 'tamagui';
+import { Button, Popover, ScrollView, Text, View, XStack, YStack } from 'tamagui';
 import DrawerPageHeader from '~/components/drawer/DrawerPageHeader';
 import Entypo from '@expo/vector-icons/Entypo';
-export default function addresses() {
+import { useState } from 'react';
+import DeleteConfirmationDialog from '~/components/addresses/DeleteConfirmationDialog';
+import { router } from 'expo-router';
+
+export default function Addresses() {
+  const [isPressEdit, setIsPressEdit] = useState(false);
+  const [isPressDelete, setIsPressDelete] = useState(false);
+  const [openPopUpcontent, setOpenPopUpContent] = useState<null | number>(null);
+  const [showRemoveAddressModal, setRemoveAddressModal] = useState(false);
+  const handleDeleteAddress = () => {
+    setRemoveAddressModal(true);
+    setOpenPopUpContent(null);
+    setIsPressDelete(false);
+  };
   return (
-    <YStack f={1} bg="white">
+    <YStack f={1} bg="white" onPress={() => setOpenPopUpContent(null)}>
       <SafeAreaView style={style.container}>
         <DrawerPageHeader title="Addresses" />
         <YStack f={1} justifyContent="space-between" gap="$4">
@@ -16,7 +29,7 @@ export default function addresses() {
               </Text>
             </YStack>
             <YStack mb={100}>
-              <ScrollView space={'$5'} showsVerticalScrollIndicator={false}>
+              <ScrollView space={'$5'} showsVerticalScrollIndicator={false} overflow="visible">
                 {savedAddress.map((address, i) => (
                   <YStack key={i} p="$3" borderRadius={12} bg="#FFF9F7">
                     <XStack alignItems="center" justifyContent="space-between">
@@ -32,10 +45,58 @@ export default function addresses() {
                           </XStack>
                         )}
                       </XStack>
-                      <TouchableOpacity>
-                        <Entypo name="dots-three-horizontal" size={24} color="#FD4F01" />
-                      </TouchableOpacity>
+                      <XStack>
+                        <TouchableOpacity onPress={() => setOpenPopUpContent(i)}>
+                          <Entypo name="dots-three-horizontal" size={24} color="#FD4F01" />
+                        </TouchableOpacity>
+                      </XStack>
                     </XStack>
+                    {openPopUpcontent === i && (
+                      <YStack
+                        borderWidth={1}
+                        borderColor="#B6BAC3"
+                        borderRadius={12}
+                        bg="white"
+                        zIndex={1}
+                        position="absolute"
+                        right={40}
+                        top={30}>
+                        <Pressable
+                          style={{
+                            ...style.popOver,
+                            backgroundColor: isPressEdit ? '#FFEDE5' : 'transparent',
+                            borderTopLeftRadius: 12,
+                            borderTopRightRadius: 12,
+                          }}
+                          onPressIn={() => setIsPressEdit(true)}
+                          onPressOut={() => setIsPressEdit(false)}
+                          onPress={() =>
+                            router.push({
+                              pathname: '/(addresses)/edit-address',
+                              params: {},
+                            })
+                          }>
+                          <Text fontSize={14} fontWeight={500} color="#1E1F20">
+                            Edit
+                          </Text>
+                        </Pressable>
+                        <Pressable
+                          onPress={handleDeleteAddress}
+                          style={{
+                            ...style.popOver,
+                            backgroundColor: isPressDelete ? '#FFEDE5' : 'transparent',
+                            borderBottomLeftRadius: 12,
+                            borderBottomRightRadius: 12,
+                          }}
+                          onPressIn={() => setIsPressDelete(true)}
+                          onPressOut={() => setIsPressDelete(false)}>
+                          <Text fontSize={14} fontWeight={500} color="#1E1F20">
+                            Remove
+                          </Text>
+                        </Pressable>
+                      </YStack>
+                    )}
+
                     <Text fontSize={16}>{address.location}</Text>
                   </YStack>
                 ))}
@@ -58,12 +119,32 @@ export default function addresses() {
               bg="white"
               borderWidth={1}
               borderColor="#FD4F01"
-              flex={1}>
+              flex={1}
+              onPress={() =>
+                router.push({
+                  pathname: '/(addresses)/new-address',
+                  params: {},
+                })
+              }>
               Add New Address
             </Button>
           </XStack>
         </YStack>
       </SafeAreaView>
+      {showRemoveAddressModal && (
+        <DeleteConfirmationDialog
+          open={showRemoveAddressModal}
+          onOpenChange={setRemoveAddressModal}
+          onConfirm={() => {
+            setRemoveAddressModal(false);
+            setOpenPopUpContent(null);
+          }}
+          onCancel={() => {
+            setRemoveAddressModal(false);
+            setOpenPopUpContent(null);
+          }}
+        />
+      )}
     </YStack>
   );
 }
@@ -71,6 +152,13 @@ export default function addresses() {
 const style = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  popOver: {
+    height: 40,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 16,
   },
 });
 

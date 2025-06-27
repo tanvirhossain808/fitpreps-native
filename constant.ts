@@ -1892,3 +1892,28 @@ export const onBoardingScreen = [
     statusBar: 'light',
   },
 ];
+
+export const shadows = {
+  small: {
+    shadowColor: 'rgba(10, 13, 18, 0.05)',
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 2,
+    shadowOpacity: 1,
+    elevation: 1,
+  },
+
+  medium: {
+    shadowColor: 'rgba(10, 13, 18, 0.1)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    shadowOpacity: 1,
+    elevation: 2,
+  },
+  large: {
+    shadowColor: 'rgba(10, 13, 18, 0.15)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 6,
+    shadowOpacity: 1,
+    elevation: 4,
+  },
+};

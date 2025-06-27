@@ -14,6 +14,7 @@ const PopoverContent = ({
   handleEdit: (index: number) => void;
 }) => (
   <Popover.Content
+    position="absolute"
     overflow="hidden"
     borderWidth={1}
     borderColor="#B6BAC3"
