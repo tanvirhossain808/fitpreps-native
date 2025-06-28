@@ -68,6 +68,17 @@ export default function Layout() {
         }}
       />
       <Drawer.Screen
+        name="payment-methods"
+        options={{
+          drawerLabel: 'Orders',
+          headerShown: false,
+          title: 'overview',
+          drawerItemStyle: {
+            display: 'none',
+          },
+        }}
+      />
+      <Drawer.Screen
         name="(tabs)"
         options={{
           drawerLabel: 'User',
