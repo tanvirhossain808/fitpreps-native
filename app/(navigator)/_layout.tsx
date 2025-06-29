@@ -48,7 +48,7 @@ export default function Layout() {
       <Drawer.Screen
         name="orders"
         options={{
-          drawerLabel: 'Orders',
+          drawerLabel: 'My Orders',
           headerShown: false,
           title: 'overview',
           drawerItemStyle: {
@@ -59,7 +59,7 @@ export default function Layout() {
       <Drawer.Screen
         name="addresses"
         options={{
-          drawerLabel: 'Orders',
+          drawerLabel: 'Addresses',
           headerShown: false,
           title: 'overview',
           drawerItemStyle: {
@@ -70,7 +70,29 @@ export default function Layout() {
       <Drawer.Screen
         name="payment-methods"
         options={{
-          drawerLabel: 'Orders',
+          drawerLabel: 'Payment Methods',
+          headerShown: false,
+          title: 'overview',
+          drawerItemStyle: {
+            display: 'none',
+          },
+        }}
+      />
+      <Drawer.Screen
+        name="contact-us"
+        options={{
+          drawerLabel: 'Contact Us',
+          headerShown: false,
+          title: 'overview',
+          drawerItemStyle: {
+            display: 'none',
+          },
+        }}
+      />
+      <Drawer.Screen
+        name="faqs"
+        options={{
+          drawerLabel: 'FAQs',
           headerShown: false,
           title: 'overview',
           drawerItemStyle: {

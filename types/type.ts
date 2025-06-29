@@ -80,3 +80,11 @@ export type AppRoute =
   | '/(navigator)/contact-us'
   | '/(navigator)/faqs'
   | '/(navigator)/settings';
+
+export type FaqCategory = {
+  name: string;
+  faqs: {
+    question: string;
+    answer: string;
+  }[];
+};
