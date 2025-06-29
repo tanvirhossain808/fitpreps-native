@@ -101,6 +101,17 @@ export default function Layout() {
         }}
       />
       <Drawer.Screen
+        name="settings"
+        options={{
+          drawerLabel: 'Settings',
+          headerShown: false,
+          title: 'overview',
+          drawerItemStyle: {
+            display: 'none',
+          },
+        }}
+      />
+      <Drawer.Screen
         name="(tabs)"
         options={{
           drawerLabel: 'User',
