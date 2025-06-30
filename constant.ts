@@ -107,7 +107,7 @@ export const selectCategories = [
     name: 'subscription',
     width: '158',
     border: '#FD4F01',
-    pathName: '/(sharedScreens)/productSelect',
+    pathName: '/(sharedScreens)/subscription',
   },
   {
     path: 'fueld',

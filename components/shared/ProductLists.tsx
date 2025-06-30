@@ -27,6 +27,9 @@ const defaultTabBarStyle = {
   shadowRadius: 4,
   backgroundColor: 'rgba(255, 255, 255, 0.85)',
 };
+export const unstable_settings = {
+  lazy: true,
+};
 export default function ProductLists({
   products,
   productType = 'cookd',

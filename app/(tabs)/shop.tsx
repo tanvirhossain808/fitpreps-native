@@ -12,9 +12,9 @@ import { foodOfItems, suppdProductCategories } from '~/constant';
 
 import { activeStatsBarInfo } from '~/helper';
 import { FoodOfItem, fueld, SliderItem, suppd } from '~/types/type';
-export const unstable_settings = {
-  lazy: true,
-};
+// export const unstable_settings = {
+//   lazy: true,
+// };
 export default function Shop() {
   const { product = 'suppd' } = useLocalSearchParams();
   const [selectCategory, setSelectCategory] = useState<string>(

@@ -1,19 +1,19 @@
 import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View } from 'tamagui';
-import ProductLists from '~/components/shared/ProductLists';
 import { foodOfItems, fueldFoodOfItems, statusBarColor } from '~/constant';
 import { setStatusBarStyle, StatusBar } from 'expo-status-bar';
 import { useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { FoodOfItem, fueld, SliderItem } from '~/types/type';
 import ProductHeader from '~/components/shared/ProductHeader';
-import { Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { activeStatsBarInfo } from '~/helper';
 import LoadingSpinner from '~/components/shared/Loading';
-
-export const unstable_settings = {
-  lazy: true,
-};
+// Change the import to use lazy
+const ProductLists = lazy(() => import('~/components/shared/ProductLists'));
+// export const unstable_settings = {
+//   lazy: true,
+// };
 
 export default function Home() {
   const insets = useSafeAreaInsets();
@@ -25,19 +25,20 @@ export default function Home() {
   return (
     <>
       <StatusBar style="light" />
-      <Suspense
-        fallback={
-          <LoadingSpinner color={statusBarColor[product as keyof typeof statusBarColor]} />
-        }>
-        <View style={{ flex: 1 }}>
-          <ProductHeader
-            productType={product as string}
-            activeStatsBarInfo={statusBarInfo as { name: string; color: string } | null}
-            insets={insets}
-          />
 
-          <View style={styles.contentContainer}>
-            <View style={{ flex: 1 }} zIndex={0}>
+      <View style={{ flex: 1 }}>
+        <ProductHeader
+          productType={product as string}
+          activeStatsBarInfo={statusBarInfo as { name: string; color: string } | null}
+          insets={insets}
+        />
+
+        <View style={styles.contentContainer}>
+          <View style={{ flex: 1 }} zIndex={0}>
+            <Suspense
+              fallback={
+                <LoadingSpinner color={statusBarColor[product as keyof typeof statusBarColor]} />
+              }>
               <ProductLists
                 productType={product as string}
                 showsVerticalScrollIndicator={false}
@@ -48,10 +49,10 @@ export default function Home() {
                     : (fueldFoodOfItems as (FoodOfItem | SliderItem | fueld)[])
                 }
               />
-            </View>
+            </Suspense>
           </View>
         </View>
-      </Suspense>
+      </View>
     </>
   );
 }

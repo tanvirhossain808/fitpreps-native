@@ -3,10 +3,10 @@ import { Text, View, XStack } from 'tamagui';
 import { selectSuppdProductType } from '~/helper';
 import ShopSwitchingHeader from './shop/ShopSwitchingHeader';
 import ShopWomenHeader from './shop/ShopWomenHeader';
-const TopSearchbar = lazy(() => import('./TopSearchbar'));
-const SelectedFoodCategories = lazy(() => import('./SelectedFoodCategories'));
-const FitlerButton = lazy(() => import('./Filters/FitlerButton'));
-const SortButton = lazy(() => import('./Sort/SortButton'));
+import SelectedFoodCategories from './SelectedFoodCategories';
+import FitlerButton from './Filters/FitlerButton';
+import SortButton from './Sort/SortButton';
+import TopSearchbar from './TopSearchbar';
 
 export default function ProductHeader({
   productType,

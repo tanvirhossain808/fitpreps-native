@@ -11,7 +11,6 @@ export default function () {
 
   const { product } = useLocalSearchParams();
   const selectedScreen = selectedItems.find((data) => data.name === product);
-  const [badge, setBadge] = useState<string | null>(null);
   if (!selectedScreen) {
     return (
       <View>

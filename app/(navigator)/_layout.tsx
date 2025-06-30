@@ -23,6 +23,15 @@ export default function Layout() {
           title: 'overview',
         }}
       /> */}
+
+      <Drawer.Screen
+        name="(tabs)"
+        options={{
+          drawerLabel: 'User',
+          title: 'overview',
+          headerShown: false,
+        }}
+      />
       <Drawer.Screen
         name="my-profile"
         options={{
@@ -109,14 +118,6 @@ export default function Layout() {
           drawerItemStyle: {
             display: 'none',
           },
-        }}
-      />
-      <Drawer.Screen
-        name="(tabs)"
-        options={{
-          drawerLabel: 'User',
-          title: 'overview',
-          headerShown: false,
         }}
       />
     </Drawer>

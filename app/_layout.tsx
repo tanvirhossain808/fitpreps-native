@@ -11,9 +11,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 SplashScreen.preventAutoHideAsync();
 
-export const unstable_settings = {
-  initialRouteName: '(tabs)',
-};
+// export const unstable_settings = {
+//   initialRouteName: '(tabs)',
+// };
 
 export default function RootLayout() {
   const [loaded] = useFonts({
