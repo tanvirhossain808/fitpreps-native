@@ -2,8 +2,9 @@ import { Feather } from '@expo/vector-icons';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { useState, useRef } from 'react';
 import { StyleSheet, TouchableOpacity, Animated } from 'react-native';
-import { Text, View, YStack } from 'tamagui';
+import { Button, Text, View, XStack, YStack } from 'tamagui';
 import VideoRecorder from 'public/images/video-recorder.svg';
+import { router } from 'expo-router';
 const videoSource =
   'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
@@ -71,6 +72,17 @@ export default function WithoutCoinSubscriber() {
             </TouchableOpacity>
           </Animated.View>
         </View>
+        <XStack justifyContent="center">
+          <Button
+            onPress={() => router.push('/(navigator)/(tabs)/subscription')}
+            color="white"
+            bg="#FD4F01"
+            fontSize={16}
+            fontWeight={700}
+            px="$5">
+            GetStarted
+          </Button>
+        </XStack>
       </YStack>
     </YStack>
   );
