@@ -1,5 +1,11 @@
 import { ScrollView } from 'tamagui';
-import { ImageBackground, StyleSheet } from 'react-native';
+import {
+  ImageBackground,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AuthHeader from '~/components/auth/AuthHeader';
 import CreateAccount from '~/components/auth/CreateAccount';
@@ -16,7 +22,21 @@ const authFlow = {
 export default function Account() {
   const { account: loginStatus } = useLocalSearchParams();
   const [authStatus, setAuthStatus] = useState<null | string>(null);
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisible(true);
+    });
 
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false);
+    });
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
   useEffect(() => {
     if (['log-in', 'sign-up', 'forget-pass', 'recover-password'].includes(loginStatus as string)) {
       setAuthStatus(loginStatus as string);
@@ -35,22 +55,29 @@ export default function Account() {
           ? 'Recover Password'
           : 'Log In';
   const AuthComponent = authFlow[authStatus as keyof typeof authFlow];
+  const androidKeyboardBehavior = isKeyboardVisible ? 'height' : undefined;
 
   return (
     <ImageBackground
       source={require('../../public/images/auth/login.png')}
       style={styles.container}
       resizeMode="cover">
-      <AuthHeader title={headerStatus} />
-      <SafeAreaView style={styles.loginIntro}>
-        <ScrollView flex={1} showsVerticalScrollIndicator={false}>
-          {authStatus === 'recover-password' ? (
-            <ForgetPass account={authStatus} />
-          ) : (
-            <AuthComponent account={authStatus} />
-          )}
-        </ScrollView>
-      </SafeAreaView>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+        behavior={Platform.OS === 'ios' ? 'padding' : androidKeyboardBehavior}>
+        <AuthHeader title={headerStatus} />
+        <SafeAreaView edges={['bottom', 'left', 'right']} style={styles.loginIntro}>
+          <ScrollView flex={1} showsVerticalScrollIndicator={false}>
+            {authStatus === 'recover-password' ? (
+              <ForgetPass account={authStatus} />
+            ) : (
+              <AuthComponent account={authStatus} />
+            )}
+          </ScrollView>
+        </SafeAreaView>
+      </KeyboardAvoidingView>
     </ImageBackground>
   );
 }
