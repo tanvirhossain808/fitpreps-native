@@ -6,7 +6,7 @@ import DrawerPageHeader from '~/components/drawer/DrawerPageHeader';
 import Visa from 'public/images/visa.svg';
 import Success from '~/components/shared/SuccessModa';
 export default function ManageCard() {
-  const [showSucessPopUp, setShowSuccessPopUp] = useState(false);
+  const [showSuccessPopUp, setShowSuccessPopUp] = useState(false);
   return (
     <YStack f={1} bg="white">
       <SafeAreaView style={{ ...style.container }}>
@@ -118,9 +118,9 @@ export default function ManageCard() {
           </XStack>
         </YStack>
       </SafeAreaView>
-      {showSucessPopUp && (
+      {showSuccessPopUp && (
         <Success
-          open={showSucessPopUp}
+          open={showSuccessPopUp}
           onOpenChange={setShowSuccessPopUp}
           title={'You have successfully made changes.'}
         />

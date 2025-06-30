@@ -15,14 +15,14 @@ export default function Layout() {
       drawerContent={(props: any) => {
         return <DrawerContent {...props} />;
       }}>
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="index"
         options={{
           //   headerShown: false,
           drawerLabel: 'Home',
           title: 'overview',
         }}
-      />
+      /> */}
       <Drawer.Screen
         name="my-profile"
         options={{

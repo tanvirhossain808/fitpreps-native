@@ -16,12 +16,18 @@ import Chat from '~/public/images/drawer/message-chat-square.svg';
 import Settings from '~/public/images/drawer/settings-01.svg';
 import LogOut from '~/public/images/drawer/log-out-02.svg';
 import { AppRoute } from '~/types/type';
+import LogOutPopUp from '../Logout/LogOutPopUp';
 
 export default function DrawerContent({ navigation }: { navigation: DrawerNavigation }) {
   const { top } = useSafeAreaInsets();
   const [activeRoute, setActiveRoute] = useState<string | null>(null);
+  const [showLogOutPopUp, setShowLogOutPopUp] = useState(false);
   console.log(activeRoute, 'navigation');
-  const handleNavigation = (route: string) => {
+  const handleNavigation = (route: string, name?: string) => {
+    if (name === 'Log Out') {
+      setShowLogOutPopUp(true);
+      return;
+    }
     setActiveRoute(route);
     router.push(route as AppRoute);
   };
@@ -59,7 +65,7 @@ export default function DrawerContent({ navigation }: { navigation: DrawerNaviga
                 shadowRadius={2}
                 shadowOffset={{ width: 0, height: 1 }}
                 shadowOpacity={1}>
-                <TouchableOpacity onPress={() => handleNavigation(item.path)}>
+                <TouchableOpacity onPress={() => handleNavigation(item.path, item.name)}>
                   <XStack justifyContent="space-between">
                     <XStack gap={10}>
                       <item.icon />
@@ -76,6 +82,7 @@ export default function DrawerContent({ navigation }: { navigation: DrawerNaviga
           </YStack>
         </ScrollView>
       </SafeAreaView>
+      <LogOutPopUp open={showLogOutPopUp} onOpenChange={setShowLogOutPopUp} />
     </YStack>
   );
 }
@@ -94,7 +101,7 @@ const drawerList = [
   {
     name: 'My Orders',
     icon: ShoppingCart,
-    path: '/(navigator)/(tabs)/orders',
+    path: '/(navigator)/orders',
   },
   {
     name: 'Addresses',

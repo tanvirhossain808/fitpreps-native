@@ -13,7 +13,7 @@ export default function manageSubscription() {
         <SafeAreaView style={{ flex: 1, height }}>
           <DrawerPageHeader title="Manage Subscription" />
           <YStack px="$4" py="$5" flex={1} justifyContent="space-between">
-            <CurrentlySubscription />
+            <CurrentlySubscription showPlan={false} />
             <SubscriptionAction />
           </YStack>
         </SafeAreaView>

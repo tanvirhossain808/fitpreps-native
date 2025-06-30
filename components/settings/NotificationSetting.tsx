@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Switch, Text, XStack, YStack } from 'tamagui';
-
+import { Switch as RNswitch } from 'react-native';
 export default function NotificationSetting() {
   const [switchStates, setSwitchStates] = useState(SettingReminders.map(() => false));
 
@@ -9,7 +9,9 @@ export default function NotificationSetting() {
     updatedStates[index] = !updatedStates[index];
     setSwitchStates(updatedStates);
   };
+  const [isEnabled, setIsEnabled] = useState(false);
 
+  const toggleSwitchs = () => setIsEnabled((previousState) => !previousState);
   return (
     <YStack gap="$7">
       {SettingReminders.map((item, index) => (
@@ -22,7 +24,7 @@ export default function NotificationSetting() {
               size="$3"
               width={50}
               pr={5}
-              pl={4}
+              pl={2}
               pt={1}
               height={22}
               alignItems="center"
@@ -39,6 +41,14 @@ export default function NotificationSetting() {
                 margin={2}
               />
             </Switch>
+            {/* <RNswitch
+              trackColor={{ false: '#767577', true: '#81b0ff' }} // Android only
+              thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'} // Android only
+              ios_backgroundColor="#3e3e3e" // iOS fallback
+              onValueChange={toggleSwitchs}
+              value={isEnabled}
+              
+            /> */}
           </XStack>
           <Text fontSize={14} color="#1E1F20" mt={1} maxWidth={'85%'}>
             {item.description}
