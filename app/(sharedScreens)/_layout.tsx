@@ -4,6 +4,7 @@ export default function sharedScreensLayout() {
     <Stack>
       <Stack.Screen name="productSelect" options={{ headerShown: false }} />
       <Stack.Screen name="subscription" options={{ headerShown: false }} />
+      <Stack.Screen name="tracking" options={{ headerShown: false }} />
     </Stack>
   );
 }

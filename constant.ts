@@ -89,7 +89,7 @@ export const selectCategories = [
     name: 'suppd',
     width: '158',
     border: '#FD4F01',
-    pathName: '/(tabs)/shop' as const,
+    pathName: '/(navigator)/(tabs)/shop' as const,
     sharedScreen: false,
   },
   {
@@ -98,7 +98,7 @@ export const selectCategories = [
     name: 'shaped',
     width: '158',
     border: '#FD4F01',
-    pathName: '/(tabs)/shop' as const,
+    pathName: '/(navigator)/(tabs)/shop' as const,
     sharedScreen: false,
   },
   {
@@ -115,7 +115,7 @@ export const selectCategories = [
     name: 'tracking',
     width: '158',
     border: '#FD4F01',
-    pathName: '/(sharedScreens)/productSelect',
+    pathName: '/(sharedScreens)/tracking',
   },
 ];
 export const selectedItems = [
@@ -1900,6 +1900,13 @@ export const shadows = {
     shadowRadius: 2,
     shadowOpacity: 1,
     elevation: 1,
+  },
+  violetShadow: {
+    shadowColor: '#BDB0F4',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 2,
+    elevation: 2,
   },
 
   medium: {

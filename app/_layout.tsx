@@ -52,6 +52,7 @@ export default function RootLayout() {
             <Stack.Screen name="(subscription)" options={{ headerShown: false }} />
             <Stack.Screen name="(addresses)" options={{ headerShown: false }} />
             <Stack.Screen name="(payments)" options={{ headerShown: false }} />
+            <Stack.Screen name="(tracking-step)" options={{ headerShown: false }} />
           </Stack>
         </SafeAreaProvider>
       </GestureHandlerRootView>

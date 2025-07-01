@@ -136,7 +136,7 @@ const config = createTamagui({
   light: {
     color: {
       background: 'gray',
-      text: 'black',
+      text: 'red',
     },
   },
   defaultFont: 'body',
@@ -150,7 +150,19 @@ const config = createTamagui({
     heading: headingFont,
     oswald: oswaldFont,
   },
-  themes,
+  themes: {
+    ...themes,
+    dark: {
+      color: '#1E1F20',
+      background: 'white',
+      trackingPrimary: '#588DF5',
+    },
+    light: {
+      color: '#1E1F20',
+      background: 'white',
+      'tracking-primary': '#588DF5',
+    },
+  },
   tokens,
   media: createMedia({
     xs: { maxWidth: 350 },

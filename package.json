@@ -31,6 +31,7 @@
     "expo-splash-screen": "~0.30.9",
     "expo-status-bar": "~2.2.3",
     "expo-system-ui": "~5.0.6",
+    "expo-video": "~2.2.2",
     "expo-web-browser": "~14.1.6",
     "lodash": "^4.17.21",
     "react": "19.0.0",
@@ -41,6 +42,7 @@
     "react-native-maps": "1.20.1",
     "react-native-reanimated": "~3.17.4",
     "react-native-reanimated-carousel": "^4.0.2",
+    "react-native-ruler-picker": "^0.2.2",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",
     "react-native-step-indicator": "^1.0.3",
@@ -48,7 +50,7 @@
     "react-native-svg-transformer": "^1.5.1",
     "react-native-web": "^0.20.0",
     "tamagui": "^1.125.8",
-    "expo-video": "~2.2.2"
+    "@shopify/flash-list": "1.7.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
