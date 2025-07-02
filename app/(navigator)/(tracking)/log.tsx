@@ -1,10 +1,42 @@
-import { View, Text } from 'react-native';
 import React from 'react';
+import { ScrollView, Text, XStack, YStack } from 'tamagui';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import TopSearchbar from '~/components/shared/TopSearchbar';
+import { StatusBar } from 'expo-status-bar';
+import { DateSelector } from '~/components/tracking/GenerateWeekDates';
+import { ProgressChart } from '~/components/tracking/ProgressChart';
+import DailyEntry from '~/components/tracking/DailyEntry';
 
-export default function log() {
+export default function Log() {
+  const insets = useSafeAreaInsets();
   return (
-    <View>
-      <Text>log</Text>
-    </View>
+    <YStack f={1} bg="$background">
+      <StatusBar style="light" />
+      <YStack
+        pt={insets.top}
+        bg="$tracking-primary"
+        borderBottomRightRadius={20}
+        borderBottomLeftRadius={20}>
+        <TopSearchbar placeholder="Search your meal here" showBackButton={false} />
+      </YStack>
+      <YStack f={1}>
+        <ScrollView>
+          <XStack p="$4">
+            <Text fontSize={16} color="$tracking-title" fontWeight={700}>
+              Hello User!
+            </Text>
+          </XStack>
+          <XStack py="$4">
+            <DateSelector />
+          </XStack>
+          <YStack px="$4" py="$5">
+            <ProgressChart />
+          </YStack>
+          <YStack p="$3">
+            <DailyEntry />
+          </YStack>
+        </ScrollView>
+      </YStack>
+    </YStack>
   );
 }

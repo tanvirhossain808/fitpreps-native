@@ -7,14 +7,22 @@ import { TouchableOpacity } from 'react-native';
 import { Input, XStack } from 'tamagui';
 import { DrawerNavigation } from '~/types/navigation';
 
-export default function TopSearchbar({ placeholder }: { placeholder: string }) {
+export default function TopSearchbar({
+  placeholder,
+  showBackButton = true,
+}: {
+  placeholder: string;
+  showBackButton?: boolean;
+}) {
   const navigation = useNavigation<DrawerNavigation>();
   // console.log(navigation, 'dra');
 
   return (
     <XStack p="$4" justifyContent="space-between" gap="$3" flexWrap="wrap" width="100%">
       <XStack flex={1} alignItems="center" gap="1">
-        <Entypo name="chevron-left" size={24} color="black" onPress={() => router.back()} />
+        {showBackButton && (
+          <Entypo name="chevron-left" size={24} color="black" onPress={() => router.back()} />
+        )}
 
         <XStack
           bg="white"

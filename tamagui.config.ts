@@ -156,9 +156,11 @@ const config = createTamagui({
       color: '#1E1F20',
       background: 'white',
       trackingPrimary: '#588DF5',
+      'tracking-title': '#25272C',
     },
     light: {
       color: '#1E1F20',
+      'tracking-title': '#25272C',
       background: 'white',
       'tracking-primary': '#588DF5',
     },

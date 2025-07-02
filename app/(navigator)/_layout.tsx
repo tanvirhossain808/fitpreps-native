@@ -33,6 +33,14 @@ export default function Layout() {
         }}
       />
       <Drawer.Screen
+        name="(tracking)"
+        options={{
+          drawerLabel: 'User',
+          title: 'overview',
+          headerShown: false,
+        }}
+      />
+      <Drawer.Screen
         name="my-profile"
         options={{
           drawerLabel: 'My Profile',

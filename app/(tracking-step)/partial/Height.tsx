@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from 'react';
 import { YStack, Text, View, ScrollView, XStack, Button } from 'tamagui';
 import { Dimensions, StyleSheet } from 'react-native';
 import { shadows } from '~/constant';
+import { router } from 'expo-router';
 
 const screenWidth = Dimensions.get('window').width;
 const ITEM_WIDTH = 14;
@@ -161,6 +162,7 @@ export default function HeightRuler({
       </YStack>
       <XStack justifyContent="center">
         <Button
+          onPress={() => router.push('/log')}
           fontSize={16}
           fontWeight={700}
           px="$5"
