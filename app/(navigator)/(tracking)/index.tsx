@@ -1,10 +1,11 @@
-import { View, Text } from 'react-native';
+'react-native';
 import React from 'react';
+import { Text, View } from 'tamagui';
 
 export default function index() {
   return (
     <View>
-      <Text>index</Text>
+      <Text bg="red">index</Text>
     </View>
   );
 }

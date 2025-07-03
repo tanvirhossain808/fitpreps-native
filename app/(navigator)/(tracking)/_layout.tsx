@@ -1,31 +1,47 @@
-import { Link, Tabs } from 'expo-router';
+import { Link, RelativePathString, Tabs } from 'expo-router';
 import { BlurView } from 'expo-blur';
 import HomeInActive from 'public/images/tracking/tabs/homeInactive.svg';
 import Logo from 'public/images/tracking/tabs/logo.svg';
 import Workout from 'public/images/tracking/tabs/workouts.svg';
 import User from 'public/images/tracking/tabs/user.svg';
 import { HeaderButton } from '~/components/HeaderButton';
+import { tabBarStyles } from '~/constant';
 
 const tabConfig = [
   {
     name: 'index',
     title: 'Home',
     icon: HomeInActive,
+    showTab: true,
+    href: '(tracking)',
   },
   {
     name: 'log',
     title: 'Log',
     icon: Logo,
+    showTab: true,
+    href: '/log',
   },
   {
     name: 'workout',
     title: 'Workout',
     icon: Workout,
+    showTab: true,
+    href: '/workout',
   },
   {
     name: 'personal-data',
     title: 'Personal Data',
     icon: User,
+    showTab: true,
+    href: 'personal-data',
+  },
+  {
+    name: 'add-food-cals',
+    title: 'Add Food Cals',
+    icon: () => {},
+    showTab: false,
+    href: null,
   },
 ];
 
@@ -35,17 +51,7 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: 'black',
         tabBarStyle: {
-          position: 'absolute',
-          borderRadius: 20,
-          paddingHorizontal: 28,
-          height: 68,
-          paddingTop: 12,
-          elevation: 7,
-          shadowColor: '#B6BAC3',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
-          backgroundColor: 'rgba(255, 255, 255, 0.85)',
+          ...tabBarStyles.tabBarStyle,
         },
         tabBarBackground: () => (
           <BlurView
@@ -65,7 +71,9 @@ export default function TabLayout() {
           name={tab.name}
           options={{
             title: tab.title,
+            href: tab.href as RelativePathString | null,
             headerShown: false,
+            tabBarStyle: tab.showTab ? { ...tabBarStyles.tabBarStyle } : { display: 'none' },
             tabBarIcon: ({ focused }) => (
               <tab.icon
                 style={{

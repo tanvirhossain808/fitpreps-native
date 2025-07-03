@@ -24,7 +24,7 @@ import extraFoodPic1 from 'public/images/extrafood/Beef teriyaki noodles.png';
 import extraFoodPic2 from 'public/images/extrafood/Beef roti.png';
 import food from 'public/images/food.png';
 import { FoodOrSliderItem } from './types/type';
-import { ImageSourcePropType } from 'react-native';
+import { ImageSourcePropType, StyleSheet } from 'react-native';
 import barChart12 from 'public/images/subscription/bar-chart-12.svg';
 import coinsStacked02 from 'public/images/subscription/coins-stacked-02.svg';
 import award03 from 'public/images/subscription/award-03.svg';
@@ -1924,3 +1924,21 @@ export const shadows = {
     elevation: 4,
   },
 };
+
+export const tabBarStyles = StyleSheet.create({
+  tabBarStyle: {
+    position: 'absolute',
+    borderRadius: 20,
+    paddingHorizontal: 28,
+    height: 68,
+    paddingTop: 12,
+    elevation: 7,
+    shadowColor: '#B6BAC3',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+  },
+});
+
+export const breakFast = [{}, {}];

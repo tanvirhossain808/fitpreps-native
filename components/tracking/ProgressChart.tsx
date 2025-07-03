@@ -85,7 +85,9 @@ export function ProgressChart() {
       <XStack w="100%" gap={40} justifyContent="center">
         <PieChart
           data={data}
-          donut
+          animationDuration={1000}
+          donut={true}
+          isAnimated={true}
           radius={66}
           innerRadius={58}
           innerCircleColor={'#f4f7ff'}

@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import { DateSelector } from '~/components/tracking/GenerateWeekDates';
 import { ProgressChart } from '~/components/tracking/ProgressChart';
 import DailyEntry from '~/components/tracking/DailyEntry';
+import WeeklyChart from '~/components/tracking/WeeklyChart';
 
 export default function Log() {
   const insets = useSafeAreaInsets();
@@ -17,7 +18,11 @@ export default function Log() {
         bg="$tracking-primary"
         borderBottomRightRadius={20}
         borderBottomLeftRadius={20}>
-        <TopSearchbar placeholder="Search your meal here" showBackButton={false} />
+        <TopSearchbar
+          isTrackingScreen={false}
+          placeholder="Search your meal here"
+          showBackButton={false}
+        />
       </YStack>
       <YStack f={1}>
         <ScrollView>
@@ -26,11 +31,12 @@ export default function Log() {
               Hello User!
             </Text>
           </XStack>
-          <XStack py="$4">
+          <XStack>
             <DateSelector />
           </XStack>
           <YStack px="$4" py="$5">
             <ProgressChart />
+            {/* <WeeklyChart /> */}
           </YStack>
           <YStack p="$3">
             <DailyEntry />
