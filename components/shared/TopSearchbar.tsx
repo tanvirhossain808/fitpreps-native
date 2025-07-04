@@ -11,19 +11,28 @@ export default function TopSearchbar({
   placeholder,
   showBackButton = true,
   isTrackingScreen = false,
+  action = false as any,
 }: {
   placeholder: string;
   showBackButton?: boolean;
   isTrackingScreen?: boolean;
+  action?: () => void | boolean;
 }) {
   const navigation = useNavigation<DrawerNavigation>();
   // console.log(navigation, 'dra');
+  const handleBack = () => {
+    if (action) {
+      action();
+    } else {
+      router.back();
+    }
+  };
 
   return (
     <XStack p="$4" justifyContent="space-between" gap="$3" flexWrap="wrap" width="100%">
       <XStack flex={1} alignItems="center" gap="1">
         {showBackButton && (
-          <TouchableOpacity onPress={() => router.back()}>
+          <TouchableOpacity onPress={handleBack}>
             <Entypo name="chevron-left" size={24} color={!isTrackingScreen ? 'black' : 'white'} />
           </TouchableOpacity>
         )}

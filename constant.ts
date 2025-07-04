@@ -1941,4 +1941,13 @@ export const tabBarStyles = StyleSheet.create({
   },
 });
 
-export const breakFast = [{}, {}];
+export const mealsLists = [
+  {
+    name: 'Breakfast',
+    lists: [{}],
+  },
+  {
+    name: 'Snack',
+    lists: [{}],
+  },
+];

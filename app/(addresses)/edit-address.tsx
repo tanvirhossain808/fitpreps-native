@@ -22,23 +22,24 @@ import DrawerPageHeader from '~/components/drawer/DrawerPageHeader';
 import Mark from 'public/images/mark.svg';
 import { router } from 'expo-router';
 import EditSuccess from '~/components/addresses/EditSucessModal';
+import useKeyboardBehavior from '../../hooks/useKeyBoardBehavior';
 export default function EditAddress() {
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  // const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [isEditSuccessOpen, setIsEditSuccessOpen] = useState(false);
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-      setKeyboardVisible(true);
-    });
+  // useEffect(() => {
+  //   const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+  //     setKeyboardVisible(true);
+  //   });
 
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-      setKeyboardVisible(false);
-    });
+  //   const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+  //     setKeyboardVisible(false);
+  //   });
 
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
+  //   return () => {
+  //     keyboardDidShowListener.remove();
+  //     keyboardDidHideListener.remove();
+  //   };
+  // }, []);
   const renderFormFields = () => {
     const fields = [];
     let i = 0;
@@ -90,14 +91,14 @@ export default function EditAddress() {
 
     return fields;
   };
-  const androidKeyboardBehavior = isKeyboardVisible ? 'height' : undefined;
+  const { keyboardBehavior } = useKeyboardBehavior();
   return (
     <YStack f={1} py={0} my={0} pb={0}>
       <KeyboardAvoidingView
         style={{ ...style.container }}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
-        behavior={Platform.OS === 'ios' ? 'padding' : androidKeyboardBehavior}>
+        behavior={keyboardBehavior as 'padding' | 'height' | 'position' | undefined}>
         <YStack f={1}>
           <SafeAreaView style={style.container}>
             <DrawerPageHeader title="Edit Address" />

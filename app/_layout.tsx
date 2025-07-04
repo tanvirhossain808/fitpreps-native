@@ -5,9 +5,11 @@ import { SplashScreen, Stack } from 'expo-router';
 import { useFonts } from 'expo-font';
 import { GestureHandlerRootView } from 'react-native-gesture-handler'; // Added import
 import { StyleSheet } from 'react-native'; // Added import
+import Toast from 'react-native-toast-message';
 
 import config from '../tamagui.config';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { toastConfig } from '~/toast-config/toast-config';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -54,6 +56,7 @@ export default function RootLayout() {
             <Stack.Screen name="(payments)" options={{ headerShown: false }} />
             <Stack.Screen name="(tracking-step)" options={{ headerShown: false }} />
           </Stack>
+          <Toast config={toastConfig} />
         </SafeAreaProvider>
       </GestureHandlerRootView>
     </TamaguiProvider>
