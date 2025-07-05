@@ -7,10 +7,12 @@ export default function Search({
   placeholder,
   value,
   onChangeText,
+  onPress,
 }: {
   placeholder: string;
   value: string;
   onChangeText: Dispatch<SetStateAction<string>>;
+  onPress?: () => void;
 }) {
   return (
     <XStack
@@ -22,6 +24,7 @@ export default function Search({
       bg="white"
       gap="$2">
       <Input
+        onPress={onPress}
         f={1}
         py={10}
         boxShadow="none"

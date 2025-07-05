@@ -37,7 +37,7 @@ export default function AddFoodCals() {
           />
         </XStack>
         <SafeAreaView style={{ ...style.container }} edges={['bottom', 'left', 'right']}>
-          <ScrollView nestedScrollEnabled={true}>
+          <ScrollView keyboardShouldPersistTaps="handled" nestedScrollEnabled={true}>
             <YStack f={1} px="$4">
               <YStack py="$5">
                 <ProgressChart />
@@ -62,7 +62,11 @@ export default function AddFoodCals() {
                 ))}
               </YStack>
               <YStack gap="$5" py="$5">
-                <SelectMeal setOpen={setOpen} isKeyboardVisible={isKeyboardVisible} />
+                <SelectMeal
+                  showFoodCalToast={showFoodCalToast}
+                  setOpen={setOpen}
+                  isKeyboardVisible={isKeyboardVisible}
+                />
               </YStack>
               {open && (
                 <ProductScanner open={open} showFoodCalToast={showFoodCalToast} setOpen={setOpen} />
