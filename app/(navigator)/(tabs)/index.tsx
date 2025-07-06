@@ -7,6 +7,11 @@ import { StatusBar } from 'expo-status-bar';
 import { selectCategories } from '~/constant';
 import { useEffect, useState } from 'react';
 import TopSearchbar from '~/components/shared/TopSearchbar';
+import IntroProductSlider from '~/components/home/IntroProductSlider';
+import { LinearGradient } from 'expo-linear-gradient';
+import HomeIntroVideoSlider from '~/components/home/HomeIntroVideoSlider';
+import ReviewSlider from '~/components/home/ReviewSlider';
+import WeeklyOffer from '~/components/home/WeeklyOffer';
 export default function Home() {
   const [selectCategory, setSelectedCategory] = useState<number | null>(null);
   useEffect(() => {
@@ -36,11 +41,11 @@ export default function Home() {
           bg={'#fffdf6'}>
           <YStack flex={1} pb="$10">
             <TopSearchbar placeholder="Search here" />
-            <YStack flex={1} pt={'$12'} gap={'$7'}>
+            <YStack flex={1} pt={'$12'}>
               <XStack justifyContent="center">
                 <Image source={require('public/images/fitpreps.png')} width={278} height={32} />
               </XStack>
-              <YStack alignItems="center">
+              <YStack alignItems="center" mt="$7">
                 <Text color="#1E1F20" fontWeight={500} fontSize={16}>
                   Fuelling your fitness.
                 </Text>
@@ -48,7 +53,7 @@ export default function Home() {
                   Pick your journey.
                 </Text>
               </YStack>
-              <YStack px={'$2'} gap={'$5'}>
+              <YStack px={'$2'} mt="$7">
                 <XStack justifyContent="center" rowGap="$5" gap="$2" flexWrap="wrap">
                   {selectCategories.map(
                     ({ img, name, width, border, pathName, path, sharedScreen }, i) => (
@@ -80,74 +85,29 @@ export default function Home() {
                   )}
                 </XStack>
               </YStack>
+              <LinearGradient
+                colors={['#FFF', '#D0FFDA']}
+                locations={[0.4684, 1.7464]}
+                start={{ x: 0.5, y: 0 }}
+                end={{ x: 0.5, y: 1 }}
+                style={{ flex: 1 }}>
+                <YStack px="$4" gap={40} py={40}>
+                  <IntroProductSlider />
+                </YStack>
+              </LinearGradient>
+              <YStack py={40} px={16}>
+                <HomeIntroVideoSlider />
+              </YStack>
+            </YStack>
+            <YStack px={16} gap="$7">
+              <WeeklyOffer />
+            </YStack>
+            <YStack py={40} px={16} gap="$7">
+              <ReviewSlider />
             </YStack>
           </YStack>
         </ScrollView>
       </SafeAreaView>
     </>
   );
-}
-
-{
-  /* <YStack height={1000} py="$5">
-          <CartExtraFood data={extraFoods} />
-        </YStack> */
-}
-
-{
-  /* <YStack flex={1} gap="$3">
-  <Text color="#1E1F20" fontWeight={700} fontSize={16}>
-    Savings
-  </Text>
-  <XStack alignItems="center" gap="$2">
-    <XStack
-      gap={2}
-      flex={1}
-      height={'40px'}
-      bg="white"
-      alignSelf="stretch"
-      elevation={1}
-      shadowColor="rgba(10, 13, 18, 0.05)"
-      shadowOffset={{ width: 0, height: 1 }}
-      shadowRadius={2}
-      shadowOpacity={1}
-      alignItems="center"
-      px={14}
-      py={10}
-      borderColor="#EDEEF1"
-      borderWidth={1}
-      borderRadius={8}>
-      <CouponTicket />
-      <Input
-        py={0}
-        alignSelf="stretch"
-        flex={1}
-        placeholder="Enter Coupon Code"
-        placeholderTextColor="#8E95A2"
-        fontSize={14}
-        bg="transparent"
-        borderWidth={0}
-        outlineWidth={0}
-      />
-    </XStack>
-    <Button
-      height={'40px'}
-      px={20}
-      py={10}
-      fontSize={16}
-      fontWeight="700"
-      color="#FD4F01"
-      borderRadius={8}
-      borderWidth={1}
-      borderColor="#FD4F01"
-      h={60}
-      bg="white"
-      shadowOffset={{ width: 0, height: 1 }}
-      shadowRadius={2}
-      shadowColor="rgba(10, 13, 18, 0.05)"
-      shadowOpacity={1}>
-      Add
-    </Button>
-  </XStack>
-</YStack>; */
 }

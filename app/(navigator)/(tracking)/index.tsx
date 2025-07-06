@@ -1,11 +1,15 @@
 'react-native';
-import React from 'react';
-import { Text, View } from 'tamagui';
+import { router, useFocusEffect } from 'expo-router';
+import React, { useEffect } from 'react';
+import { Text, View, YStack } from 'tamagui';
 
-export default function index() {
+export default function Home() {
+  useFocusEffect(() => {
+    router.push('/log');
+  });
   return (
-    <View>
-      <Text bg="red">index</Text>
-    </View>
+    <YStack>
+      <Text>index</Text>
+    </YStack>
   );
 }

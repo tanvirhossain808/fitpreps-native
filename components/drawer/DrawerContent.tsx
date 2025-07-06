@@ -22,7 +22,6 @@ export default function DrawerContent({ navigation }: { navigation: DrawerNaviga
   const { top } = useSafeAreaInsets();
   const [activeRoute, setActiveRoute] = useState<string | null>(null);
   const [showLogOutPopUp, setShowLogOutPopUp] = useState(false);
-  console.log(activeRoute, 'navigation');
   const handleNavigation = (route: string, name?: string) => {
     if (name === 'Log Out') {
       setShowLogOutPopUp(true);

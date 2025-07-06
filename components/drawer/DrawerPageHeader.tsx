@@ -20,6 +20,23 @@ export default function DrawerPageHeader({ title }: { title: string }) {
   );
 }
 
+export function VideoHeader({ title, onPress }: { title: string; onPress: () => void }) {
+  const handleBack = () => {};
+  return (
+    <XStack py="$5">
+      <TouchableOpacity onPress={onPress}>
+        <Feather name="chevron-left" size={24} color="white" />
+      </TouchableOpacity>
+      <Text flex={1} color="white" fontWeight={700} fontSize={20} textAlign="center">
+        {title}
+      </Text>
+      <TouchableOpacity disabled style={style.hiddenOpacity}>
+        <Feather name="chevron-left" size={24} color="#1E1F20" />
+      </TouchableOpacity>
+    </XStack>
+  );
+}
+
 const style = StyleSheet.create({
   hiddenOpacity: {
     opacity: 0,

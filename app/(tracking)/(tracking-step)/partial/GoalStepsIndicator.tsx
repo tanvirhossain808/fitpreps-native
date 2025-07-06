@@ -23,8 +23,9 @@ export default function GoalStepsIndicator({
   let progressPercent = Math.round(((currentStep + 1) / stepCount) * 100);
   const handleBack = () => {
     if (currentStep > 0) {
-      setCurrentStep((prev) => prev - 1);
+      return setCurrentStep((prev) => prev - 1);
     }
+    router.back();
   };
   return (
     <>

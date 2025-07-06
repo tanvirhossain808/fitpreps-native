@@ -59,6 +59,7 @@ export default function subscription() {
                   color="white"
                   fontSize={16}
                   fontWeight={700}
+                  onPress={() => router.push('/goal-step')}
                   bg="#FD4F01"
                   px="$5">
                   Set Your Goal

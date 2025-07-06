@@ -10,7 +10,6 @@ import CartPlaced from '~/components/orderplaced/CartPlaced';
 export default function OrderPlaced() {
   const screenWidth = Dimensions.get('window').width;
   const { type } = useLocalSearchParams() || {};
-  console.log(type);
   return (
     <YStack flex={1} bg="white">
       <YStack flex={1} position="relative" width="100%" aspectRatio={390 / 844}>

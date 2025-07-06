@@ -4,7 +4,7 @@ import Octicons from '@expo/vector-icons/Octicons';
 import { useNavigation } from '@react-navigation/native';
 import { router } from 'expo-router';
 import { TouchableOpacity } from 'react-native';
-import { Input, Text, XStack } from 'tamagui';
+import { Input, Text, TextProps, XStack } from 'tamagui';
 import { DrawerNavigation } from '~/types/navigation';
 
 export default function TopSearchbar({
@@ -12,14 +12,15 @@ export default function TopSearchbar({
   showBackButton = true,
   isTrackingScreen = false,
   action = false as any,
+  textProps = {},
 }: {
   placeholder: string;
   showBackButton?: boolean;
   isTrackingScreen?: boolean;
   action?: () => void | boolean;
+  textProps?: TextProps;
 }) {
   const navigation = useNavigation<DrawerNavigation>();
-  // console.log(navigation, 'dra');
   const handleBack = () => {
     if (action) {
       action();
@@ -68,7 +69,13 @@ export default function TopSearchbar({
             </TouchableOpacity>
           </XStack>
         ) : (
-          <Text color="white" fontSize={20} fontWeight={700} w={190} textAlign="center">
+          <Text
+            color="white"
+            fontSize={20}
+            fontWeight={700}
+            w={190}
+            textAlign="center"
+            {...textProps}>
             {placeholder}
           </Text>
         )}

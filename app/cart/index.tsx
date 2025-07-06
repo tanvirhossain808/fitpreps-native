@@ -35,6 +35,7 @@ export default function Cart() {
         cartType={cartType as string}
         setIsEditAddress={setIsEditAddress}
         currentStep={currentStep}
+        setCurrentStep={setCurrentStep}
         isEditAddress={isEditAddress}
         isShowMapModal={isShowMapModal}
         isAddressModalOpen={isAddressModalOpen}

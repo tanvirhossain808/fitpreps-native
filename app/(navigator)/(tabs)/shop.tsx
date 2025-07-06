@@ -24,7 +24,6 @@ export default function Shop() {
   const [productType, setProductType] = useState<string | null>(product as string);
   const [gender, setGender] = useState<'male' | 'female' | null>(null);
   const insets = useSafeAreaInsets();
-  console.log(product, 'product');
   useFocusEffect(
     useCallback(() => {
       setStatusBarStyle(product === 'suppd' ? 'dark' : 'light');

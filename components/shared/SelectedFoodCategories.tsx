@@ -28,7 +28,7 @@ export default function SelectedFoodCategories({
             justifyContent="center"
             borderWidth={1.5}
             borderColor={
-              item.name === selectFoodCategory ? activeStatsBarInfo?.tentColor : '$colorTransparent'
+              item.name === selectFoodCategory ? activeStatsBarInfo?.tentColor : 'transparent'
             }
             borderRadius={50}
             alignItems="center"

@@ -6,10 +6,10 @@ import { StatusBar } from 'expo-status-bar';
 import { DateSelector } from '~/components/tracking/GenerateWeekDates';
 import { ProgressChart } from '~/components/tracking/ProgressChart';
 import DailyEntry from '~/components/tracking/DailyEntry';
-import WeeklyChart from '~/components/tracking/WeeklyChart';
 
 export default function Log() {
   const insets = useSafeAreaInsets();
+
   return (
     <YStack f={1} bg="$background">
       <StatusBar style="light" />

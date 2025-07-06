@@ -1,6 +1,4 @@
-import { AntDesign } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
-import { AnimatePresence, Button, Dialog, Text, View, XStack, YStack } from 'tamagui';
+import { AnimatePresence, Button, Dialog, Text, XStack, YStack } from 'tamagui';
 import { shadows } from '~/constant';
 
 export default function LogOutPopUp({

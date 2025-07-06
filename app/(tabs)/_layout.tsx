@@ -1,10 +1,50 @@
 import { Link, Tabs } from 'expo-router';
 import { BlurView } from 'expo-blur';
-
 import { HeaderButton } from '../../components/HeaderButton';
-import { TabBarIcon } from '../../components/TabBarIcon';
 import { Image } from 'tamagui';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+const tabConfigs = [
+  {
+    name: 'meals',
+    title: 'Meals',
+    icon: require('public/images/meals.png'),
+    focusedIcon: require('public/images/focusedmeals.png'),
+    width: 28,
+    height: 28,
+  },
+  {
+    name: 'subscription',
+    title: 'Subscription',
+    icon: require('public/images/subs.png'),
+    focusedIcon: require('public/images/focuesSubscription.png'),
+    width: 20,
+    height: 22,
+  },
+  {
+    name: 'index',
+    title: 'Home',
+    icon: require('public/images/home.png'),
+    focusedIcon: require('public/images/fhome.png'),
+    width: 28,
+    height: 28,
+  },
+  {
+    name: 'shop',
+    title: 'Shop',
+    icon: require('public/images/shop.png'),
+    focusedIcon: require('public/images/fshop.png'),
+    width: 28,
+    height: 28,
+  },
+  {
+    name: 'track',
+    title: 'Track',
+    icon: require('public/images/track.png'),
+    focusedIcon: require('public/images/fshop.png'),
+    width: 20,
+    height: 20,
+  },
+];
 
 export default function TabLayout() {
   return (
@@ -36,94 +76,31 @@ export default function TabLayout() {
           />
         ),
       }}>
-      <Tabs.Screen
-        name="meals"
-        options={{
-          headerShown: false,
-          title: 'Meals',
-          tabBarIcon: ({ color, focused }) => {
-            return !focused ? (
-              <Image source={require('public/images/meals.png')} width={28} height={28} />
-            ) : (
-              <Image source={require('public/images/focusedmeals.png')} width={28} height={28} />
-            );
-          },
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <HeaderButton />
-            </Link>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="subscription"
-        options={{
-          title: 'Subscription',
-          headerShown: false,
-          tabBarIcon: ({ color, focused }) => {
-            return !focused ? (
-              <Image source={require('public/images/subs.png')} width={20} height={22} />
-            ) : (
+      {tabConfigs.map((tab) => (
+        <Tabs.Screen
+          key={tab.name}
+          name={tab.name}
+          options={{
+            headerShown: false,
+            title: tab.title,
+            tabBarIcon: ({ focused }) => (
               <Image
-                source={require('public/images/focuesSubscription.png')}
-                width={20}
-                height={22}
+                source={focused ? tab.focusedIcon : tab.icon}
+                width={tab.width}
+                height={tab.height}
               />
-            );
-          },
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <HeaderButton />
-            </Link>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          headerShown: false,
-          tabBarIcon: ({ color, focused }) => {
-            return !focused ? (
-              <Image source={require('public/images/home.png')} width={28} height={28} />
-            ) : (
-              <Image source={require('public/images/fhome.png')} width={28} height={28} />
-            );
-          },
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <HeaderButton />
-            </Link>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="shop"
-        options={{
-          headerShown: false,
-          title: 'Shop',
-          tabBarIcon: ({ color, focused }) => {
-            return !focused ? (
-              <Image source={require('public/images/shop.png')} width={28} height={28} />
-            ) : (
-              <Image source={require('public/images/fshop.png')} width={28} height={28} />
-            );
-          },
-        }}
-      />
-      <Tabs.Screen
-        name="track"
-        options={{
-          title: 'Track',
-          tabBarIcon: ({ color, focused }) => {
-            return !focused ? (
-              <Image source={require('public/images/track.png')} width={20} height={20} />
-            ) : (
-              <Image source={require('public/images/fshop.png')} width={20} height={20} />
-            );
-          },
-        }}
-      />
+            ),
+            ...(tab.name !== 'shop' &&
+              tab.name !== 'track' && {
+                headerRight: () => (
+                  <Link href="/modal" asChild>
+                    <HeaderButton />
+                  </Link>
+                ),
+              }),
+          }}
+        />
+      ))}
     </Tabs>
   );
 }

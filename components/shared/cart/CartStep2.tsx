@@ -164,7 +164,7 @@ export default function CartStep2({
                             open={selectedAddress === i}
                             onOpenChange={() => {}}
                             placement="left-start"
-                            offset={{ mainAxis: -25, crossAxis: 20 }}>
+                            offset={{ mainAxis: 100, crossAxis: 20 }}>
                             <Popover.Trigger asChild>
                               <TouchableOpacity
                                 onPress={(e) => {

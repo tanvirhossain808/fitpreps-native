@@ -13,7 +13,7 @@ const tabConfig = [
     title: 'Home',
     icon: HomeInActive,
     showTab: true,
-    href: '(tracking)',
+    href: '(navigator)/(tabs)',
   },
   {
     name: 'log',
@@ -39,6 +39,20 @@ const tabConfig = [
   {
     name: 'add-food-cals',
     title: 'Add Food Cals',
+    icon: () => {},
+    showTab: false,
+    href: null,
+  },
+  {
+    name: 'train-workout',
+    title: 'Train Workout',
+    icon: () => {},
+    showTab: false,
+    href: null,
+  },
+  {
+    name: 'log-workout',
+    title: 'Log Workout',
     icon: () => {},
     showTab: false,
     href: null,

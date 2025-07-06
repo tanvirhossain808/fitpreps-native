@@ -17,6 +17,7 @@ type StepIndicatorProps = {
   setShowMapModal?: React.Dispatch<React.SetStateAction<boolean>>;
   isAddressModalOpen?: boolean;
   setIsAddressModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentStep?: React.Dispatch<React.SetStateAction<number>>;
   cartType?: string;
 };
 
@@ -28,6 +29,7 @@ export default function StepIndicator({
   setShowMapModal,
   isAddressModalOpen = false,
   setIsAddressModalOpen,
+  setCurrentStep,
   cartType,
 }: StepIndicatorProps) {
   const labels = ['Select Date', 'Address', 'Payment'];
@@ -67,7 +69,11 @@ export default function StepIndicator({
         setIsEditAddress(false);
       }
     } else {
-      router.back();
+      if (currentStep > 0) {
+        setCurrentStep && setCurrentStep(currentStep - 1);
+      } else {
+        router.back();
+      }
     }
   };
   return (

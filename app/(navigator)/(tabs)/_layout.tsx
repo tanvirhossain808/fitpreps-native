@@ -113,6 +113,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="track"
         options={{
+          href: '/(tracking)',
           title: 'Track',
           tabBarIcon: ({ color, focused }) => {
             return !focused ? (

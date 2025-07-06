@@ -64,6 +64,9 @@ import Cutting from 'public/images/categoryselector/cutting.svg';
 import Accessories from 'public/images/categoryselector/acceserois.svg';
 import Breakfast from 'public/images/categoryselector/breakfast.svg';
 import Snacks from 'public/images/categoryselector/snacks.svg';
+import CurrencyDollar from 'public/images/home/intro-products/currency-dollar-circle.svg';
+import ChefHat from 'public/images/home/intro-products/chefhats.svg';
+import Target04 from 'public/images/home/intro-products/target-04.svg';
 export const selectCategories = [
   {
     img: cookd,
@@ -1949,5 +1952,93 @@ export const mealsLists = [
   {
     name: 'Snack',
     lists: [{}],
+  },
+];
+
+export const videoSource =
+  'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+
+export const HomeIntroProducts = [
+  {
+    id: 1,
+    title1: 'CHOOSE YOUR MEALS',
+    title2: 'or choose your plan',
+    icon: CurrencyDollar,
+    height: 342,
+    img: require('public/images/home/intro-products/p1.png'),
+    description: 'A menu of 30+ meals every week.',
+    endTitle1: 'Pay Less, Get More -',
+    endTitle2: 'Pause Anytime',
+    top: -65,
+    width: '100%',
+    left: 'auto',
+    right: 0,
+    headerTitle: 'how you get your meals',
+  },
+  {
+    headerTitle: 'how you get your meals',
+    id: 2,
+    title1: 'FRESHLY PREPARED',
+    title2: 'BY OUR CHEFS',
+    height: 265,
+    icon: Target04,
+    img: require('public/images/home/intro-products/p2.png'),
+    description: 'Our chefs do all the prep work, so all you have to do is enjoy.',
+    endTitle1: 'Tailored to Your',
+    endTitle2: 'Taste and Lifestyle',
+    width: 300,
+    top: -80,
+    right: 0,
+
+    left: 'auto',
+  },
+  {
+    headerTitle: 'how you get your meals',
+    id: 3,
+    height: 270,
+    title1: 'WARM UP, EAT',
+    title2: '& ENJOY',
+    icon: ChefHat,
+    description: 'No prep. No fuss. Our meals are ready to heat and eat in minutes.',
+    img: require('public/images/home/intro-products/p3.png'),
+    endTitle1: 'Chief’s Touch ',
+    endTitle2: 'Personalizaton',
+    width: 390,
+    top: -80,
+    right: -38,
+    left: 'auto',
+  },
+];
+
+export const HomeVideoSlider = [
+  {
+    img: require('public/images/home/intro-products/Influencer Reel (1).png'),
+  },
+  {
+    img: require('public/images/home/intro-products/Influencer Reel (1).png'),
+  },
+  {
+    img: require('public/images/home/intro-products/Influencer Reel (1).png'),
+  },
+];
+
+export const WeeklyReview = [
+  {
+    img: require('public/images/home/intro-products/image.png'),
+    title: 'Rose',
+    description:
+      '“First positive effects: I no longer feel tired during the day and feel more focused”',
+  },
+  {
+    img: require('public/images/home/intro-products/image (1).png'),
+    title: 'Rose',
+    description:
+      '“First positive effects: I no longer feel tired during the day and feel more focused”',
+  },
+  {
+    img: require('public/images/home/intro-products/image.png'),
+    title: 'Rose',
+    description:
+      '“First positive effects: I no longer feel tired during the day and feel more focused”',
   },
 ];
