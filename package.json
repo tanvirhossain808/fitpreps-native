@@ -14,6 +14,7 @@
     "@expo/vector-icons": "^14.0.0",
     "@react-navigation/drawer": "^7.4.4",
     "@react-navigation/native": "^7.0.3",
+    "@reduxjs/toolkit": "^2.8.2",
     "@shopify/flash-list": "1.7.6",
     "@tamagui/animations-react-native": "^1.125.8",
     "@tamagui/font-inter": "^1.125.8",
@@ -53,8 +54,11 @@
     "react-native-svg-transformer": "^1.5.1",
     "react-native-toast-message": "^2.3.3",
     "react-native-web": "^0.20.0",
+    "react-redux": "^9.2.0",
+    "redux-persist": "^6.0.0",
     "tamagui": "^1.125.8",
-    "victory-native": "^41.17.4"
+    "victory-native": "^41.17.4",
+    "undefined": "react-native-async-storage/async-storage"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
