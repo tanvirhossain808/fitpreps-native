@@ -7,6 +7,7 @@ import SelectedFoodCategories from './SelectedFoodCategories';
 import FitlerButton from './Filters/FitlerButton';
 import SortButton from './Sort/SortButton';
 import TopSearchbar from './TopSearchbar';
+import { useDispatch } from 'react-redux';
 
 export default function ProductHeader({
   productType,

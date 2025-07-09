@@ -4,6 +4,10 @@ import { useGetSmakelijkeProductsQuery } from '~/src/store/apiSlices/products/sm
 import { useTabBarVisibility } from '~/src/hooks/useTabBarVisibility';
 import { lazy, useCallback, useEffect } from 'react';
 import LoadingSpinner from './Loading';
+import useProductFilters from '~/src/hooks/useProductFilters';
+import { useSelector } from 'react-redux';
+import { RootState } from '~/src/store';
+import { View } from 'tamagui';
 const ProductsmakelijkeLists = lazy(() => import('./ProductsmakelijkeLists'));
 
 export const unstable_settings = {
@@ -21,11 +25,20 @@ export default function ProductLists({
   scrollEventThrottle?: number;
   productType?: string;
 }) {
-  const { data, isLoading, error, ...rest } = useGetSmakelijkeProductsQuery(null);
-
   const { handleScroll } = useTabBarVisibility();
+  // const category = useSelector((state: RootState) => state.filter.category);
+  // console.log(category, 'category');
+  const { data, isLoading, error, refetch } = useGetSmakelijkeProductsQuery(null);
+
+  const { filteredProducts, filters, updateSortBy } = useProductFilters(data);
+  // console.log(filteredProducts, 'filteredProducts');
+  // console.log(filteredProducts, 'filter');
+  // console.log(filteredProducts, 'filteredProducts');
+  // console.log(filteredProducts, 'filters');
+  // console.log(filteredProducts, 'fil');
   const renderItem = useCallback(
     ({ item }: { item: (Productsmakelijke | SliderItem)[] }) => {
+      // return <View />;
       return <ProductsmakelijkeLists item={item} productType={productType} />;
     },
     [productType]
@@ -39,11 +52,11 @@ export default function ProductLists({
   // }
   return (
     <FlatList
-      initialNumToRender={10}
-      windowSize={10}
-      maxToRenderPerBatch={10}
+      initialNumToRender={15}
+      windowSize={15}
+      maxToRenderPerBatch={15}
       updateCellsBatchingPeriod={50}
-      data={data || []}
+      data={filteredProducts || []}
       keyExtractor={(item, idx) => item[0]._id}
       renderItem={renderItem}
       contentContainerStyle={[{ paddingBottom: 50 }, contentContainerStyle]}

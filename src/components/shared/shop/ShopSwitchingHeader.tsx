@@ -1,5 +1,6 @@
 import { Button, XStack } from 'tamagui';
 import React, { Dispatch } from 'react';
+import useProductFilters from '~/src/hooks/useProductFilters';
 
 export default function SwitchHeader({
   product,
@@ -17,6 +18,7 @@ export default function SwitchHeader({
     setSelectCategory(() => 'Supplements');
     setGender(() => null);
   };
+  const { updateCategory } = useProductFilters();
   return (
     <XStack width={'100%'} p={4} borderRadius={8} borderWidth={1} borderColor="#B6BAC3">
       <Button

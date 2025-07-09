@@ -149,49 +149,55 @@ export const cookdFoodCategories = [
     img: AllImg,
     id: 1,
     svg: () => createElement(AllFood),
+    dutchName: 'Alle',
   },
   {
     name: 'Bundles',
     img: bundlesImg,
     id: 2,
     svg: () => createElement(AllFood),
+    dutchName: 'Maaltijdbundels',
   },
   {
     name: 'Chicken',
     img: chickenImg,
     id: 3,
     svg: () => createElement(AllFood),
+    dutchName: 'Kip',
   },
   {
     name: 'Beef',
     img: beefImg,
     id: 4,
     svg: () => createElement(AllFood),
+    dutchName: 'Rundvlees',
   },
   {
     name: 'Fish',
     img: fishImg,
     id: 5,
     svg: () => createElement(AllFood),
+    dutchName: 'Vis',
   },
   {
     name: 'Vegetarian',
     img: vegetarianImg,
     id: 6,
     svg: () => createElement(AllFood),
+    dutchName: 'Vegetarisch',
   },
-  {
-    name: 'Accessories',
-    img: accessoriesImg,
-    id: 7,
-    svg: () => createElement(AllFood),
-  },
-  {
-    name: 'Breakfast',
-    img: accessoriesImg,
-    id: 8,
-    svg: () => createElement(AllFood),
-  },
+  // {
+  //   name: 'Accessories',
+  //   img: accessoriesImg,
+  //   id: 7,
+  //   svg: () => createElement(AllFood),
+  // },
+  // {
+  //   name: 'Breakfast',
+  //   img: accessoriesImg,
+  //   id: 8,
+  //   svg: () => createElement(AllFood),
+  // },
 ];
 export const fueldSelectedCategories = [
   {
