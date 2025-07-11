@@ -26,38 +26,34 @@ export default function ProductLists({
   productType?: string;
 }) {
   const { handleScroll } = useTabBarVisibility();
-  // const category = useSelector((state: RootState) => state.filter.category);
-  // console.log(category, 'category');
+
   const { data, isLoading, error, refetch } = useGetSmakelijkeProductsQuery(null);
 
   const { filteredProducts, filters, updateSortBy } = useProductFilters(data);
-  // console.log(filteredProducts, 'filteredProducts');
-  // console.log(filteredProducts, 'filter');
-  // console.log(filteredProducts, 'filteredProducts');
-  // console.log(filteredProducts, 'filters');
-  // console.log(filteredProducts, 'fil');
+
   const renderItem = useCallback(
-    ({ item }: { item: (Productsmakelijke | SliderItem)[] }) => {
+    ({ item, index }: { item: Productsmakelijke | SliderItem; index: number }) => {
+      // return <View />;j
+      return <ProductsmakelijkeLists item={item} index={index} productType={productType} />;
       // return <View />;
-      return <ProductsmakelijkeLists item={item} productType={productType} />;
     },
     [productType]
   );
   if (isLoading) {
     return <LoadingSpinner color="white" />;
   }
-  // const isReady = products && products.length > 0;
-  // if (!isReady) {
-  //   return <LoadingSpinner color="white" />;
-  // }
+
   return (
     <FlatList
-      initialNumToRender={15}
-      windowSize={15}
-      maxToRenderPerBatch={15}
+      // ItemSeparatorComponent={() => <View h={20} />}
+      initialNumToRender={20}
+      windowSize={20}
+      maxToRenderPerBatch={20}
+      numColumns={2}
+      columnWrapperStyle={{ gap: 8 }}
       updateCellsBatchingPeriod={50}
-      data={filteredProducts || []}
-      keyExtractor={(item, idx) => item[0]._id}
+      data={(filteredProducts as (Productsmakelijke | SliderItem)[]) || []}
+      keyExtractor={(item, idx) => idx.toString()}
       renderItem={renderItem}
       contentContainerStyle={[{ paddingBottom: 50 }, contentContainerStyle]}
       showsVerticalScrollIndicator={showsVerticalScrollIndicator}

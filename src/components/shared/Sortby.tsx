@@ -1,21 +1,28 @@
-import { View, Text, YStack, Portal } from 'tamagui';
-import React, { useState } from 'react';
+import { Text, YStack, Portal } from 'tamagui';
 import { TouchableOpacity } from 'react-native';
+import { SortOption } from '~/src/types/type';
 
 export default function Sortby({
   data,
   setShowSort,
   sort,
   setSort,
+  handleUpdateSortBy,
 }: {
   data: {
     name: string;
+    value: string;
   }[];
   setShowSort: (show: boolean) => void;
   sort: string | null;
   setSort: (sort: string | null) => void;
+  handleUpdateSortBy: (sortOption: SortOption) => void;
 }) {
-  //   const [sort, setSort] = useState<null | string>(null);
+  const handleSortPress = (sortValue: SortOption) => {
+    setTimeout(() => handleUpdateSortBy(sortValue), 0);
+    setShowSort(false);
+  };
+
   return (
     <Portal top={300} left={70}>
       <YStack
@@ -34,11 +41,11 @@ export default function Sortby({
         shadowRadius={8}
         elevationAndroid={4}
         w={146}>
-        {data.map(({ name }, i) => (
+        {data.map(({ name, value }, i) => (
           <TouchableOpacity
             key={i}
             onPressIn={() => setSort(name)}
-            onPress={() => setShowSort(false)}>
+            onPress={() => handleSortPress(value as SortOption)}>
             <Text
               px={16}
               bg={sort === name ? '#E5F8EA' : 'transparent'}

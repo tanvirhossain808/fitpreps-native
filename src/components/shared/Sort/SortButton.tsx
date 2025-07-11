@@ -4,8 +4,13 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { foodSortByOptions } from '~/src/constant';
 import Sortby from '~/src/components/shared/Sortby';
+import { SortOption } from '~/src/types/type';
 
-export default function SortButton() {
+export default function SortButton({
+  updateSortBy,
+}: {
+  updateSortBy: (sortOption: SortOption) => void;
+}) {
   const [sort, setSort] = useState<null | string>(null);
   const [showSort, setShowSort] = useState(false);
   const handleOutsidePress = useCallback(() => {
@@ -14,6 +19,9 @@ export default function SortButton() {
   const handleSortPress = useCallback(() => {
     setShowSort((prev) => !prev);
   }, []);
+  const handleUpdateSortBy = (sortOption: SortOption) => {
+    updateSortBy(sortOption);
+  };
 
   return (
     <TouchableOpacity
@@ -33,6 +41,7 @@ export default function SortButton() {
               onPress={handleOutsidePress}
             />
             <Sortby
+              handleUpdateSortBy={updateSortBy}
               data={foodSortByOptions}
               setShowSort={setShowSort}
               sort={sort}

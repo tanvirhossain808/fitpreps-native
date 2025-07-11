@@ -4,8 +4,15 @@ import { TouchableOpacity } from 'react-native';
 import { Portal, Text } from 'tamagui';
 import FilterModal from '~/src/components/modal/Filter';
 import { filterItems } from '~/src/helper';
+import { SortOption } from '~/src/types/type';
 
-export default function ({ productType }: { productType: string }) {
+export default function ({
+  productType,
+  updateSortBy,
+}: {
+  productType: string;
+  updateSortBy: (sortOption: SortOption) => void;
+}) {
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState<{ [key: string]: string[] }>({});
   const handleFilterPress = useCallback(() => {
@@ -15,6 +22,7 @@ export default function ({ productType }: { productType: string }) {
     (total, category) => total + category.length,
     0
   );
+  console.log(filters, 'filter');
   const filterOption = filterItems(productType);
   return (
     <>

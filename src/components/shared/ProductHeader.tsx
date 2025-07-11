@@ -8,6 +8,8 @@ import FitlerButton from './Filters/FitlerButton';
 import SortButton from './Sort/SortButton';
 import TopSearchbar from './TopSearchbar';
 import { useDispatch } from 'react-redux';
+import { useGetSmakelijkeProductsQuery } from '~/src/store/apiSlices/products/smakelijke';
+import useProductFilters from '~/src/hooks/useProductFilters';
 
 export default function ProductHeader({
   productType,
@@ -26,6 +28,8 @@ export default function ProductHeader({
   setGender?: Dispatch<React.SetStateAction<'male' | 'female' | null>>;
   insets: { top: number };
 }) {
+  const { data } = useGetSmakelijkeProductsQuery(null);
+  const { filteredProducts, updateSortBy } = useProductFilters(data);
   return (
     <View>
       <View>
@@ -73,11 +77,16 @@ export default function ProductHeader({
                 borderBottomWidth={0.5}
                 borderBottomColor="#B6BAC3">
                 <XStack alignItems="center" gap={12}>
-                  <FitlerButton productType={productType as string} />
-                  <SortButton />
+                  <FitlerButton productType={productType as string} updateSortBy={updateSortBy} />
+                  <SortButton updateSortBy={updateSortBy} />
                 </XStack>
                 <Text fontSize={11} color="#25272C">
-                  48 meal preps to explore
+                  {filteredProducts.length <= 4
+                    ? filteredProducts.length - 3 < 0
+                      ? 0
+                      : filteredProducts.length - 3
+                    : filteredProducts?.length - 2}{' '}
+                  meal preps to explore
                 </Text>
               </XStack>
             </View>

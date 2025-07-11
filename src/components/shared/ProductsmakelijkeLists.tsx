@@ -9,96 +9,88 @@ import { baseUrl } from '~/src/constants/baseConstant';
 export default function ProductsmakelijkeLists({
   item,
   productType,
+  index,
 }: {
-  item: (Productsmakelijke | SliderItem)[];
+  item: Productsmakelijke | SliderItem | { type: 'dummy' };
   productType: string;
+  index: number;
 }) {
   // Slider row
-  if (item?.length === 1 && 'type' in item[0] && item[0]?.type === 'slider') {
+  if ((item as SliderItem)?.type === 'slider') {
     return (
-      <YStack w="100%" mb={20}>
-        <SliderCarousel images={(item[0] as SliderItem)?.images} productType={productType} />
+      <YStack w="100%" py={0} my={0}>
+        <SliderCarousel images={(item as SliderItem)?.images} productType={productType} />
       </YStack>
     );
   }
+  if ((item as { type: string })?.type === 'dummy') {
+    return <View h={0} />;
+  }
   return (
-    <YStack flexDirection="row" justifyContent="space-between" mb={20}>
-      {item.map((item) => {
-        const product = item as Productsmakelijke;
-        return (
-          <YStack
-            key={product?._id}
-            w={'48%'}
-            p={8}
-            bg="white"
-            gap={20}
-            borderColor="#B6BAC3"
-            borderWidth={1}
-            borderRadius={8}>
-            <View
-              py={15}
-              justifyContent="center"
-              alignItems="center"
-              height={165}
-              width={'100%'}
-              alignSelf="stretch"
-              flex={1}
-              bg="#E5F8EA"
-              borderRadius={4}>
-              <Image
-                source={{
-                  uri:
-                    product?.files?.length > 0
-                      ? baseUrl + `/uploads/${product.files[0]?.url}`
-                      : product?.thumbnail?.url,
-                }}
-                // style={{ width: '126', height: 111 }}
-                width={115}
-                height="auto"
-                aspectRatio={1}
-                resizeMode="contain"
-                // resizeMode="contain"
-              />
-              {product?.metadata?.badges && (
-                <XStack top={4} gap={2} left={6} position="absolute">
-                  {product?.metadata?.badges?.map((badge, i) => {
-                    if (badge === 'Premium') {
-                      return (
-                        <LinearGradient
-                          key={i}
-                          style={{
-                            borderRadius: 20,
-                            display: 'flex',
-                            alignItems: 'center',
-                            paddingVertical: 5,
-                            paddingHorizontal: 5,
-                          }}
-                          colors={['#BBA271', '#846C49']}>
-                          <Text
-                            key={i}
-                            // p={'$2'}
-                            color="white"
-                            fontSize={7}
-                            fontWeight={600}>
-                            Premium
-                          </Text>
-                        </LinearGradient>
-                      );
-                    }
-                    const chefFav = badge === 'Chef’s Favoriet';
-                    if (chefFav) {
-                      return (
+    <>
+      {item.type === 'dummy1' ? (
+        <View />
+      ) : (
+        <YStack
+          mt={index === 7 || index === 6 ? 0 : 20}
+          key={(item as Productsmakelijke)?._id}
+          w={'48%'}
+          p={8}
+          bg="white"
+          gap={20}
+          borderColor="#B6BAC3"
+          borderWidth={1}
+          borderRadius={8}>
+          <View
+            py={15}
+            justifyContent="center"
+            alignItems="center"
+            height={165}
+            width={'100%'}
+            alignSelf="stretch"
+            flex={1}
+            bg="#E5F8EA"
+            borderRadius={4}>
+            <Image
+              source={{
+                uri:
+                  (item as Productsmakelijke)?.files?.length > 0
+                    ? baseUrl + `/uploads/${(item as Productsmakelijke)?.files[0]?.url}`
+                    : (item as Productsmakelijke)?.thumbnail?.url,
+              }}
+              width={115}
+              height="auto"
+              aspectRatio={1}
+              resizeMode="contain"
+            />
+            {(item as Productsmakelijke)?.metadata?.badges && (
+              <XStack top={4} gap={2} left={6} position="absolute">
+                {(item as Productsmakelijke)?.metadata?.badges?.map((badge, i) => {
+                  if (badge === 'Premium') {
+                    return (
+                      <LinearGradient
+                        key={i}
+                        style={{
+                          borderRadius: 20,
+                          display: 'flex',
+                          alignItems: 'center',
+                          paddingVertical: 5,
+                          paddingHorizontal: 5,
+                        }}
+                        colors={['#BBA271', '#846C49']}>
                         <Text
                           key={i}
-                          p={5}
+                          // p={'$2'}
+                          color="white"
                           fontSize={7}
-                          fontWeight={700}
-                          {...badgesColor[badge as keyof typeof badgesColor]}
-                          borderRadius={20}>
-                          Chef&apos;s Favoriet
+                          fontWeight={600}>
+                          Premium
                         </Text>
-                      );
-                    }
+                      </LinearGradient>
+                    );
+                  }
+                  const chefFav = badge === 'Chef’s Favoriet';
+                  if (chefFav) {
                     return (
                       <Text
                         key={i}
@@ -107,13 +99,25 @@ export default function ProductsmakelijkeLists({
                         fontWeight={700}
                         {...badgesColor[badge as keyof typeof badgesColor]}
                         borderRadius={20}>
-                        {badge}
+                        Chef&apos;s Favoriet
                       </Text>
                     );
-                  })}
-                </XStack>
-              )}
-              {/* <YStack
+                  }
+                  return (
+                    <Text
+                      key={i}
+                      p={5}
+                      fontSize={7}
+                      fontWeight={700}
+                      {...badgesColor[badge as keyof typeof badgesColor]}
+                      borderRadius={20}>
+                      {badge}
+                    </Text>
+                  );
+                })}
+              </XStack>
+            )}
+            {/* <YStack
                   borderTopWidth={1}
                   borderLeftWidth={0.1}
                   borderRightWidth={0.1}
@@ -142,9 +146,9 @@ export default function ProductsmakelijkeLists({
                     protein
                   </Text>
                 </YStack> */}
-            </View>
-            <YStack gap={8}>
-              {/* <Text
+          </View>
+          <YStack gap={8}>
+            {/* <Text
                 px={6}
                 py={4}
                 maxWidth={71}
@@ -157,20 +161,20 @@ export default function ProductsmakelijkeLists({
                 {product?.name}
               </Text> */}
 
-              <Text
-                fontSize={11.5}
-                fontWeight={700}
-                color="#1E1F20"
-                numberOfLines={2}
-                ellipsizeMode="tail">
-                {product?.name}
-              </Text>
+            <Text
+              fontSize={11.5}
+              fontWeight={700}
+              color="#1E1F20"
+              numberOfLines={2}
+              ellipsizeMode="tail">
+              {(item as Productsmakelijke)?.name}
+            </Text>
 
-              <View>
-                <SelectPrice values={product?.metadata?.weight_options} />
-              </View>
+            <View>
+              <SelectPrice values={(item as Productsmakelijke)?.metadata?.weight_options} />
+            </View>
 
-              {/* <View>
+            {/* <View>
                   <Text fontSize={14} fontWeight={700} color="#FD4F01">
                     {product?.metadata?.price}
                   </Text>
@@ -180,16 +184,13 @@ export default function ProductsmakelijkeLists({
                   </Text>
                 </View> */}
 
-              <Button fontSize={15} color="white" fontWeight={700} bg="#FD4F01" borderRadius={8}>
-                {productType === 'cookd' ? 'Add & Fuel Up' : 'Add'}
-              </Button>
-            </YStack>
+            <Button fontSize={15} color="white" fontWeight={700} bg="#FD4F01" borderRadius={8}>
+              {productType === 'cookd' ? 'Add & Fuel Up' : 'Add'}
+            </Button>
           </YStack>
-        );
-      })}
-
-      {/* {item?.length === 1 && <YStack w={'48%'} />} */}
-    </YStack>
+        </YStack>
+      )}
+    </>
   );
 
   // else if (item[0].type === 'product') {

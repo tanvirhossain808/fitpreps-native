@@ -6,6 +6,8 @@ import { TouchableOpacity } from 'react-native';
 import { cookdFilter } from '~/src/constant';
 import Entypo from '@expo/vector-icons/Entypo';
 import { FilterOption } from '~/src/types/type';
+import { useDispatch } from 'react-redux';
+import { setFilter } from '~/src/store/slices/filterSlice';
 
 type FilterModalProps = {
   open: boolean;
@@ -25,6 +27,7 @@ export default function FilterModal({
   filterOption,
 }: FilterModalProps) {
   // const [selectedKeys, setSelectedKeys] = useState<{ [key: string]: string[] }>({});
+  const dispatch = useDispatch();
   const addField = () => {
     const initialKeys: { [key: string]: string[] } = {};
     filterOption.forEach((data) => {
@@ -32,10 +35,16 @@ export default function FilterModal({
     });
     setFilters(initialKeys);
   };
-  useEffect(() => {
-    addField();
-  }, [cookdFilter]);
 
+  // useEffect(() => {
+  //   addField();
+  // }, [cookdFilter]);
+  const applyFilters = () => {
+    setOpen(false);
+    setTimeout(() => {
+      dispatch(setFilter(filters));
+    }, 0);
+  };
   return (
     <Sheet open={open} onOpenChange={setOpen} snapPoints={[100]} dismissOnSnapToBottom>
       <SafeAreaView style={{ flex: 1 }}>
@@ -66,7 +75,7 @@ export default function FilterModal({
                         alignItems="center"
                         py="$3"
                         bg="transparent"
-                        borderColor="$colorTransparent"
+                        borderColor="transparent"
                         borderRadius={8}
                         p={0}>
                         {({ open }: { open: boolean }) => (
@@ -138,7 +147,7 @@ export default function FilterModal({
                   Reset Filters
                 </Button>
                 <Button
-                  onPress={() => setOpen(false)}
+                  onPress={applyFilters}
                   flex={1}
                   alignSelf="stretch"
                   borderColor="#FD4F01"

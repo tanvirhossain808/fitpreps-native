@@ -1,77 +1,62 @@
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
-import {
-  setCategory,
-  setPriceRange,
-  setSortBy,
-  setGender,
-  resetFilters,
-} from '../store/slices/filterSlice';
-import { Productsmakelijke } from '../types/type';
+import { setCategory, setSortBy, setGender, resetFilters } from '../store/slices/filterSlice';
+import { Productsmakelijke, SortOption } from '../types/type';
 import { productRows } from '../helper';
-
-type SortOption = 'price_asc' | 'price_desc' | 'recent' | 'oldest';
+import { sliderData } from '../constant';
+import Sortby from '../components/shared/Sortby';
 
 const useProductFilters = (initialProducts: Productsmakelijke[] = []) => {
   const dispatch = useDispatch();
   const filters = useSelector((state: RootState) => state.filter);
+  console.log(filters, 'filtersdd');
   const filteredProducts = useMemo(() => {
     if (!initialProducts.length) return [];
-    let products = [];
-    if (filters.category?.toLowerCase() === 'alle') {
-      products = [...initialProducts];
-    } else {
-      const filtered = initialProducts.filter(
+
+    let products = [...initialProducts];
+
+    if (filters.category?.toLowerCase() !== 'alle') {
+      products = products.filter(
         (item) => item.categories[1]?.toLowerCase() === filters.category?.toLowerCase()
       );
-      products = [...filtered];
     }
-    return products;
-  }, [initialProducts, filters.category]);
-  // Apply filters to products
-  const applyFilters = (products: Productsmakelijke[] = []) => {
-    if (!products || products.length === 0) return [];
 
-    return products.filter((product) => {
-      // Apply category filter
-      //   if (filters.category && product.categories?.includes(filters.category)) {
-      //     return true;
-      //   }
-
-      // Apply price range filter
-      if (filters.priceRange) {
-        const [min, max] = filters.priceRange.map((val) =>
-          val === '100+' ? Infinity : Number(val)
-        );
-
-        const hasMatchingPrice = product.metadata?.weight_options?.some((option) => {
-          const price = parseFloat(option.price);
-          return max === Infinity
-            ? price >= min // For "100+", only check if price >= min
-            : price >= min && price <= max; // For normal
+    if (filters.filters?.price?.length) {
+      const selectedPriceRanges = filters.filters.price;
+      products = products.filter((product) => {
+        return product.metadata?.weight_options?.some((option) => {
+          const productPrices =
+            product.metadata?.weight_options?.map((option) => parseFloat(option.price)) || [];
+          return selectedPriceRanges.some((range) => {
+            switch (range) {
+              case '€0 - €10':
+                return productPrices.some((price) => price >= 0 && price <= 10);
+              case '€10 - €20':
+                return productPrices.some((price) => price > 10 && price <= 20);
+              case '€20 - €50':
+                return productPrices.some((price) => price > 20 && price <= 50);
+              case '€50 - €100':
+                return productPrices.some((price) => price > 50 && price <= 100);
+              case '€100+':
+                return productPrices.some((price) => price > 100);
+              default:
+                return false;
+            }
+          });
         });
+      });
+    }
 
-        if (!hasMatchingPrice) {
-          return false;
-        }
-      }
-
-      // Apply gender filter
-      //   if (filters.gender && product.gender !== filters.gender) {
-      //     return false;
-      //   }
-
-      return true;
-    });
-  };
+    return products;
+  }, [initialProducts, filters]);
 
   // Apply sorting to products
   const applySorting = (products: Productsmakelijke[] = []) => {
     if (!products || products.length === 0) return [];
 
     const sortedProducts = [...products];
-
+    console.log('sort');
     switch (filters.sortBy) {
       case 'price_asc':
         sortedProducts.sort((a, b) => {
@@ -92,9 +77,12 @@ const useProductFilters = (initialProducts: Productsmakelijke[] = []) => {
         );
         break;
       case 'recent':
-        sortedProducts.sort(
-          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
+        sortedProducts.sort((a, b) => {
+          const aDate = new Date(a.createdAt).getTime();
+          const bDate = new Date(b.createdAt).getTime();
+          console.log(bDate - aDate, 'df');
+          return bDate - aDate;
+        });
         break;
       case 'oldest':
         sortedProducts.sort(
@@ -104,24 +92,50 @@ const useProductFilters = (initialProducts: Productsmakelijke[] = []) => {
       default:
         return sortedProducts;
     }
-
     return sortedProducts;
   };
 
-  // Combined filtered and sorted products
   const filteredAndSortedProducts = useMemo(() => {
-    const filtered = applyFilters(filteredProducts);
+    const filtered = [...filteredProducts];
     const sorted = applySorting(filtered);
-    return productRows(filteredProducts);
-  }, [filteredProducts, filters]);
+    // console.log('hey');
+    if (sorted.length >= 4) {
+      // 4 or more products: show first 4, then slider
+      return [
+        ...sorted.slice(0, 4),
+        { ...sliderData },
+        { id: 'dummy', type: 'dummy' },
+        ...sorted.slice(4),
+      ];
+    } else if (sorted.length === 3) {
+      // 3 products: add dummy to make 4, then slider
+      return [
+        ...sorted,
+        {
+          id: 'dummy1',
+          type: 'dummy1',
+        },
+        { ...sliderData },
+        { id: 'dummy', type: 'dummy' },
+        ...sorted.slice(3),
+      ];
+    } else if (sorted.length === 2) {
+      return [...sorted, { ...sliderData }, ...sorted.slice(2), { id: 'dummy', type: 'dummy' }];
+    } else if (sorted.length === 1) {
+      return [
+        sorted[0],
+        { id: 'dummy1', type: 'dummy1' },
+        { ...sliderData },
+        { id: 'dummy', type: 'dummy' },
+      ];
+    } else {
+      return [{ ...sliderData }, { id: 'dummy', type: 'dummy' }];
+    }
+  }, [filteredProducts, filters.sortBy]);
 
   // Action creators
   const updateCategory = (category: string) => {
     dispatch(setCategory(category));
-  };
-
-  const updatePriceRange = (priceRange: [number, number]) => {
-    dispatch(setPriceRange(priceRange));
   };
 
   const updateSortBy = (sortOption: SortOption) => {
@@ -143,7 +157,6 @@ const useProductFilters = (initialProducts: Productsmakelijke[] = []) => {
 
     // Actions
     updateCategory,
-    updatePriceRange,
     updateSortBy,
     updateGender,
     resetAllFilters,

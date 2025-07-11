@@ -309,15 +309,19 @@ export const shapedSelecteCategories = [
 export const foodSortByOptions = [
   {
     name: 'Price: Low to High',
+    value: 'price_asc',
   },
   {
     name: 'Price: High to Low',
+    value: 'price_desc',
   },
   {
     name: 'Newest to Oldest',
+    value: 'oldest',
   },
   {
     name: 'Oldest to Newest',
+    value: 'recent',
   },
 ];
 

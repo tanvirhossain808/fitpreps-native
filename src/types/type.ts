@@ -91,6 +91,7 @@ export type FaqCategory = {
 };
 
 export type Productsmakelijke = {
+  type?: string;
   _id: string;
   productId: number;
   name: string;
@@ -127,3 +128,5 @@ export type Productsmakelijke = {
   }[];
   eiwitten: string;
 };
+
+export type SortOption = 'price_asc' | 'price_desc' | 'recent' | 'oldest';
