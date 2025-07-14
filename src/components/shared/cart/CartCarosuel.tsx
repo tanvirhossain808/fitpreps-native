@@ -5,23 +5,23 @@ import { Button, Image, Text, XStack, YStack } from 'tamagui';
 import { youMayLike } from '~/src/constant';
 
 export default function CartCarousel() {
-  const width = Dimensions.get('window').width - 32;
+  const width = Dimensions.get('window').width - 16;
 
   return (
-    <YStack width="100%" gap="$3" pb="$5">
+    <YStack width="100%" py="$4" gap="$3" mt={10}>
       <Text color="#1E1F20" fontWeight={700} fontSize={16}>
         You might also like
       </Text>
       <Carousel
         loop
         width={width}
-        height={200}
+        height={170}
         autoPlay={true}
         autoPlayInterval={3000}
         data={youMayLike}
         scrollAnimationDuration={300}
         windowSize={3}
-        style={{ width: '100%' }}
+        style={{ marginLeft: -8 }}
         renderItem={({ item, index }) => (
           <XStack
             key={index}

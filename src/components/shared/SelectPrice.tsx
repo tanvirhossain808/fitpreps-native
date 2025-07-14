@@ -1,10 +1,35 @@
 import { Adapt, Select, Sheet, Text, XStack } from 'tamagui';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { Productsmakelijke } from '~/src/types/type';
 
-export default function SelectPrice({ values }: { values: { weight: string; price: string }[] }) {
+export default function SelectPrice({
+  values,
+  setSelectProduct,
+  quantity,
+}: {
+  values: { weight: string; price: string }[];
+  setSelectProduct: React.Dispatch<React.SetStateAction<Productsmakelijke | undefined>>;
+  quantity: number;
+}) {
+  const handleSelectedValue = (value: string) => {
+    const selectedOption = values.find((v) => v.weight === value);
+    if (selectedOption) {
+      setSelectProduct((prev: any) => {
+        return {
+          ...prev,
+          selectedWeight: selectedOption,
+        };
+      });
+    }
+  };
   return (
-    <Select defaultValue={values[0]?.weight}>
+    <Select
+      defaultValue={values[0]?.weight}
+      onValueChange={(value) => {
+        handleSelectedValue(value);
+      }}>
       <Select.Trigger
+        disabled={quantity < 0}
         iconAfter={<AntDesign name="down" size={16} color="#A1A1A1" />}
         width={'100%'}
         borderWidth={1}

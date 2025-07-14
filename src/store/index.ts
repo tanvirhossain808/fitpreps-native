@@ -1,15 +1,36 @@
-import { configureStore } from '@reduxjs/toolkit';
+// store.ts
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import rootApiSlice from './root.api.slice';
 import filterSlice from './slices/filterSlice';
+import cartSlice from './slices/cartSlice';
+import userSlice from './auth/userSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { persistReducer, persistStore } from 'redux-persist';
 
-const store = configureStore({
-  reducer: {
-    [rootApiSlice.reducerPath]: rootApiSlice.reducer,
-    filter: filterSlice,
-  },
-  middleware: (preMiddleware) => preMiddleware().concat(rootApiSlice.middleware),
+const rootReducer = combineReducers({
+  [rootApiSlice.reducerPath]: rootApiSlice.reducer,
+  filter: filterSlice,
+  user: userSlice,
+  cart: cartSlice,
 });
 
-export default store;
+const persistConfig = {
+  key: 'root',
+  storage: AsyncStorage,
+  whitelist: ['cart', 'user'],
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).concat(rootApiSlice.middleware),
+});
+
+export const persistor = persistStore(store);
+
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

@@ -2,12 +2,10 @@ import { FlatList } from 'react-native';
 import { Productsmakelijke, SliderItem } from '~/src/types/type';
 import { useGetSmakelijkeProductsQuery } from '~/src/store/apiSlices/products/smakelijke';
 import { useTabBarVisibility } from '~/src/hooks/useTabBarVisibility';
-import { lazy, useCallback, useEffect } from 'react';
+import { lazy, useCallback, useEffect, useRef } from 'react';
 import LoadingSpinner from './Loading';
 import useProductFilters from '~/src/hooks/useProductFilters';
-import { useSelector } from 'react-redux';
-import { RootState } from '~/src/store';
-import { View } from 'tamagui';
+
 const ProductsmakelijkeLists = lazy(() => import('./ProductsmakelijkeLists'));
 
 export const unstable_settings = {
@@ -27,9 +25,20 @@ export default function ProductLists({
 }) {
   const { handleScroll } = useTabBarVisibility();
 
-  const { data, isLoading, error, refetch } = useGetSmakelijkeProductsQuery(null);
+  const { data, isLoading, error, refetch } = useGetSmakelijkeProductsQuery(null, {
+    refetchOnMountOrArgChange: true,
+  });
 
-  const { filteredProducts, filters, updateSortBy } = useProductFilters(data);
+  const { filteredProducts } = useProductFilters(data);
+  const flatListRef = useRef<FlatList>(null);
+  useEffect(() => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToIndex({
+        index: 0,
+        animated: true,
+      });
+    }
+  }, [filteredProducts]);
 
   const renderItem = useCallback(
     ({ item, index }: { item: Productsmakelijke | SliderItem; index: number }) => {
@@ -45,6 +54,7 @@ export default function ProductLists({
 
   return (
     <FlatList
+      ref={flatListRef}
       // ItemSeparatorComponent={() => <View h={20} />}
       initialNumToRender={20}
       windowSize={20}
@@ -53,7 +63,7 @@ export default function ProductLists({
       columnWrapperStyle={{ gap: 8 }}
       updateCellsBatchingPeriod={50}
       data={(filteredProducts as (Productsmakelijke | SliderItem)[]) || []}
-      keyExtractor={(item, idx) => idx.toString()}
+      keyExtractor={(item) => item?._id?.toString()}
       renderItem={renderItem}
       contentContainerStyle={[{ paddingBottom: 50 }, contentContainerStyle]}
       showsVerticalScrollIndicator={showsVerticalScrollIndicator}

@@ -22,7 +22,6 @@ export default function ({
     (total, category) => total + category.length,
     0
   );
-  console.log(filters, 'filter');
   const filterOption = filterItems(productType);
   return (
     <>

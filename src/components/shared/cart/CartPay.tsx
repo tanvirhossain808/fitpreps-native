@@ -1,12 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Text, View, XStack, YStack } from 'tamagui';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '~/src/store';
+import { setTotal } from '~/src/store/slices/cartSlice';
 
 export default function CartPay({
   setCurrentStep,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
 }) {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setTotal as any);
+  }, []);
+
+  const sub = useSelector((state: RootState) => state.cart.subTotal);
+  const total = useSelector((state: RootState) => state.cart.total);
+
   return (
     <YStack flex={1} pb="$5">
       <XStack alignItems="center" justifyContent="space-between">
@@ -21,7 +32,7 @@ export default function CartPay({
             Subtotal
           </Text>
           <Text fontSize={14} fontWeight={500} color="#1E1F20">
-            €18
+            €{sub.toFixed(2)}
           </Text>
         </XStack>
         <XStack alignItems="center" justifyContent="space-between">
@@ -39,7 +50,7 @@ export default function CartPay({
           Total
         </Text>
         <Text fontWeight={700} fontSize={14} color="#1E1F20">
-          €xx
+          €{total.toFixed(2)}
         </Text>
       </XStack>
       <Button

@@ -1,20 +1,21 @@
 import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View } from 'tamagui';
-import { fueldFoodOfItems, statusBarColor } from '~/src/constant';
+import { statusBarColor } from '~/src/constant';
 import { setStatusBarStyle, StatusBar } from 'expo-status-bar';
 import { useFocusEffect, useLocalSearchParams } from 'expo-router';
-import { FoodOfItem, fueld, SliderItem } from '~/src/types/type';
 import ProductHeader from '~/src/components/shared/ProductHeader';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { activeStatsBarInfo } from '~/src/helper';
 import LoadingSpinner from '~/src/components/shared/Loading';
-// Change the import to use lazy
+import { useLoginMutation, useRegisterMutation } from '~/src/store/apiSlices/auth/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '~/src/store';
+import { setUser } from '~/src/store/auth/userSlice';
 const ProductLists = lazy(() => import('~/src/components/shared/ProductLists'));
 // export const unstable_settings = {
 //   lazy: true,
 // };
-
 export default function Home() {
   const insets = useSafeAreaInsets();
   const { product = 'cookd' } = useLocalSearchParams();
@@ -22,6 +23,25 @@ export default function Home() {
   useFocusEffect(() => {
     setStatusBarStyle('light', true);
   });
+  // const [register, { data, isLoading, error }] = useRegisterMutation();
+  const [login, { data, isLoading, error }] = useLoginMutation();
+  const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+  console.log(data, 'data');
+  console.log(user, 'hey user');
+  // useEffect(() => {
+  //   async function registerUser() {
+  //     const { data, error } = await login({
+  //       email: 't@t.com',
+  //       password: 'password',
+  //     });
+  //     console.log(data, 'yo data');
+  //     if (data) {
+  //       dispatch(setUser(data));
+  //     }
+  //   }
+  //   registerUser();
+  // }, [login]);
   return (
     <>
       <StatusBar style="light" />

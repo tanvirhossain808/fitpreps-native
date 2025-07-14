@@ -1,0 +1,32 @@
+@baseUrl = https://back.fitpreps.nl
+
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+    "email": "t@t.com",
+    "password": "password",
+    "metadata": {
+        "first_name": "t",
+        "last_name": "t"
+    }
+}
+
+###
+
+POST  {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "t@t.com",
+    "password": "password"
+}
+
+### coupon verification code
+
+get {{baseUrl}}/api/coupons/validate/fit?userId=6873ddc17a23f97097408608
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODczZGRjMTdhMjNmOTcwOTc0MDg2MDgiLCJpYXQiOjE3N
+
+
+

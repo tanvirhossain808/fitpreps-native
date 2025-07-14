@@ -7,9 +7,10 @@ import SelectedFoodCategories from './SelectedFoodCategories';
 import FitlerButton from './Filters/FitlerButton';
 import SortButton from './Sort/SortButton';
 import TopSearchbar from './TopSearchbar';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useGetSmakelijkeProductsQuery } from '~/src/store/apiSlices/products/smakelijke';
 import useProductFilters from '~/src/hooks/useProductFilters';
+import { RootState } from '~/src/store';
 
 export default function ProductHeader({
   productType,
@@ -30,6 +31,7 @@ export default function ProductHeader({
 }) {
   const { data } = useGetSmakelijkeProductsQuery(null);
   const { filteredProducts, updateSortBy } = useProductFilters(data);
+  // const filters = useSelector((state: RootState) => state.cart);
   return (
     <View>
       <View>

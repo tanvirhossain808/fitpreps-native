@@ -5,6 +5,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { badgesColor } from '~/src/constants/colorConstants';
 import SelectPrice from './SelectPrice';
 import { baseUrl } from '~/src/constants/baseConstant';
+import { TouchableOpacity } from 'react-native';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { useDispatch, useSelector } from 'react-redux';
+import { increment, decrement } from '~/src/store/slices/cartSlice';
+import Toast from 'react-native-toast-message';
+import { RootState } from '~/src/store';
+import { useEffect, useState } from 'react';
+import { shadows } from '~/src/constant';
 
 export default function ProductsmakelijkeLists({
   item,
@@ -15,7 +23,46 @@ export default function ProductsmakelijkeLists({
   productType: string;
   index: number;
 }) {
-  // Slider row
+  const [selectedProduct, setSelectProduct] = useState<Productsmakelijke | any>();
+  const dispatch = useDispatch();
+  const quantity = useSelector((state: RootState) => {
+    if ('_id' in item) {
+      return state?.cart?.cartItems[item._id];
+    }
+    return undefined;
+  });
+  useEffect(() => {
+    const selectedWeight = item as Productsmakelijke;
+    setSelectProduct({ selectedWeight: selectedWeight?.metadata?.weight_options[0] });
+  }, []);
+  const handlePlus = () => {
+    const productData = { ...item } as Productsmakelijke;
+    const data = {
+      ...productData,
+      selectedWeight: selectedProduct.selectedWeight,
+
+      metadata: {
+        ...productData.metadata,
+        _price: selectedProduct.selectedWeight?.price,
+      },
+    };
+    setTimeout(() => {
+      Toast.show({
+        type: 'cardAddedToast',
+        text1: 'Product added to cart',
+        props: {
+          quantity: quantity?.quantity ? quantity.quantity + 1 : 1,
+        },
+        position: 'bottom',
+      });
+    }, 0);
+    dispatch(increment(data));
+  };
+  const handleMinus = () => {
+    if (quantity?.quantity && quantity.quantity > 0) {
+      dispatch(decrement(item as Productsmakelijke));
+    }
+  };
   if ((item as SliderItem)?.type === 'slider') {
     return (
       <YStack w="100%" py={0} my={0}>
@@ -46,6 +93,7 @@ export default function ProductsmakelijkeLists({
             justifyContent="center"
             alignItems="center"
             height={165}
+            maxHeight={165}
             width={'100%'}
             alignSelf="stretch"
             flex={1}
@@ -61,7 +109,7 @@ export default function ProductsmakelijkeLists({
               width={115}
               height="auto"
               aspectRatio={1}
-              resizeMode="contain"
+              resizeMode="cover"
             />
             {(item as Productsmakelijke)?.metadata?.badges && (
               <XStack top={4} gap={2} left={6} position="absolute">
@@ -147,7 +195,7 @@ export default function ProductsmakelijkeLists({
                   </Text>
                 </YStack> */}
           </View>
-          <YStack gap={8}>
+          <YStack gap={8} justifyContent="space-between" f={1}>
             {/* <Text
                 px={6}
                 py={4}
@@ -171,7 +219,11 @@ export default function ProductsmakelijkeLists({
             </Text>
 
             <View>
-              <SelectPrice values={(item as Productsmakelijke)?.metadata?.weight_options} />
+              <SelectPrice
+                quantity={quantity?.quantity ? quantity.quantity : 0}
+                setSelectProduct={setSelectProduct}
+                values={(item as Productsmakelijke)?.metadata?.weight_options}
+              />
             </View>
 
             {/* <View>
@@ -184,9 +236,41 @@ export default function ProductsmakelijkeLists({
                   </Text>
                 </View> */}
 
-            <Button fontSize={15} color="white" fontWeight={700} bg="#FD4F01" borderRadius={8}>
+            {/* <Button fontSize={15} color="white" fontWeight={700} bg="#FD4F01" borderRadius={8}>
               {productType === 'cookd' ? 'Add & Fuel Up' : 'Add'}
-            </Button>
+            </Button> */}
+            {quantity?.quantity && quantity.quantity > 0 ? (
+              <XStack
+                overflow="hidden"
+                borderWidth={1}
+                borderRadius={12}
+                borderColor="#FD4F01"
+                alignItems="center"
+                justifyContent="space-between">
+                <TouchableOpacity onPress={handleMinus}>
+                  <XStack px="$2" py="$2" bg="#FFEDE5">
+                    <AntDesign name="minus" size={24} color="#FD4F01" />
+                  </XStack>
+                </TouchableOpacity>
+                <Text>{quantity?.quantity}</Text>
+                <TouchableOpacity onPress={handlePlus}>
+                  <XStack px="$4" py="$2" bg="#FFEDE5">
+                    <AntDesign name="plus" size={24} color="#FD4F01" />
+                  </XStack>
+                </TouchableOpacity>
+              </XStack>
+            ) : (
+              <Button
+                fontSize={15}
+                color="white"
+                fontWeight={700}
+                {...shadows.small}
+                bg="#FD4F01"
+                borderRadius={8}
+                onPress={handlePlus}>
+                {productType === 'cookd' ? 'Add & Fuel Up' : 'Add'}
+              </Button>
+            )}
           </YStack>
         </YStack>
       )}

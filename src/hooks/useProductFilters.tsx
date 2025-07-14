@@ -1,161 +1,143 @@
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store';
 import { setCategory, setSortBy, setGender, resetFilters } from '../store/slices/filterSlice';
+import { RootState } from '../store';
 import { Productsmakelijke, SortOption } from '../types/type';
-import { productRows } from '../helper';
 import { sliderData } from '../constant';
-import Sortby from '../components/shared/Sortby';
 
 const useProductFilters = (initialProducts: Productsmakelijke[] = []) => {
   const dispatch = useDispatch();
-  const filters = useSelector((state: RootState) => state.filter);
-  console.log(filters, 'filtersdd');
+  const {
+    category,
+    sortBy,
+    filters: extraFilters,
+  } = useSelector((state: RootState) => state.filter);
+
+  /* ───────────────────────── CATEGORY ───────────────────────── */
+
+  const productsByCategory = useMemo(() => {
+    if (category?.toLowerCase() === 'alle') return initialProducts;
+    return initialProducts.filter(
+      (p) => p.categories[1]?.toLowerCase() === category?.toLowerCase()
+    );
+  }, [initialProducts, category]); // ← added initialProducts
+
+  /* ───────────────────────── PRICE FILTER ───────────────────── */
+
   const filteredProducts = useMemo(() => {
-    if (!initialProducts.length) return [];
+    if (!productsByCategory.length) return [];
 
-    let products = [...initialProducts];
+    if (!extraFilters?.price?.length) return productsByCategory;
 
-    if (filters.category?.toLowerCase() !== 'alle') {
-      products = products.filter(
-        (item) => item.categories[1]?.toLowerCase() === filters.category?.toLowerCase()
-      );
-    }
+    const ranges = extraFilters.price;
 
-    if (filters.filters?.price?.length) {
-      const selectedPriceRanges = filters.filters.price;
-      products = products.filter((product) => {
-        return product.metadata?.weight_options?.some((option) => {
-          const productPrices =
-            product.metadata?.weight_options?.map((option) => parseFloat(option.price)) || [];
-          return selectedPriceRanges.some((range) => {
-            switch (range) {
-              case '€0 - €10':
-                return productPrices.some((price) => price >= 0 && price <= 10);
-              case '€10 - €20':
-                return productPrices.some((price) => price > 10 && price <= 20);
-              case '€20 - €50':
-                return productPrices.some((price) => price > 20 && price <= 50);
-              case '€50 - €100':
-                return productPrices.some((price) => price > 50 && price <= 100);
-              case '€100+':
-                return productPrices.some((price) => price > 100);
-              default:
-                return false;
-            }
-          });
-        });
+    return productsByCategory.filter((product) => {
+      const prices = product.metadata?.weight_options?.map((o) => +o.price) ?? [];
+
+      return ranges.some((range) => {
+        switch (range) {
+          case '€0 - €10':
+            return prices.some((p) => p >= 0 && p <= 10);
+          case '€10 - €20':
+            return prices.some((p) => p > 10 && p <= 20);
+          case '€20 - €50':
+            return prices.some((p) => p > 20 && p <= 50);
+          case '€50 - €100':
+            return prices.some((p) => p > 50 && p <= 100);
+          case '€100+':
+            return prices.some((p) => p > 100);
+          default:
+            return false;
+        }
       });
-    }
+    });
+  }, [productsByCategory, extraFilters.price]);
 
-    return products;
-  }, [initialProducts, filters]);
+  /* ───────────────────────── SORTING ────────────────────────── */
 
-  // Apply sorting to products
-  const applySorting = (products: Productsmakelijke[] = []) => {
-    if (!products || products.length === 0) return [];
-
-    const sortedProducts = [...products];
-    console.log('sort');
-    switch (filters.sortBy) {
-      case 'price_asc':
-        sortedProducts.sort((a, b) => {
-          const aPrice = Math.min(
-            ...(a.metadata?.weight_options?.map((opt) => parseFloat(opt.price)) || [0])
+  const sortProducts = useCallback(
+    (products: Productsmakelijke[]): Productsmakelijke[] => {
+      if (!products.length) return [];
+      if (!sortBy) return products;
+      const out = [...products];
+      switch (sortBy) {
+        case 'price_asc':
+          out.sort(
+            (a, b) =>
+              Math.min(...(a.metadata?.weight_options?.map((o) => +o.price) ?? [0])) -
+              Math.min(...(b.metadata?.weight_options?.map((o) => +o.price) ?? [0]))
           );
-          const bPrice = Math.min(
-            ...(b.metadata?.weight_options?.map((opt) => parseFloat(opt.price)) || [0])
+          break;
+        case 'price_desc':
+          out.sort(
+            (a, b) =>
+              +(b.metadata?.weight_options?.[0]?.price ?? 0) -
+              +(a.metadata?.weight_options?.[0]?.price ?? 0)
           );
-          return aPrice - bPrice;
-        });
-        break;
-      case 'price_desc':
-        sortedProducts.sort(
-          (a, b) =>
-            parseFloat(b.metadata?.weight_options[0].price) -
-            parseFloat(a.metadata?.weight_options[0].price)
-        );
-        break;
-      case 'recent':
-        sortedProducts.sort((a, b) => {
-          const aDate = new Date(a.createdAt).getTime();
-          const bDate = new Date(b.createdAt).getTime();
-          console.log(bDate - aDate, 'df');
-          return bDate - aDate;
-        });
-        break;
-      case 'oldest':
-        sortedProducts.sort(
-          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
-        break;
-      default:
-        return sortedProducts;
-    }
-    return sortedProducts;
-  };
+          break;
+        case 'recent':
+          out.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+          break;
+        case 'oldest':
+          out.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+          break;
+      }
+      return out;
+    },
+    [sortBy]
+  );
 
-  const filteredAndSortedProducts = useMemo(() => {
-    const filtered = [...filteredProducts];
-    const sorted = applySorting(filtered);
-    // console.log('hey');
-    if (sorted.length >= 4) {
-      // 4 or more products: show first 4, then slider
+  /* ────────────────── SORT + SLIDER INJECTION ───────────────── */
+
+  const finalProducts = useMemo(() => {
+    const sorted = sortProducts(filteredProducts);
+
+    /* Inject slider + dummies */
+    if (sorted.length >= 4)
       return [
         ...sorted.slice(0, 4),
         { ...sliderData },
         { id: 'dummy', type: 'dummy' },
         ...sorted.slice(4),
       ];
-    } else if (sorted.length === 3) {
-      // 3 products: add dummy to make 4, then slider
+
+    if (sorted.length === 3)
       return [
         ...sorted,
-        {
-          id: 'dummy1',
-          type: 'dummy1',
-        },
+        { id: 'dummy1', type: 'dummy1' },
         { ...sliderData },
         { id: 'dummy', type: 'dummy' },
-        ...sorted.slice(3),
       ];
-    } else if (sorted.length === 2) {
+
+    if (sorted.length === 2)
       return [...sorted, { ...sliderData }, ...sorted.slice(2), { id: 'dummy', type: 'dummy' }];
-    } else if (sorted.length === 1) {
+
+    if (sorted.length === 1)
       return [
         sorted[0],
         { id: 'dummy1', type: 'dummy1' },
         { ...sliderData },
         { id: 'dummy', type: 'dummy' },
       ];
-    } else {
-      return [{ ...sliderData }, { id: 'dummy', type: 'dummy' }];
-    }
-  }, [filteredProducts, filters.sortBy]);
 
-  // Action creators
-  const updateCategory = (category: string) => {
-    dispatch(setCategory(category));
-  };
+    return [{ ...sliderData }, { id: 'dummy', type: 'dummy' }];
+  }, [filteredProducts, sortProducts]); // ← depend on the fn + data
 
-  const updateSortBy = (sortOption: SortOption) => {
-    dispatch(setSortBy(sortOption));
-  };
+  /* ───────────────────────── ACTIONS ────────────────────────── */
 
-  const updateGender = (gender: 'male' | 'female' | null) => {
-    dispatch(setGender(gender));
-  };
+  const updateCategory = useCallback((c: string) => dispatch(setCategory(c)), [dispatch]);
+  const updateSortBy = useCallback((s: SortOption) => dispatch(setSortBy(s)), [dispatch]);
+  const updateGender = useCallback(
+    (g: 'male' | 'female' | null) => dispatch(setGender(g)),
+    [dispatch]
+  );
+  const resetAllFilters = useCallback(() => dispatch(resetFilters()), [dispatch]);
 
-  const resetAllFilters = () => {
-    dispatch(resetFilters());
-  };
+  /* ───────────────────────── RETURN ─────────────────────────── */
 
   return {
-    // State
-    filters,
-    filteredProducts: filteredAndSortedProducts,
-
-    // Actions
+    filters: { category, sortBy, filters: extraFilters },
+    filteredProducts: finalProducts,
     updateCategory,
     updateSortBy,
     updateGender,

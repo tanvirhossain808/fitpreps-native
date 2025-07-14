@@ -95,6 +95,7 @@ export type Productsmakelijke = {
   _id: string;
   productId: number;
   name: string;
+  quantity?: number;
   description: string;
   status: string;
   createdAt: string;
@@ -107,7 +108,7 @@ export type Productsmakelijke = {
     _price: string;
     _product_background_color: string;
     _stock: string;
-    nutretions_data: string;
+    nutretions_data: any;
     producten_specificaties_data: string;
     total_sales: string;
     voedingswaarde_data: {
@@ -127,6 +128,91 @@ export type Productsmakelijke = {
     url: string;
   }[];
   eiwitten: string;
+  selectedWeight?: {
+    weight: string;
+    price: string;
+  };
 };
 
 export type SortOption = 'price_asc' | 'price_desc' | 'recent' | 'oldest';
+
+export type RegisterBody = {
+  email: string;
+  password: string;
+  metadata: {
+    first_name: string;
+    last_name: string;
+  };
+};
+
+export type LoginBody = {
+  email: string;
+  password: string;
+};
+
+export interface LoginResponse {
+  message: string;
+  token: string;
+  user: UserType;
+}
+
+export type UserType = {
+  _id: string;
+  email: string;
+  registeredAt: string;
+  password: string;
+  metadata: {
+    first_name: string;
+    last_name: string;
+    woocommerce_reward_points: string;
+    shipping_country?: string;
+  };
+};
+export type cartType = { [key: string]: Productsmakelijke & { quantity: number } };
+
+export type CouponTypes = {
+  message: string;
+  coupon: {
+    _id: string;
+    code: string;
+    description: string;
+    status: string;
+    discountType: string;
+    amount: string;
+    freeShipping: boolean;
+    usageLimit: string;
+    usageCount: number;
+    usageLimitPerUser: string;
+    individualUse: boolean;
+    excludeSaleItems: boolean;
+    productIds: string;
+    excludedProductIds: string;
+    categoryIds: string;
+    excludedCategoryIds: string;
+    minimumAmount: string;
+    maximumAmount: string;
+    totalDiscount: any;
+  };
+};
+export type Coupon = {
+  _id: string;
+  isBusiness?: boolean;
+  code: string;
+  description: string;
+  status: string;
+  discountType: string;
+  amount: string;
+  freeShipping: boolean;
+  usageLimit: string;
+  usageCount: number;
+  usageLimitPerUser: string;
+  individualUse: boolean;
+  excludeSaleItems: boolean;
+  productIds: string;
+  excludedProductIds: string;
+  categoryIds: string;
+  excludedCategoryIds: string;
+  minimumAmount: string;
+  maximumAmount: string;
+  totalDiscount: any;
+};

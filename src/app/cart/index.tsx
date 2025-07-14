@@ -1,16 +1,55 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StepIndicator from '~/src/components/shared/StepIndicator';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CartStep2 from '~/src/components/shared/cart/CartStep2';
 import CartStep3 from '~/src/components/shared/cart/CartStep3';
 import CartStep1 from '~/src/components/shared/cart/CartStep1';
 import { useLocalSearchParams } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { useVerifyCouponMutation } from '~/src/store/apiSlices/verifyCouponSlice';
+import { RootState } from '~/src/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { useCartLogic } from '~/src/hooks/useCartLogic';
+import { setShipping, setSubTotal } from '~/src/store/slices/cartSlice';
+import { useOrderData } from '~/src/hooks/useOrderData';
 export default function Cart() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [isShowMapModal, setShowMapModal] = useState<boolean>(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isEditAddress, setIsEditAddress] = useState(false);
   const { cartType = 'meals', subscriptionType, packId } = useLocalSearchParams() || {};
+  const { user } = useSelector((s: RootState) => s.user) || {};
+  const cartItems = useSelector((s: RootState) => s.cart.cartItems);
+  const [couponData, { isSuccess, isLoading, error }] = useVerifyCouponMutation();
+  const { orderData, errors, loyaltyPoints } = useOrderData({
+    user: user!!.user,
+    cart: Object.values(cartItems) as any,
+    coupon: null,
+    fitCouponData: { discountAmount: 20 },
+    detectedCountry: 'NL',
+  });
+  console.log(orderData, 'datai');
+
+  useEffect(() => {
+    async function fetchData() {
+      if (!user) return;
+      const response = await couponData({
+        couponCode: 'summerfit',
+        userId: user.user._id,
+        token: user.token,
+      });
+      console.log(response, 'coupon data');
+    }
+    fetchData();
+  }, [couponData]);
+  const dispatch = useDispatch();
+  const { sub, tax, shippingFee, discount, final } = useCartLogic();
+  useEffect(() => {
+    if (sub > 125) {
+      dispatch(setShipping(0));
+    }
+    dispatch(setSubTotal(sub));
+  }, [sub]);
   const cartSteps: { [key: number]: any } = {
     0: <CartStep1 setCurrentStep={setCurrentStep} cartType={cartType as string} />,
     1: (
@@ -31,6 +70,7 @@ export default function Cart() {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <StatusBar style="dark" />
       <StepIndicator
         cartType={cartType as string}
         setIsEditAddress={setIsEditAddress}
