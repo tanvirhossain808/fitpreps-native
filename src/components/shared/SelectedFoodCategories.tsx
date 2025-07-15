@@ -6,10 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCategory } from '~/src/store/slices/filterSlice';
 
 export default function SelectedFoodCategories({
-  cookdFoodCategories,
+  productCategories,
   activeStatsBarInfo,
 }: {
-  cookdFoodCategories: {
+  productCategories: {
     name: string;
     img: number | { uri: string } | string;
     id: number;
@@ -41,7 +41,7 @@ export default function SelectedFoodCategories({
 
   return (
     <FlatList
-      data={cookdFoodCategories}
+      data={productCategories}
       keyExtractor={(item) => item.id.toString()}
       horizontal
       showsHorizontalScrollIndicator={false}
@@ -49,6 +49,7 @@ export default function SelectedFoodCategories({
       renderItem={({ item }) => (
         <YStack alignItems="center" justifyContent="space-between" mr={4} w={80} h={80}>
           <XStack
+            mr={item.name.includes('Minera') ? 'auto' : 0}
             justifyContent="center"
             borderWidth={1.5}
             borderColor={

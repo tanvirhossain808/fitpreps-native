@@ -35,10 +35,25 @@ const filterSlice = createSlice({
     setFilter: (state, action: PayloadAction<{ [key: string]: string[] }>) => {
       state.filters = action.payload;
     },
-    resetFilters: () => initialState,
+    resetFilters: (state) => {
+      return {
+        ...state,
+        ...initialState,
+        sortBy: state.sortBy,
+        filters: {},
+        category: state.category,
+      };
+    },
+    resetAllFilters: (state) => {
+      return {
+        ...initialState,
+        category: 'Alle',
+      };
+    },
   },
 });
 
-export const { setCategory, setSortBy, setFilter, setGender, resetFilters } = filterSlice.actions;
+export const { setCategory, setSortBy, setFilter, setGender, resetFilters, resetAllFilters } =
+  filterSlice.actions;
 
 export default filterSlice.reducer;

@@ -4,8 +4,40 @@ import { TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
+import { useLoginMutation } from '~/src/store/apiSlices/auth/userSlice';
+import Toast from 'react-native-toast-message';
+import { useDispatch } from 'react-redux';
+import { setUser } from '~/src/store/auth/userSlice';
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [userLogin, { isLoading, error, data }] = useLoginMutation();
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState('');
+
+  const [password, setPassword] = useState('');
+  const handleLogin = () => {
+    userLogin({
+      email,
+      password,
+    })
+      .unwrap()
+      .then((data) => {
+        Toast.show({
+          type: 'success',
+          text1: data.message,
+          // text2: 'You have successfully logged in',
+        });
+        dispatch(setUser(data));
+        router.replace('/(tabs)');
+      })
+      .catch((error) => {
+        Toast.show({
+          type: 'error',
+          text1: error.data.message,
+          text2: 'Please try again',
+        });
+      });
+  };
   return (
     <YStack mt={180} gap={28} alignItems="center" px="$7" pb={50}>
       <XStack flex={1} alignItems="center" justifyContent="center">
@@ -34,6 +66,8 @@ export default function Login() {
                 elevation={0.4}
                 borderWidth={0.6}>
                 <Input
+                  onChangeText={setEmail}
+                  value={email}
                   flex={0}
                   p={0}
                   width="100%"
@@ -69,6 +103,8 @@ export default function Login() {
                   placeholder={field.placeholder}
                   color="#8E95A2"
                   fontSize={14}
+                  onChangeText={setPassword}
+                  value={password}
                   secureTextEntry={!showPassword}
                   keyboardType={field.type === 'email-address' ? 'email-address' : 'default'}
                   borderWidth={0}
@@ -103,7 +139,8 @@ export default function Login() {
       </YStack>
       <XStack justifyContent="center">
         <Button
-          onPress={() => router.replace('/(tabs)')}
+          // onPress={() => router.replace('/(tabs)')}
+          onPress={handleLogin}
           minWidth={0}
           px="$5"
           backgroundColor="#FD4F01"
@@ -146,7 +183,7 @@ const loginFeilds = [
     placeholder: 'Enter your email id',
     type: 'email-address',
     icon: '',
-    name: '',
+    name: 'email',
   },
   {
     placeholder: 'Enter password',

@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { Coupon, Productsmakelijke, UserType } from '../types/type';
 import { phpDeserializeStrings } from '../utils/cartCalculations';
+import Toast from 'react-native-toast-message';
 
 export interface FitCouponData {
   discountAmount: number;
@@ -22,11 +23,6 @@ export type Country = 'NL' | 'BE';
 const isSerialized = (str?: string) => typeof str === 'string' && /^(a|O|s):/.test(str);
 
 const optimizer = (p: Productsmakelijke) => {
-  console.log(
-    p.metadata.nutretions_data && isSerialized(p.metadata.nutretions_data),
-    p.metadata.nutretions_data?.weight,
-    'yoyoyoy'
-  );
   if (!p.metadata) return 500;
   if (p.metadata.nutretions_data && isSerialized(p.metadata.nutretions_data)) {
     const weight = phpDeserializeStrings(p.metadata.nutretions_data).weight;
@@ -43,7 +39,7 @@ export function generateOrderData(params: {
   fitCouponData?: FitCouponData;
   detectedCountry: Country;
 }): {
-  orderData: any;
+  orderData: typeof orderData;
   errors: string[];
   loyaltyPoints: number;
 } {
@@ -56,18 +52,19 @@ export function generateOrderData(params: {
     (s, i) => s + Number(i.quantity) * Number(i.metadata._price),
     0
   );
-
+  console.log(totalCartIncl, 'inc');
   const supplementsIncl = cart.reduce((s, i) => {
     return i.categories.includes('Supplements')
       ? s + Number(i.quantity) * Number(i.metadata._price)
       : s;
   }, 0);
   const mealsIncl = totalCartIncl - supplementsIncl;
-
+  console.log(mealsIncl, 'mealsInc');
   // 2. Shipping cost
   const shippingCountry: Country = (user.metadata.shipping_country as Country) || detectedCountry;
 
-  const baseShipping = totalCartIncl > 125 ? 0 : shippingCountry === 'BE' ? 8.95 : 6.95;
+  const baseShipping =
+    cart.length > 0 ? (totalCartIncl > 125 ? 0 : shippingCountry === 'BE' ? 8.95 : 6.95) : 0;
 
   // 3. Coupon discount
   let discount = 0;
@@ -150,7 +147,7 @@ export function generateOrderData(params: {
       meta: {
         _qty: i.quantity,
         _line_total: Number(i.metadata._price) * Number(i.quantity),
-        _weight: optimizer(i) / 1000,
+        _weight: optimizer(i),
         _id: i._id,
         _bundled_items: i.metadata._yith_wcpb_bundle_data ?? null,
         _asnp_wepb_items: asnp,
@@ -164,8 +161,8 @@ export function generateOrderData(params: {
     user_id: user._id,
     total: grossTotal.toFixed(2),
     totalWeight: +(totalWeight / 1000).toFixed(3),
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
     metadata: {
       _cart_discount: +discount.toFixed(2),
       _order_shipping: +(shippingCost - shippingVAT).toFixed(2),
@@ -178,8 +175,12 @@ export function generateOrderData(params: {
 
   // 9. Errors / warnings
   const errors: string[] = [];
-  if (mealsIncl > 0 && mealsIncl < 45)
-    errors.push('De minimale bestelwaarde voor maaltijden is €45');
+  // if (mealsIncl > 0 && mealsIncl < 45)
+  //   Toast.show({
+  //     type: 'minimumOrderAmountToast',
+  //     text1: 'De minimale bestelwaarde voor maaltijden is €45',
+  //     position: 'top',
+  //   });
   if (couponMessage) errors.push(couponMessage);
 
   const loyaltyPoints = coupon?.isBusiness ? 0 : Math.floor(grossTotal);

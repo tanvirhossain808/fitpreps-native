@@ -7,7 +7,7 @@ import { cookdFilter } from '~/src/constant';
 import Entypo from '@expo/vector-icons/Entypo';
 import { FilterOption } from '~/src/types/type';
 import { useDispatch } from 'react-redux';
-import { setFilter } from '~/src/store/slices/filterSlice';
+import { resetFilters, setFilter } from '~/src/store/slices/filterSlice';
 
 type FilterModalProps = {
   open: boolean;
@@ -26,8 +26,14 @@ export default function FilterModal({
   totalFilters,
   filterOption,
 }: FilterModalProps) {
-  // const [selectedKeys, setSelectedKeys] = useState<{ [key: string]: string[] }>({});
   const dispatch = useDispatch();
+
+  // const [selectedKeys, setSelectedKeys] = useState<{ [key: string]: string[] }>({});
+  const handleResetFilters = () => {
+    dispatch(resetFilters());
+    setFilters({});
+    setOpen(false);
+  };
   const addField = () => {
     const initialKeys: { [key: string]: string[] } = {};
     filterOption.forEach((data) => {
@@ -143,7 +149,7 @@ export default function FilterModal({
                   bg={'white'}
                   color="#FD4F01"
                   fontWeight={700}
-                  onPress={() => addField()}>
+                  onPress={() => handleResetFilters()}>
                   Reset Filters
                 </Button>
                 <Button

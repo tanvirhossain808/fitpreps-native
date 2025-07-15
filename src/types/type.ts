@@ -94,6 +94,7 @@ export type Productsmakelijke = {
   type?: string;
   _id: string;
   productId: number;
+
   name: string;
   quantity?: number;
   description: string;
@@ -105,6 +106,7 @@ export type Productsmakelijke = {
   };
   categories: string[];
   metadata: {
+    dose?: string;
     _price: string;
     _product_background_color: string;
     _stock: string;
@@ -119,7 +121,7 @@ export type Productsmakelijke = {
     _freezer: string;
     allergenen: string[];
     badges: string[];
-    weight_options: {
+    weight_options?: {
       weight: string;
       price: string;
     }[];

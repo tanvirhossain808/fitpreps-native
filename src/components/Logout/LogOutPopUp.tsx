@@ -1,5 +1,7 @@
+import { useDispatch } from 'react-redux';
 import { AnimatePresence, Button, Dialog, Text, XStack, YStack } from 'tamagui';
 import { shadows } from '~/src/constant';
+import { clearUser } from '~/src/store/auth/userSlice';
 
 export default function LogOutPopUp({
   open,
@@ -8,6 +10,11 @@ export default function LogOutPopUp({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(clearUser());
+    onOpenChange(false);
+  };
   return (
     <Dialog open={open} onOpenChange={onOpenChange} modal>
       <AnimatePresence>
@@ -77,7 +84,7 @@ export default function LogOutPopUp({
                     Cancel
                   </Button>
                   <Button
-                    onPress={() => onOpenChange(false)}
+                    onPress={handleLogout}
                     {...shadows.small}
                     backgroundColor="#FD4F01"
                     fontWeight="700"

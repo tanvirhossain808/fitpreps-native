@@ -1,13 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
-import {
-  cartTax,
-  supplementsTotal,
-  totalPrice,
-  totalWeight,
-  tryAlternativeLocationDetection,
-} from '../utils/cartCalculations';
+import { cartTax, supplementsTotal, totalPrice, totalWeight } from '../utils/cartCalculations';
 import {
   decrement,
   increment,
@@ -19,7 +13,7 @@ import {
 
 export function useCartLogic() {
   const dispatch = useDispatch();
-  const { cartItems, coupon, discount } = useSelector((s: RootState) => s.cart);
+  const { cartItems, couponCode: coupon, discount } = useSelector((s: RootState) => s.cart);
   const user = useSelector((s: RootState) => s.user.user);
 
   /* ---------- derived numbers ---------- */

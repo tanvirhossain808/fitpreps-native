@@ -12,10 +12,10 @@ import { useLoginMutation, useRegisterMutation } from '~/src/store/apiSlices/aut
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '~/src/store';
 import { setUser } from '~/src/store/auth/userSlice';
+import { useGetSmakelijkeProductsQuery } from '~/src/store/apiSlices/products/smakelijke';
+import useProductFilters from '~/src/hooks/useProductFilters';
+import { useGetProductsQuery } from '~/src/store/apiSlices/products/productsSlice';
 const ProductLists = lazy(() => import('~/src/components/shared/ProductLists'));
-// export const unstable_settings = {
-//   lazy: true,
-// };
 export default function Home() {
   const insets = useSafeAreaInsets();
   const { product = 'cookd' } = useLocalSearchParams();
@@ -23,12 +23,15 @@ export default function Home() {
   useFocusEffect(() => {
     setStatusBarStyle('light', true);
   });
-  // const [register, { data, isLoading, error }] = useRegisterMutation();
-  const [login, { data, isLoading, error }] = useLoginMutation();
-  const user = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch();
-  console.log(data, 'data');
-  console.log(user, 'hey user');
+  const { data: cookd, isLoading } = useGetSmakelijkeProductsQuery(null);
+  const { data: fueld, isLoading: fueldLoading } = useGetProductsQuery(null);
+  const { filteredProducts } = useProductFilters(
+    product === 'fueld' ? fueld : cookd,
+    product as string
+  );
+  console.log(fueld, 'data');
+  // console.log(fueld, 'fueld');
+  // console.log(filteredProducts, 'filteredProducts');
   // useEffect(() => {
   //   async function registerUser() {
   //     const { data, error } = await login({
@@ -48,6 +51,7 @@ export default function Home() {
 
       <View style={{ flex: 1 }}>
         <ProductHeader
+          data={filteredProducts}
           productType={product as string}
           activeStatsBarInfo={statusBarInfo as { name: string; color: string } | null}
           insets={insets}
@@ -55,21 +59,26 @@ export default function Home() {
 
         <View style={styles.contentContainer}>
           <View style={{ flex: 1 }} zIndex={0}>
-            <Suspense
-              fallback={
-                <LoadingSpinner color={statusBarColor[product as keyof typeof statusBarColor]} />
-              }>
-              <ProductLists
-                productType={product as string}
-                showsVerticalScrollIndicator={false}
-                scrollEventThrottle={16}
-                // products={
-                //   product === 'cookd'
-                //     ? (foodOfItems as (FoodOfItem | SliderItem | fueld)[])
-                //     : (fueldFoodOfItems as (FoodOfItem | SliderItem | fueld)[])
-                // }
-              />
-            </Suspense>
+            {isLoading || fueldLoading ? (
+              <LoadingSpinner color={statusBarColor[product as keyof typeof statusBarColor]} />
+            ) : (
+              <Suspense
+                fallback={
+                  <LoadingSpinner color={statusBarColor[product as keyof typeof statusBarColor]} />
+                }>
+                <ProductLists
+                  productType={product as string}
+                  showsVerticalScrollIndicator={false}
+                  scrollEventThrottle={16}
+                  data={filteredProducts}
+                  // products={
+                  //   product === 'cookd'
+                  //     ? (foodOfItems as (FoodOfItem | SliderItem | fueld)[])
+                  //     : (fueldFoodOfItems as (FoodOfItem | SliderItem | fueld)[])
+                  // }
+                />
+              </Suspense>
+            )}
           </View>
         </View>
       </View>

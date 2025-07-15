@@ -1,6 +1,53 @@
 import { Button, Text, Input, YStack, XStack } from 'tamagui';
 import CouponTicket from 'public/images/couponTicket.svg';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '~/src/store';
+import { useVerifyCouponMutation } from '~/src/store/apiSlices/verifyCouponSlice';
+import Toast from 'react-native-toast-message';
+import { setCoupon } from '~/src/store/slices/cartSlice';
+
 export default function Saving() {
+  const { token, user } = useSelector((s: RootState) => s.user.user)!;
+  const [verifyCoupon, { isSuccess, isLoading, error }] = useVerifyCouponMutation();
+  const dispatch = useDispatch();
+  const [couponCode, setCouponCode] = useState('');
+
+  const validCoupons = ['freesnack', 'summerfit', 'willem', 'mama', 'summer', 'father', 'fit'];
+
+  const handleSubmitCoupon = async () => {
+    if (!user) {
+      //logout the user
+    }
+    if (validCoupons.includes(couponCode.toLowerCase())) {
+    }
+    const verifyCouponResponse = await verifyCoupon({
+      couponCode: couponCode,
+      userId: user._id,
+      token: token,
+    }).unwrap();
+    Toast.show({
+      type: 'success',
+      text1: verifyCouponResponse.message,
+    });
+
+    dispatch(setCoupon(verifyCouponResponse.coupon));
+
+    return setCouponCode('');
+  };
+
+  useEffect(() => {
+    if (error && 'status' in error && error.status === 404) {
+      setCouponCode('');
+      Toast.show({
+        type: 'minimumOrderAmountToast',
+        //@ts-ignore
+        text1: error?.data?.message!,
+        position: 'top',
+      });
+    }
+  }, [error]);
+
   return (
     <YStack gap="$3" mt={12}>
       <Text color="#1E1F20" fontWeight={700} fontSize={16}>
@@ -25,6 +72,7 @@ export default function Saving() {
           borderRadius={8}>
           <CouponTicket style={{ marginTop: 4 }} />
           <Input
+            value={couponCode}
             py={0}
             alignSelf="stretch"
             flex={1}
@@ -34,9 +82,11 @@ export default function Saving() {
             bg="transparent"
             borderWidth={0}
             outlineWidth={0}
+            onChangeText={setCouponCode}
           />
         </XStack>
         <Button
+          onPress={handleSubmitCoupon}
           height={45}
           px={20}
           py={10}

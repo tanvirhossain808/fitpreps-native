@@ -37,7 +37,23 @@ export default function RootLayout() {
   }, [loaded]);
 
   if (!loaded) return null;
-
+  const routes = [
+    { name: 'index', options: { headerShown: false }, protected: false },
+    { name: '(auth)', options: { headerShown: false }, protected: false },
+    { name: '(on-boarding)', options: { headerShown: false }, protected: true },
+    { name: '(tabs)', options: { headerShown: false }, protected: true },
+    { name: 'modal', options: { presentation: 'modal' }, protected: true },
+    { name: '(sharedScreens)', options: { headerShown: false }, protected: true },
+    { name: 'cart', options: { headerShown: false }, protected: true },
+    { name: 'orderplaced', options: { headerShown: false }, protected: true },
+    { name: '(orders)', options: { headerShown: false }, protected: true },
+    { name: 'h', options: { headerShown: false }, protected: true },
+    { name: '(navigator)', options: { headerShown: false }, protected: true },
+    { name: '(subscription)', options: { headerShown: false }, protected: true },
+    { name: '(addresses)', options: { headerShown: false }, protected: true },
+    { name: '(payments)', options: { headerShown: false }, protected: true },
+    { name: '(tracking)', options: { headerShown: false }, protected: true },
+  ];
   return (
     <Provider store={store}>
       <TamaguiProvider config={config}>
@@ -46,20 +62,22 @@ export default function RootLayout() {
             <SafeAreaProvider>
               <Stack>
                 <Stack.Screen name="index" options={{ headerShown: false }} />
-                <Stack.Screen name="(on-boarding)" options={{ headerShown: false }} />
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-                <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-                <Stack.Screen name="(sharedScreens)" options={{ headerShown: false }} />
-                <Stack.Screen name="cart" options={{ headerShown: false }} />
-                <Stack.Screen name="orderplaced" options={{ headerShown: false }} />
-                <Stack.Screen name="(orders)" options={{ headerShown: false }} />
-                <Stack.Screen name="h" options={{ headerShown: false }} />
-                <Stack.Screen name="(navigator)" options={{ headerShown: false }} />
-                <Stack.Screen name="(subscription)" options={{ headerShown: false }} />
-                <Stack.Screen name="(addresses)" options={{ headerShown: false }} />
-                <Stack.Screen name="(payments)" options={{ headerShown: false }} />
-                <Stack.Screen name="(tracking)" options={{ headerShown: false }} />
+                <Stack.Screen name="(protected)" options={{ headerShown: false }} />
+                <Stack.Screen name="(on-boarding)" options={{ headerShown: false }} />
+                {/* <Stack.Screen name="(on-boarding)" options={{ headerShown: false }} /> */}
+                {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
+                {/* <Stack.Screen name="modal" options={{ presentation: 'modal' }} /> */}
+                {/* <Stack.Screen name="(sharedScreens)" options={{ headerShown: false }} /> */}
+                {/* <Stack.Screen name="cart" options={{ headerShown: false }} /> */}
+                {/* <Stack.Screen name="orderplaced" options={{ headerShown: false }} /> */}
+                {/* <Stack.Screen name="(orders)" options={{ headerShown: false }} /> */}
+                {/* <Stack.Screen name="h" options={{ headerShown: false }} /> */}
+                {/* <Stack.Screen name="(navigator)" options={{ headerShown: false }} /> */}
+                {/* <Stack.Screen name="(subscription)" options={{ headerShown: false }} /> */}
+                {/* <Stack.Screen name="(addresses)" options={{ headerShown: false }} /> */}
+                {/* <Stack.Screen name="(payments)" options={{ headerShown: false }} /> */}
+                {/* <Stack.Screen name="(tracking)" options={{ headerShown: false }} /> */}
               </Stack>
               <Toast config={toastConfig} />
             </SafeAreaProvider>

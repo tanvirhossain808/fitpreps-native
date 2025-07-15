@@ -10,26 +10,42 @@ import { useVerifyCouponMutation } from '~/src/store/apiSlices/verifyCouponSlice
 import { RootState } from '~/src/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { useCartLogic } from '~/src/hooks/useCartLogic';
-import { setShipping, setSubTotal } from '~/src/store/slices/cartSlice';
+import {
+  setCoupon,
+  setShipping,
+  setSubTotal,
+  setTax,
+  setTotal,
+} from '~/src/store/slices/cartSlice';
 import { useOrderData } from '~/src/hooks/useOrderData';
 export default function Cart() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [isShowMapModal, setShowMapModal] = useState<boolean>(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isEditAddress, setIsEditAddress] = useState(false);
-  const { cartType = 'meals', subscriptionType, packId } = useLocalSearchParams() || {};
+  const { cartType = 'meals', subscriptionType } = useLocalSearchParams() || {};
   const { user } = useSelector((s: RootState) => s.user) || {};
   const cartItems = useSelector((s: RootState) => s.cart.cartItems);
+  const couponCode = useSelector((s: RootState) => s.cart.couponCode);
   const [couponData, { isSuccess, isLoading, error }] = useVerifyCouponMutation();
   const { orderData, errors, loyaltyPoints } = useOrderData({
-    user: user!!.user,
+    user: user!.user,
     cart: Object.values(cartItems) as any,
-    coupon: null,
+    coupon: couponCode,
     fitCouponData: { discountAmount: 20 },
     detectedCountry: 'NL',
   });
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setCoupon(null));
+  }, []);
   console.log(orderData, 'datai');
-
+  useEffect(() => {
+    dispatch(setSubTotal(orderData.subTotal));
+    dispatch(setTotal(orderData.metadata._order_total));
+    dispatch(setTax(orderData.metadata._order_shipping_tax));
+    dispatch(setShipping(orderData.metadata._order_shipping));
+  }, [orderData]);
   useEffect(() => {
     async function fetchData() {
       if (!user) return;
@@ -42,16 +58,22 @@ export default function Cart() {
     }
     fetchData();
   }, [couponData]);
-  const dispatch = useDispatch();
-  const { sub, tax, shippingFee, discount, final } = useCartLogic();
-  useEffect(() => {
-    if (sub > 125) {
-      dispatch(setShipping(0));
-    }
-    dispatch(setSubTotal(sub));
-  }, [sub]);
+  // const { sub, tax, shippingFee, discount, final } = useCartLogic();
+  // useEffect(() => {
+  //   if (sub > 125) {
+  //     dispatch(setShipping(0));
+  //   }
+  //   dispatch(setSubTotal(sub));
+  // }, [sub]);
+
   const cartSteps: { [key: number]: any } = {
-    0: <CartStep1 setCurrentStep={setCurrentStep} cartType={cartType as string} />,
+    0: (
+      <CartStep1
+        orderData={orderData}
+        setCurrentStep={setCurrentStep}
+        cartType={cartType as string}
+      />
+    ),
     1: (
       <CartStep2
         isAddressModalOpen={isAddressModalOpen}

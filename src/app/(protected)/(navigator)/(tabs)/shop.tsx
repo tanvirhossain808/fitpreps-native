@@ -8,9 +8,11 @@ import ProductHeader from '~/src/components/shared/ProductHeader';
 import ProductLists from '~/src/components/shared/ProductLists';
 import GymProductsForWomen from '~/src/components/shared/shop/GymProductsForWomen';
 import ShopByCategoryList from '~/src/components/shop/ShopByCategoryList';
-import { foodOfItems, suppdProductCategories } from '~/src/constant';
+import { suppdProductCategories } from '~/src/constant';
 
 import { activeStatsBarInfo } from '~/src/helper';
+import useProductFilters from '~/src/hooks/useProductFilters';
+import { useGetSupplementsQuery } from '~/src/store/apiSlices/products/supplementsSlice';
 import { FoodOfItem, fueld, SliderItem, suppd } from '~/src/types/type';
 
 export const unstable_settings = {
@@ -44,46 +46,53 @@ export default function Shop() {
     }
   }, [productType, selectCategory, product]);
   const statusBarInfo = activeStatsBarInfo(selectCategory === 'Supplements' ? 'suppd' : 'shaped');
-
+  const { data, isLoading } = useGetSupplementsQuery(null);
+  const { filteredProducts } = useProductFilters(data, productType as string);
   return (
     <YStack flex={1}>
       <StatusBar style="dark" />
-      <Suspense fallback={<LoadingSpinner color={statusBarInfo?.color as string} />}>
-        <YStack flex={1} bg="white">
-          <ProductHeader
-            gender={gender}
-            setGender={setGender}
-            selectCategory={selectCategory as string}
-            setSelectCategory={setSelectCategory}
-            productType={productType as string}
-            activeStatsBarInfo={statusBarInfo as { name: string; color: string } | null}
-            insets={insets}
-          />
-          {selectCategory !== 'Gym Wear' && gender === null ? (
-            <ProductLists
-              productType={product as string}
-              showsVerticalScrollIndicator={false}
-              scrollEventThrottle={16}
-              products={
-                product === 'cookd'
-                  ? (foodOfItems as (FoodOfItem | SliderItem | fueld)[])
-                  : (suppdProductCategories as (FoodOfItem | SliderItem | fueld | suppd)[])
-              }
-            />
-          ) : (
-            <YStack flex={1}>
-              {selectCategory === 'Gym Wear' && gender === null && (
-                <ShopByCategoryList setGender={setGender} />
-              )}
-              {selectCategory === 'Gym Wear' && gender === 'female' && (
-                <YStack flex={1}>
-                  <GymProductsForWomen />
-                </YStack>
-              )}
-            </YStack>
-          )}
-        </YStack>
-      </Suspense>
+      <YStack flex={1} bg="white">
+        <ProductHeader
+          data={filteredProducts}
+          gender={gender}
+          setGender={setGender}
+          selectCategory={selectCategory as string}
+          setSelectCategory={setSelectCategory}
+          productType={productType as string}
+          activeStatsBarInfo={
+            { ...statusBarInfo, tentColor: '#FD4F01' } as { name: string; color: string } | null
+          }
+          insets={insets}
+        />
+        {isLoading ? (
+          <LoadingSpinner color={statusBarInfo?.color as string} />
+        ) : (
+          <>
+            {selectCategory !== 'Gym Wear' && gender === null ? (
+              <Suspense fallback={<LoadingSpinner color={statusBarInfo?.color as string} />}>
+                <ProductLists
+                  isLoading={isLoading}
+                  data={filteredProducts}
+                  productType={product as string}
+                  showsVerticalScrollIndicator={false}
+                  scrollEventThrottle={16}
+                />
+              </Suspense>
+            ) : (
+              <YStack flex={1}>
+                {selectCategory === 'Gym Wear' && gender === null && (
+                  <ShopByCategoryList setGender={setGender} />
+                )}
+                {selectCategory === 'Gym Wear' && gender === 'female' && (
+                  <YStack flex={1}>
+                    <GymProductsForWomen />
+                  </YStack>
+                )}
+              </YStack>
+            )}
+          </>
+        )}
+      </YStack>
     </YStack>
   );
 }

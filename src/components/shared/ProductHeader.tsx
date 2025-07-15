@@ -11,11 +11,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useGetSmakelijkeProductsQuery } from '~/src/store/apiSlices/products/smakelijke';
 import useProductFilters from '~/src/hooks/useProductFilters';
 import { RootState } from '~/src/store';
+import { Productsmakelijke, SortOption } from '~/src/types/type';
+import { setSortBy } from '~/src/store/slices/filterSlice';
 
 export default function ProductHeader({
   productType,
   activeStatsBarInfo,
   insets,
+  data,
   selectCategory = '',
   setSelectCategory = () => {},
   gender = null,
@@ -28,10 +31,12 @@ export default function ProductHeader({
   gender?: string | null;
   setGender?: Dispatch<React.SetStateAction<'male' | 'female' | null>>;
   insets: { top: number };
+  data: Productsmakelijke[] | any;
 }) {
-  const { data } = useGetSmakelijkeProductsQuery(null);
-  const { filteredProducts, updateSortBy } = useProductFilters(data);
-  // const filters = useSelector((state: RootState) => state.cart);
+  // const { data } = useGetSmakelijkeProductsQuery(null);
+  // const { filteredProducts, updateSortBy } = useProductFilters(data, productType);
+  const dispatch = useDispatch();
+  const updateSortBy = (sortOption: SortOption) => dispatch(setSortBy(sortOption));
   return (
     <View>
       <View>
@@ -67,7 +72,7 @@ export default function ProductHeader({
               activeStatsBarInfo={
                 activeStatsBarInfo as { name: string; color: string; tentColor: string } | null
               }
-              cookdFoodCategories={selectSuppdProductType(productType)}
+              productCategories={selectSuppdProductType(productType)}
             />
 
             <View px={16} mt={20}>
@@ -83,11 +88,11 @@ export default function ProductHeader({
                   <SortButton updateSortBy={updateSortBy} />
                 </XStack>
                 <Text fontSize={11} color="#25272C">
-                  {filteredProducts.length <= 4
-                    ? filteredProducts.length - 3 < 0
+                  {data.length <= 4
+                    ? data.length - 3 < 0
                       ? 0
-                      : filteredProducts.length - 3
-                    : filteredProducts?.length - 2}{' '}
+                      : data.length - 3
+                    : data?.length - 2}{' '}
                   meal preps to explore
                 </Text>
               </XStack>

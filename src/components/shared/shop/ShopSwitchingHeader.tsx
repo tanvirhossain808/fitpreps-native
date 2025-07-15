@@ -1,6 +1,6 @@
 import { Button, XStack } from 'tamagui';
 import React, { Dispatch } from 'react';
-import useProductFilters from '~/src/hooks/useProductFilters';
+import Toast from 'react-native-toast-message';
 
 export default function SwitchHeader({
   product,
@@ -18,7 +18,12 @@ export default function SwitchHeader({
     setSelectCategory(() => 'Supplements');
     setGender(() => null);
   };
-  const { updateCategory } = useProductFilters();
+  const handleGymPress = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Coming soon',
+    });
+  };
   return (
     <XStack width={'100%'} p={4} borderRadius={8} borderWidth={1} borderColor="#B6BAC3">
       <Button
@@ -35,7 +40,8 @@ export default function SwitchHeader({
         Supplements
       </Button>
       <Button
-        onPress={() => setSelectCategory('Gym Wear')}
+        // onPress={() => setSelectCategory('Gym Wear')}
+        onPress={handleGymPress}
         width={'50%'}
         color={selectCategory === 'Gym Wear' ? 'white' : '#1E1F20'}
         fontWeight={selectCategory === 'Gym Wear' ? 700 : 500}

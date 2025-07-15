@@ -16,9 +16,11 @@ import { router } from 'expo-router';
 export default function CartStep1({
   setCurrentStep,
   cartType,
+  orderData,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   cartType: string;
+  orderData: any;
 }) {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state: RootState) => state.cart);
@@ -43,7 +45,7 @@ export default function CartStep1({
             <YStack>
               <Saving />
               <CartCarousel />
-              <FooterCart setCurrentStep={setCurrentStep} />
+              <FooterCart setCurrentStep={setCurrentStep} orderData={orderData} />
             </YStack>
           }
           ListEmptyComponent={() => (
@@ -93,7 +95,7 @@ export default function CartStep1({
       )}
       {cartType === 'subscription' && (
         <FlatList
-          ListFooterComponent={<FooterCart setCurrentStep={setCurrentStep} />}
+          ListFooterComponent={<FooterCart orderData={orderData} setCurrentStep={setCurrentStep} />}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => <View h={12} />}
           contentContainerStyle={{

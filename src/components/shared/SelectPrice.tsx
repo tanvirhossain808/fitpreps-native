@@ -7,12 +7,12 @@ export default function SelectPrice({
   setSelectProduct,
   quantity,
 }: {
-  values: { weight: string; price: string }[];
+  values?: { weight: string; price: string }[];
   setSelectProduct: React.Dispatch<React.SetStateAction<Productsmakelijke | undefined>>;
   quantity: number;
 }) {
   const handleSelectedValue = (value: string) => {
-    const selectedOption = values.find((v) => v.weight === value);
+    const selectedOption = values?.find((v) => v.weight === value);
     if (selectedOption) {
       setSelectProduct((prev: any) => {
         return {
@@ -24,7 +24,7 @@ export default function SelectPrice({
   };
   return (
     <Select
-      defaultValue={values[0]?.weight}
+      defaultValue={values?.[0]?.weight}
       onValueChange={(value) => {
         handleSelectedValue(value);
       }}>

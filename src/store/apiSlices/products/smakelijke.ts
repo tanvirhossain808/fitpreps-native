@@ -13,23 +13,6 @@ const smakelijkeSlice = rootApiSlice.injectEndpoints({
           },
         };
       },
-      // transformResponse: (response: Productsmakelijke[], meta, arg) => {
-      //   // return productRows(response);`
-      //   console.log(response, 'response', meta, 'Df', arg);
-      //   const category = arg.category;
-      //   let data: Productsmakelijke[] = [];
-      //   if (category.toLowerCase() === 'Alle'.toLowerCase()) {
-      //     data = [...response];
-      //   } else {
-      //     const filterData = response.filter(
-      //       (item) => item.categories[1].toLowerCase() === category.toLowerCase()
-      //     );
-      //     console.log(filterData, 'youdata');
-      //     data = [...filterData];
-      //   }
-      //   console.log('bey');
-      //   return data;
-      // },
     }),
   }),
 });

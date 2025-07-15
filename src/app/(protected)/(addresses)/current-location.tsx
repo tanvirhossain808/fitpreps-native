@@ -64,7 +64,7 @@ export default function CurrentLocation() {
               <Button
                 onPress={() =>
                   router.push({
-                    pathname: '/(addresses)/new-address',
+                    pathname: '/new-address',
                     params: {},
                   })
                 }

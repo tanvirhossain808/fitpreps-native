@@ -5,6 +5,9 @@ import { useTabBarVisibility } from '~/src/hooks/useTabBarVisibility';
 import { lazy, useCallback, useEffect, useRef } from 'react';
 import LoadingSpinner from './Loading';
 import useProductFilters from '~/src/hooks/useProductFilters';
+import { Button, Text, YStack } from 'tamagui';
+import { useDispatch } from 'react-redux';
+import { resetFilters } from '~/src/store/slices/filterSlice';
 
 const ProductsmakelijkeLists = lazy(() => import('./ProductsmakelijkeLists'));
 
@@ -16,42 +19,48 @@ export default function ProductLists({
   contentContainerStyle,
   showsVerticalScrollIndicator,
   scrollEventThrottle,
+  isLoading,
+  data,
 }: {
   // products: (FoodOrSliderItem | fueldOrSliderItem | suppd)[];
   contentContainerStyle?: any;
   showsVerticalScrollIndicator?: boolean;
   scrollEventThrottle?: number;
   productType?: string;
+  isLoading?: boolean;
+  data: any;
 }) {
   const { handleScroll } = useTabBarVisibility();
-
-  const { data, isLoading, error, refetch } = useGetSmakelijkeProductsQuery(null, {
-    refetchOnMountOrArgChange: true,
-  });
-
-  const { filteredProducts } = useProductFilters(data);
+  // console.log(productType, 'type');
+  const dispatch = useDispatch();
+  // const { filteredProducts } = useProductFilters(data2);
+  // console.log('filt', filteredProducts);
   const flatListRef = useRef<FlatList>(null);
   useEffect(() => {
-    if (flatListRef.current) {
+    if (flatListRef.current && data?.length > 0) {
       flatListRef.current.scrollToIndex({
         index: 0,
         animated: true,
       });
     }
-  }, [filteredProducts]);
+  }, [data]);
 
   const renderItem = useCallback(
     ({ item, index }: { item: Productsmakelijke | SliderItem; index: number }) => {
       // return <View />;j
+      // if (productType === 'cookd')
+      // return <ProductsmakelijkeLists item={item} index={index} productType={productType} />;
+      // else if (productType === 'suppd')
+      // return <ProductsmakelijkeLists item={item} index={index} productType={productType} />;
       return <ProductsmakelijkeLists item={item} index={index} productType={productType} />;
       // return <View />;
     },
+
     [productType]
   );
   if (isLoading) {
     return <LoadingSpinner color="white" />;
   }
-
   return (
     <FlatList
       ref={flatListRef}
@@ -60,9 +69,26 @@ export default function ProductLists({
       windowSize={20}
       maxToRenderPerBatch={20}
       numColumns={2}
+      ListEmptyComponent={
+        <YStack alignItems="center" f={1} justifyContent="center">
+          <Text fontSize={18} color="#FD4F01">
+            No products found
+          </Text>
+          <Button
+            onPress={() => {
+              dispatch(resetFilters());
+            }}
+            bg="#FD4F01"
+            color="white"
+            mt={16}
+            fontWeight={700}>
+            Reset filters
+          </Button>
+        </YStack>
+      }
       columnWrapperStyle={{ gap: 8 }}
       updateCellsBatchingPeriod={50}
-      data={(filteredProducts as (Productsmakelijke | SliderItem)[]) || []}
+      data={(data as (Productsmakelijke | SliderItem)[]) || []}
       keyExtractor={(item) => item?._id?.toString()}
       renderItem={renderItem}
       contentContainerStyle={[{ paddingBottom: 50 }, contentContainerStyle]}

@@ -24,4 +24,8 @@ export const badgesColor = {
     bg: 'linear-gradient(90deg, #BBA271 0%, #846C49 100%)',
     color: 'white',
   },
+  '20% Korting': {
+    bg: '#FD5001',
+    color: 'white',
+  },
 };

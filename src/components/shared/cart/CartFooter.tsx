@@ -6,8 +6,10 @@ import { useLocalSearchParams } from 'expo-router';
 
 export default function FooterCart({
   setCurrentStep,
+  orderData,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  orderData: any;
 }) {
   const { cartType } = useLocalSearchParams() || {};
   return (
@@ -19,7 +21,7 @@ export default function FooterCart({
         </YStack>
       )}
       <YStack flex={1}>
-        <CartPay setCurrentStep={setCurrentStep} />
+        <CartPay setCurrentStep={setCurrentStep} orderData={orderData} />
       </YStack>
     </YStack>
   );

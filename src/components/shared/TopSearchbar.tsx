@@ -4,7 +4,9 @@ import Octicons from '@expo/vector-icons/Octicons';
 import { useNavigation } from '@react-navigation/native';
 import { router } from 'expo-router';
 import { TouchableOpacity } from 'react-native';
+import { useSelector } from 'react-redux';
 import { Input, Text, TextProps, XStack } from 'tamagui';
+import { RootState } from '~/src/store';
 import { DrawerNavigation } from '~/src/types/navigation';
 
 export default function TopSearchbar({
@@ -29,6 +31,7 @@ export default function TopSearchbar({
     }
   };
 
+  const cartQuantity = useSelector((s: RootState) => s.cart.quantity);
   return (
     <XStack p="$4" justifyContent="space-between" gap="$3" flexWrap="wrap" width="100%">
       <XStack flex={1} alignItems="center" gap="1">
@@ -54,6 +57,7 @@ export default function TopSearchbar({
             shadowRadius={1}>
             <Input
               placeholder={placeholder}
+              fontSize={12}
               flex={1}
               focusStyle={{
                 borderColor: 'transparent',
@@ -89,9 +93,23 @@ export default function TopSearchbar({
           justifyContent="center"
           borderRadius={50}
           bg="#ffede5">
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push('/cart')}>
             <Feather name="shopping-cart" size={18} color="#FD4F01" />
           </TouchableOpacity>
+          <XStack
+            alignItems="center"
+            justifyContent="center"
+            w={cartQuantity > 99 ? 20 : 16}
+            h={cartQuantity > 99 ? 20 : 16}
+            position="absolute"
+            right={0}
+            top={0}
+            borderRadius={50}
+            bg="#FD4F01">
+            <Text fontSize={10} color="white">
+              {cartQuantity ? cartQuantity : 0}
+            </Text>
+          </XStack>
         </XStack>
 
         <XStack

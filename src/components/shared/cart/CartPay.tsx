@@ -3,20 +3,69 @@ import { Button, Text, View, XStack, YStack } from 'tamagui';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '~/src/store';
-import { setTotal } from '~/src/store/slices/cartSlice';
+import { setOrderData, setTotal } from '~/src/store/slices/cartSlice';
+import Toast from 'react-native-toast-message';
 
 export default function CartPay({
   setCurrentStep,
+  orderData,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  orderData: any;
 }) {
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(setTotal as any);
+  // }, []);
+  const { total, subTotal, shipping, tax } = useSelector((s: RootState) => s.cart);
+  const cartItems = useSelector((s: RootState) => s.cart.cartItems);
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(setTotal as any);
-  }, []);
+  const handleCheckout = () => {
+    console.log('hey', 'cartItems');
+    const c = Object.values(cartItems);
+    const isSupplimentInTheCart = c.find((data) => data.categories.includes('Supplements'));
 
-  const sub = useSelector((state: RootState) => state.cart.subTotal);
-  const total = useSelector((state: RootState) => state.cart.total);
+    let value = 0;
+    let isTastyFoodInsideCart = false;
+
+    if (isSupplimentInTheCart) {
+      for (let i = 0; i < c.length; i++) {
+        const item = c[i];
+
+        if (!item.categories.includes('Supplements')) {
+          if (!isTastyFoodInsideCart) {
+            isTastyFoodInsideCart = true;
+          }
+          console.log(value, 'value');
+
+          value += Number(item.metadata._price) * item.quantity;
+          if (value >= 45) {
+            break;
+          }
+        }
+      }
+      console.log(value, 'value');
+      if (isTastyFoodInsideCart && value < 45) {
+        console.log('hey3');
+        Toast.show({
+          type: 'minimumOrderAmountToast',
+          text1: 'De minimale bestelwaarde voor maaltijden is €45',
+          position: 'top',
+        });
+        return;
+      }
+    } else if (subTotal > 0 && subTotal < 45) {
+      console.log('hey4');
+      Toast.show({
+        type: 'minimumOrderAmountToast',
+        text1: 'De minimale bestelwaarde voor maaltijden is €45',
+        position: 'top',
+      });
+      return;
+    }
+    console.log('hey2');
+    dispatch(setOrderData(orderData));
+  };
 
   return (
     <YStack flex={1} pb="$5">
@@ -32,7 +81,7 @@ export default function CartPay({
             Subtotal
           </Text>
           <Text fontSize={14} fontWeight={500} color="#1E1F20">
-            €{sub.toFixed(2)}
+            €{subTotal.toFixed(2)}
           </Text>
         </XStack>
         <XStack alignItems="center" justifyContent="space-between">
@@ -40,7 +89,7 @@ export default function CartPay({
             Shipping cost
           </Text>
           <Text fontSize={14} fontWeight={500} color="#1E1F20">
-            €x
+            €{(shipping + tax).toFixed(2)}
           </Text>
         </XStack>
       </YStack>
@@ -60,7 +109,8 @@ export default function CartPay({
         fontSize={16}
         fontWeight={700}
         color="white"
-        onPress={() => setCurrentStep(1)}>
+        // onPress={() => setCurrentStep(1)}
+        onPress={handleCheckout}>
         Checkout
       </Button>
     </YStack>

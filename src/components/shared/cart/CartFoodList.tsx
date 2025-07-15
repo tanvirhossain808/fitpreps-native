@@ -1,6 +1,7 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useState } from 'react';
 import { ImageSourcePropType, TouchableOpacity } from 'react-native';
+import Toast from 'react-native-toast-message';
 import { useDispatch, useSelector } from 'react-redux';
 import { Text, XStack, Image, YStack } from 'tamagui';
 import { baseUrl } from '~/src/constants/baseConstant';
@@ -15,6 +16,7 @@ export default function CartFoodList({
   };
 }) {
   const dispatch = useDispatch();
+  const cartItem = useSelector((s: RootState) => s.cart.cartItems[item._id]);
   // const quantity = useSelector((state: RootState) => {
   //   if ('_id' in item) {
   //     return state?.cart?.cartItems[item._id];
@@ -22,6 +24,13 @@ export default function CartFoodList({
   //   return undefined;
   // });
   const handlePlus = (item: Productsmakelijke) => {
+    if (cartItem.categories.includes('Pakket Samenstellen')) {
+      return Toast.show({
+        type: 'minimumOrderAmountToast',
+        text1: 'TRY OUT: artikel kan eenmalig besteld worden.',
+        position: 'top',
+      });
+    }
     dispatch(increment(item));
   };
   const handleMinus = (item: Productsmakelijke) => {

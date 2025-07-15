@@ -22,7 +22,7 @@ import DrawerPageHeader from '~/src/components/drawer/DrawerPageHeader';
 import Mark from 'public/images/mark.svg';
 import { router } from 'expo-router';
 import EditSuccess from '~/src/components/addresses/EditSucessModal';
-import useKeyboardBehavior from '../../hooks/useKeyBoardBehavior';
+import useKeyboardBehavior from '../../../hooks/useKeyBoardBehavior';
 export default function EditAddress() {
   // const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const [isEditSuccessOpen, setIsEditSuccessOpen] = useState(false);
@@ -130,7 +130,7 @@ export default function EditAddress() {
                       <TouchableOpacity
                         onPress={() =>
                           router.push({
-                            pathname: '/(addresses)/current-location',
+                            pathname: '/current-location',
                             params: {},
                           })
                         }>
