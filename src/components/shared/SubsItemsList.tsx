@@ -1,0 +1,286 @@
+import { Button, Text, View, XStack, YStack, Image } from 'tamagui';
+import SliderCarousel from './SliderCarousel';
+import { Productsmakelijke, SliderItem } from '~/src/types/type';
+import { LinearGradient } from 'expo-linear-gradient';
+import { badgesColor } from '~/src/constants/colorConstants';
+import { baseUrl } from '~/src/constants/baseConstant';
+import { TouchableOpacity } from 'react-native';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { useDispatch, useSelector } from 'react-redux';
+import { increment, decrement } from '~/src/store/slices/cartSlice';
+import Toast from 'react-native-toast-message';
+import { RootState } from '~/src/store';
+import { useState } from 'react';
+import { productBg, shadows } from '~/src/constant';
+import Coin from '~/public/images/coin.svg';
+export default function SubItemsList({
+  item,
+  index,
+}: {
+  item: Productsmakelijke | SliderItem | { type: 'dummy' };
+  productType: string;
+  index: number;
+}) {
+  const [selectedProduct, setSelectProduct] = useState<Productsmakelijke | any>();
+  const dispatch = useDispatch();
+  const quantity = useSelector((state: RootState) => {
+    if ('_id' in item) {
+      return state?.cart?.cartItems[item?._id];
+    }
+    return undefined;
+  });
+
+  const handlePlus = () => {
+    const productData = { ...item } as Productsmakelijke;
+    let data;
+
+    {
+      data = { ...productData };
+    }
+
+    Toast.show({
+      type: 'subCartToast',
+      text1: 'Product added to cart',
+      props: {
+        quantity: quantity?.quantity ? quantity.quantity + 1 : 1,
+      },
+      position: 'bottom',
+      // autoHide: false,
+    });
+    // }, 0);
+    dispatch(increment(data));
+  };
+  const handleMinus = () => {
+    if (quantity?.quantity && quantity?.quantity > 0) {
+      dispatch(decrement(item as Productsmakelijke));
+    }
+  };
+  if ((item as SliderItem)?.type === 'slider') {
+    return (
+      <YStack w="100%" py={0} my={0}>
+        <SliderCarousel images={(item as SliderItem)?.images} productType={'fuled'} />
+      </YStack>
+    );
+  }
+  if ((item as { type: string })?.type === 'dummy') {
+    return <View h={0} />;
+  }
+  return (
+    <>
+      {/* <SubCartAddedToast /> */}
+      {item.type === 'dummy1' ? (
+        <View />
+      ) : (
+        <YStack
+          mt={index === 7 || index === 6 ? 0 : 20}
+          key={(item as Productsmakelijke)?._id}
+          w={'48%'}
+          p={8}
+          bg="white"
+          gap={20}
+          borderColor="#B6BAC3"
+          borderWidth={1}
+          borderRadius={8}>
+          <View
+            py={15}
+            justifyContent="center"
+            alignItems="center"
+            height={165}
+            maxHeight={165}
+            width={'100%'}
+            alignSelf="stretch"
+            flex={1}
+            bg={productBg['fueld' as keyof typeof productBg]}
+            borderRadius={4}>
+            <Image
+              source={{
+                uri:
+                  (item as Productsmakelijke)?.files?.length > 0
+                    ? baseUrl + `/uploads/${(item as Productsmakelijke)?.files[0]?.url}`
+                    : (item as Productsmakelijke)?.thumbnail?.url,
+              }}
+              width={115}
+              height="auto"
+              aspectRatio={1}
+              resizeMode="cover"
+            />
+            {(item as Productsmakelijke)?.metadata?.badges && (
+              <XStack top={4} gap={2} left={6} position="absolute">
+                {(item as Productsmakelijke)?.metadata?.badges?.map((badge, i) => {
+                  if (badge === 'Premium') {
+                    return (
+                      <LinearGradient
+                        key={i}
+                        style={{
+                          borderRadius: 20,
+                          display: 'flex',
+                          alignItems: 'center',
+                          paddingVertical: 5,
+                          paddingHorizontal: 5,
+                        }}
+                        colors={['#BBA271', '#846C49']}>
+                        <Text
+                          key={i}
+                          // p={'$2'}
+                          color="white"
+                          fontSize={7}
+                          fontWeight={600}>
+                          Premium
+                        </Text>
+                      </LinearGradient>
+                    );
+                  }
+                  const chefFav = badge === 'Chef’s Favoriet';
+                  if (chefFav) {
+                    return (
+                      <Text
+                        key={i}
+                        p={5}
+                        fontSize={7}
+                        fontWeight={700}
+                        {...badgesColor[badge as keyof typeof badgesColor]}
+                        borderRadius={20}>
+                        Chef&apos;s Favoriet
+                      </Text>
+                    );
+                  }
+                  return (
+                    <Text
+                      key={i}
+                      p={5}
+                      fontSize={7}
+                      fontWeight={700}
+                      {...badgesColor[badge as keyof typeof badgesColor]}
+                      borderRadius={20}>
+                      {badge}
+                    </Text>
+                  );
+                })}
+              </XStack>
+            )}
+            {/* {productType === 'fueld' && (item as Productsmakelijke)?.eiwitten && ( */}
+            <YStack
+              borderTopWidth={1}
+              borderLeftWidth={0.1}
+              borderRightWidth={0.1}
+              borderColor="#FD4F01"
+              alignItems="center"
+              justifyContent="center"
+              position="absolute"
+              bottom={-20}
+              top="100%"
+              right={'50%'}
+              transform={[{ translateX: '50%' }]}
+              width={50}
+              height={50}
+              bg="#FFF"
+              borderRadius={50}>
+              <View bg="white" position="absolute" inset={0} borderRadius={25} top={20}></View>
+              <Text fontSize={13} color="#FD4F01" fontFamily="$oswald" fontWeight={700}>
+                {/* {(food as fueld)?.protein} */}
+                {(item as Productsmakelijke)?.eiwitten}
+              </Text>
+              <Text color="#1E1F20" fontWeight={500} fontSize={12}>
+                protein
+              </Text>
+            </YStack>
+            {/* )} */}
+          </View>
+          <YStack gap={8} justifyContent="space-between" f={1}>
+            {/* <Text
+                px={6}
+                py={4}
+                maxWidth={71}
+                textAlign="center"
+                bg="#E5F8EA"
+                borderRadius={20}
+                color="#009A21"
+                fontSize={10}
+                fontWeight={500}>
+                {product?.name}
+              </Text> */}
+
+            <Text
+              fontSize={11.5}
+              fontWeight={700}
+              color="#1E1F20"
+              numberOfLines={2}
+              ellipsizeMode="tail">
+              {(item as Productsmakelijke)?.name}
+            </Text>
+
+            <View>
+              {(item as Productsmakelijke)?.metadata?.coin ? (
+                <XStack gap={4} alignItems="center">
+                  <Text fontSize={14} fontWeight={700} color="#FD4F01">
+                    {(item as Productsmakelijke)?.metadata?.coin}
+                  </Text>
+                  <Coin />
+                </XStack>
+              ) : (
+                <Text fontSize={14} fontWeight={700} color="#FD4F01">
+                  €{(item as Productsmakelijke)?.metadata?._price}
+                </Text>
+              )}
+
+              {(item as Productsmakelijke).categories.includes('Supplements') ? (
+                <Text fontSize={12} fontWeight={500} color="#1E1F20">
+                  {(item as Productsmakelijke)?.metadata?.dose}
+                </Text>
+              ) : (
+                <Text fontSize={12} fontWeight={500} color="#1E1F20">
+                  {
+                    (item as Productsmakelijke)?.metadata?.nutretions_data[0]
+                      ?.voedingswaarde_contents
+                  }
+                </Text>
+              )}
+            </View>
+            {quantity?.quantity && quantity?.quantity > 0 ? (
+              <XStack
+                overflow="hidden"
+                borderWidth={1}
+                borderRadius={12}
+                borderColor="#FD4F01"
+                alignItems="center"
+                justifyContent="space-between">
+                <TouchableOpacity onPress={handleMinus}>
+                  <XStack px="$2" py="$2" bg="#FFEDE5">
+                    <AntDesign name="minus" size={24} color="#FD4F01" />
+                  </XStack>
+                </TouchableOpacity>
+                <Text>{quantity?.quantity}</Text>
+                <TouchableOpacity onPress={handlePlus}>
+                  <XStack px="$4" py="$2" bg="#FFEDE5">
+                    <AntDesign name="plus" size={24} color="#FD4F01" />
+                  </XStack>
+                </TouchableOpacity>
+              </XStack>
+            ) : (
+              <Button
+                fontSize={15}
+                color="white"
+                fontWeight={700}
+                {...shadows.small}
+                bg="#FD4F01"
+                borderRadius={8}
+                onPress={handlePlus}>
+                Add
+                {/* {productType === 'cookd' ? 'Add & Fuel Up' : ''} */}
+              </Button>
+            )}
+          </YStack>
+        </YStack>
+      )}
+    </>
+  );
+
+  // else if (item[0].type === 'product') {
+  //   return (
+  //     <>
+  //       <SupplementLists item={item as suppd[]} productType={productType} />
+  //     </>
+  //   );
+  // }
+  // return null;
+}

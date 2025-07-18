@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface FilterState {
   category?: string;
+  search?: string;
   sortBy: 'price_asc' | 'price_desc' | 'oldest' | 'recent' | string;
   gender?: 'male' | 'female' | null;
   filters: {
@@ -16,6 +17,7 @@ const initialState: FilterState = {
   gender: null,
   filters: {},
   category: 'Alle',
+  search: '',
 };
 
 const filterSlice = createSlice({
@@ -35,6 +37,9 @@ const filterSlice = createSlice({
     setFilter: (state, action: PayloadAction<{ [key: string]: string[] }>) => {
       state.filters = action.payload;
     },
+    setSearch: (state, action: PayloadAction<string>) => {
+      state.search = action.payload;
+    },
     resetFilters: (state) => {
       return {
         ...state,
@@ -42,6 +47,7 @@ const filterSlice = createSlice({
         sortBy: state.sortBy,
         filters: {},
         category: state.category,
+        search: '',
       };
     },
     resetAllFilters: (state) => {
@@ -53,7 +59,14 @@ const filterSlice = createSlice({
   },
 });
 
-export const { setCategory, setSortBy, setFilter, setGender, resetFilters, resetAllFilters } =
-  filterSlice.actions;
+export const {
+  setCategory,
+  setSortBy,
+  setFilter,
+  setGender,
+  resetFilters,
+  resetAllFilters,
+  setSearch,
+} = filterSlice.actions;
 
 export default filterSlice.reducer;

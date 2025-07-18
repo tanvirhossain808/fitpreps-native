@@ -58,7 +58,7 @@ export default function CurrentOrders() {
             <Button
               onPress={() =>
                 router.push({
-                  pathname: '/(orders)/track-order',
+                  pathname: '/(protected)/(orders)/track-order',
                   params: { trackingNumber: 'ASDGH234GAS24s' },
                 })
               }

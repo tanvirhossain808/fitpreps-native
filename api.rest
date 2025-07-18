@@ -22,6 +22,14 @@ Content-Type: application/json
     "password": "password"
 }
 
+${process.env.NEXT_PUBLIC_BACKEND_URI}/api/orders/order?userId=${user.userId}
+
+###
+
+get {{baseUrl}}/api/orders/order?userId=67e2a75fc6c55d0533dc64a3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODczZGRjMTdhMjNmOTcwOTc0MDg2MDgiLCJpYXQiOjE3NTI1OTcxMDcsImV4cCI6MTc1MzIwMTkwN30.HWI7TyuEbifOJph-lt_jGE4gcooPx2Zg2jJyu-QmUGE
+
 ### coupon verification code
 
 get {{baseUrl}}/api/coupons/validate/fit?userId=6873ddc17a23f97097408608
@@ -29,4 +37,44 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODczZGRjMTdhMjNmOTcwOTc0MDg2MDgiLCJpYXQiOjE3N
 
 
+###
+# Purchase a new subscription
+POST {{baseUrl}}/api/subscription/purchase-points
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODczZGRjMTdhMjNmOTcwOTc0MDg2MDgiLCJpYXQiOjE3N
 
+{
+    "startDate": "2025-07-28",
+    "userId": "6873ddc17a23f97097408608",
+    "totalPoints": "870.00",
+    "frequency": "weekly",
+    "amount": "39.42",
+    "_billing_email": "john.doe@example.com",
+    "_billing_first_name": "John",
+    "_billing_last_name": "Doe",
+    "_billing_country": "NL",
+    "_billing_address_1": "Main Street 123",
+    "_billing_address_2": "Apt 4B",
+    "_billing_city": "Amsterdam",
+    "_billing_state": "North Holland",
+    "_billing_postcode": "1012 AB",
+    "_billing_phone": "0612345678",
+    "_billing_company": "Doe Inc.",
+    "_billing_company_kvk": "12345678",
+    "_billing_company_vat": "NL123456789B01",
+    "_shipping_email": "john.doe@example.com",
+    "_shipping_first_name": "John",
+    "_shipping_last_name": "Doe",
+    "_shipping_country": "NL",
+    "_shipping_address_1": "Main Street 123",
+    "_shipping_address_2": "Apt 4B",
+    "_shipping_city": "Amsterdam",
+    "_shipping_state": "North Holland",
+    "_shipping_postcode": "1012 AB",
+    "_shipping_phone": "0612345678",
+    "_shipping_company": "Doe Inc.",
+    "_shipping_company_kvk": "12345678",
+    "_shipping_company_vat": "NL123456789B01",
+    "_delivery_time": "17:00-18:00",
+    "_newsletter": false
+}

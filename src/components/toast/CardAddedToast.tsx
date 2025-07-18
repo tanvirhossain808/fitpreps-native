@@ -1,9 +1,14 @@
 import { Text, XStack } from 'tamagui';
-import { ToastProps } from 'react-native-toast-message';
+import Toast, { ToastProps } from 'react-native-toast-message';
 import { TouchableOpacity } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { router } from 'expo-router';
 export default function CardAddedToast({ props }: { props: ToastProps & { quantity: number } }) {
+  const handleToast = () => {
+    setTimeout(() => router.push({ pathname: '/cart', params: { quantity: props.quantity } }), 0);
+
+    Toast.hide();
+  };
   return (
     <XStack w="100%" px="$4">
       <XStack
@@ -23,8 +28,7 @@ export default function CardAddedToast({ props }: { props: ToastProps & { quanti
         <Text fontSize={16} fontWeight={700} color="white">
           {props.quantity} meal added
         </Text>
-        <TouchableOpacity
-          onPress={() => router.push({ pathname: '/cart', params: { quantity: props.quantity } })}>
+        <TouchableOpacity onPress={handleToast}>
           <XStack alignItems="center" gap="$2">
             <Text fontSize={16} fontWeight={700} color="white">
               View Cart

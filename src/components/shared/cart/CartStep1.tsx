@@ -93,24 +93,6 @@ export default function CartStep1({
           keyExtractor={(item) => item._id.toString()}
         />
       )}
-      {cartType === 'subscription' && (
-        <FlatList
-          ListFooterComponent={<FooterCart orderData={orderData} setCurrentStep={setCurrentStep} />}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View h={12} />}
-          contentContainerStyle={{
-            flexGrow: 1,
-            paddingTop: 20,
-            paddingBottom: 20,
-          }}
-          data={['']}
-          style={{ ...style.flastListContainer }}
-          ListHeaderComponent={<SubsHeader />}
-          ListHeaderComponentStyle={{ marginBottom: 20 }}
-          renderItem={() => <SubsPlan />}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      )}
     </>
   );
 }

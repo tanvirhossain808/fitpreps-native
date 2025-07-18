@@ -19,6 +19,7 @@ type StepIndicatorProps = {
   setIsAddressModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentStep?: React.Dispatch<React.SetStateAction<number>>;
   cartType?: string;
+  isSubsCribedProduct?: boolean;
 };
 
 export default function StepIndicator({
@@ -31,17 +32,17 @@ export default function StepIndicator({
   setIsAddressModalOpen,
   setCurrentStep,
   cartType,
+  isSubsCribedProduct = false,
 }: StepIndicatorProps) {
   const labels = ['Select Date', 'Address', 'Payment'];
   const labelsSubscribed = ['Select Date', 'Address'];
   const stepCount = labels.length;
   let progressPercent = Math.round(((currentStep + 1) / stepCount) * 100);
-  let subscriped = false;
 
   let text = 'Cart';
   useEffect(() => {
-    if (subscriped) {
-      progressPercent = Math.round(((currentStep + 1) / stepCount) * 100);
+    if (isSubsCribedProduct) {
+      progressPercent = Math.round((currentStep / stepCount) * 100);
     } else {
       progressPercent = Math.round(((currentStep + 1) / stepCount) * 100);
     }
@@ -115,7 +116,7 @@ export default function StepIndicator({
                   />
                 </Progress>
 
-                {!subscriped && (
+                {!isSubsCribedProduct && (
                   <View
                     position="absolute"
                     left={0}
@@ -151,7 +152,7 @@ export default function StepIndicator({
                     })}
                   </View>
                 )}
-                {subscriped && (
+                {isSubsCribedProduct && (
                   <View
                     position="absolute"
                     left={0}

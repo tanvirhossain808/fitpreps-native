@@ -7,8 +7,9 @@ import { useVerifyCouponMutation } from '~/src/store/apiSlices/verifyCouponSlice
 import Toast from 'react-native-toast-message';
 import { setCoupon } from '~/src/store/slices/cartSlice';
 
-export default function Saving() {
-  const { token, user } = useSelector((s: RootState) => s.user.user)!;
+export default function Saving({ isCommingSoon = false }: { isCommingSoon?: boolean }) {
+  const { token, user } = useSelector((s: RootState) => s.user.user!);
+  console.log(user, 'user');
   const [verifyCoupon, { isSuccess, isLoading, error }] = useVerifyCouponMutation();
   const dispatch = useDispatch();
   const [couponCode, setCouponCode] = useState('');
@@ -18,6 +19,13 @@ export default function Saving() {
   const handleSubmitCoupon = async () => {
     if (!user) {
       //logout the user
+    }
+    if (isCommingSoon) {
+      return Toast.show({
+        type: 'error',
+        text1: 'Not available',
+        text2: 'Coming soon',
+      });
     }
     if (validCoupons.includes(couponCode.toLowerCase())) {
     }

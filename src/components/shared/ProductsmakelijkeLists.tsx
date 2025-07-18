@@ -11,9 +11,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { increment, decrement } from '~/src/store/slices/cartSlice';
 import Toast from 'react-native-toast-message';
 import { RootState } from '~/src/store';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { productBg, shadows } from '~/src/constant';
-
+import Coin from '~/public/images/coin.svg';
+import SubCartAddedToast from '../toast/SubCartAddedToast';
 export default function ProductsmakelijkeLists({
   item,
   productType,
@@ -257,9 +258,19 @@ export default function ProductsmakelijkeLists({
 
             {productType !== 'cookd' && (
               <View>
-                <Text fontSize={14} fontWeight={700} color="#FD4F01">
-                  €{(item as Productsmakelijke)?.metadata?._price}
-                </Text>
+                {(item as Productsmakelijke)?.metadata?.coin ? (
+                  <XStack gap={4} alignItems="center">
+                    <Text fontSize={14} fontWeight={700} color="#FD4F01">
+                      {(item as Productsmakelijke)?.metadata?.coin}
+                    </Text>
+                    <Coin />
+                  </XStack>
+                ) : (
+                  <Text fontSize={14} fontWeight={700} color="#FD4F01">
+                    €{(item as Productsmakelijke)?.metadata?._price}
+                  </Text>
+                )}
+
                 {(item as Productsmakelijke).categories.includes('Supplements') ? (
                   <Text fontSize={12} fontWeight={500} color="#1E1F20">
                     {(item as Productsmakelijke)?.metadata?.dose}

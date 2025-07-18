@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { foodSortByOptions } from '~/src/constant';
 import Sortby from '~/src/components/shared/Sortby';
 import { SortOption } from '~/src/types/type';
+import { useFocusEffect } from 'expo-router';
 
 export default function SortButton({
   updateSortBy,
@@ -22,7 +23,11 @@ export default function SortButton({
   const handleUpdateSortBy = (sortOption: SortOption) => {
     updateSortBy(sortOption);
   };
-
+  useFocusEffect(
+    useCallback(() => {
+      setSort(null);
+    }, [])
+  );
   return (
     <TouchableOpacity
       onPress={handleSortPress}

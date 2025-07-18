@@ -1,6 +1,8 @@
 import { Text, YStack, Portal } from 'tamagui';
 import { TouchableOpacity } from 'react-native';
 import { SortOption } from '~/src/types/type';
+import { useFocusEffect } from 'expo-router';
+import { useCallback } from 'react';
 
 export default function Sortby({
   data,

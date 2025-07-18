@@ -3,11 +3,15 @@ import FoodCaroleSuccessToast from '~/src/components/toast/foodCaroleSuccessToas
 import CardAddedToast from '~/src/components/toast/CardAddedToast';
 import { ToastProps } from 'react-native-toast-message';
 import { Text, XStack } from 'tamagui';
+import SubCartAddedToast from '../components/toast/SubCartAddedToast';
 
 export const toastConfig = {
   foodCaroleSuccessToast: () => <FoodCaroleSuccessToast />,
   cardAddedToast: (quantity: { props: ToastProps & { quantity: number } }) => (
     <CardAddedToast props={quantity.props} />
+  ),
+  subCartToast: (quantity: { props: ToastProps & { quantity: number } }) => (
+    <SubCartAddedToast props={quantity.props} />
   ),
   minimumOrderAmountToast: () => (
     <XStack

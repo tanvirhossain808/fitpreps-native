@@ -4,6 +4,7 @@ import { Button, Text, XStack, YStack } from 'tamagui';
 import Coin from 'public/images/coin.svg';
 import { router } from 'expo-router';
 import { subscriptionPlans } from '~/src/constant';
+import Toast from 'react-native-toast-message';
 export default function SelectSubscriptionPlan({
   isUpgradePlan = false,
 }: {
@@ -11,7 +12,31 @@ export default function SelectSubscriptionPlan({
 }) {
   const [selectedPlan, setSelectedPlan] = useState(subscriptionPlans[0]);
   const [packId, setPackId] = useState<string | null>('weekly1');
-
+  const [plan, setPlan] = useState(subscriptionPlans[0].plans[0]);
+  const handleSubscription = () => {
+    if (!plan) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Please select a plan',
+      });
+      return;
+    } else {
+      router.push({
+        pathname: '/sub-cart/purchase-sub-cart',
+        params: {
+          selectedPlan: JSON.stringify(plan),
+          // cartType: 'subscription',
+          // subscriptionType: selectedPlan.name === 'Weekly plan' ? 'weekly' : 'monthly',
+          // packId: plan,
+        },
+      });
+    }
+  };
+  const handleSelectedPlan = (plan: any) => {
+    setPackId(plan.id);
+    setPlan(plan);
+  };
   return (
     <YStack gap="$7" py="$5" px="$4" backgroundColor="#fff3d7" borderRadius={12} w={'100%'}>
       <YStack w={'100%'}>
@@ -51,10 +76,10 @@ export default function SelectSubscriptionPlan({
           gap={8}>
           {selectedPlan.plans.map((plan, i) => {
             return (
-              <TouchableOpacity key={i} onPress={() => setPackId(plan.id)}>
+              <TouchableOpacity key={i} onPress={() => handleSelectedPlan(plan)}>
                 <YStack
                   gap={12}
-                  px="$4"
+                  px="$3"
                   py="$3"
                   borderRadius={8}
                   borderWidth={plan.id.toString() === packId?.toString() ? 2 : 1}
@@ -79,36 +104,48 @@ export default function SelectSubscriptionPlan({
                       </XStack>
                     </XStack>
                     <Text color="#25272C" fontSize={14} fontWeight={700}>
-                      {plan.price}
+                      {Number(plan.price).toFixed(2)}
                     </Text>
                   </XStack>
-                  <XStack alignItems="center" gap={8}>
-                    <XStack alignItems="center" gap={4}>
-                      <Text fontSize={12} fontWeight={700} color="#FD4F01">
-                        {plan.coins}
+                  <XStack alignItems="center" justifyContent="space-between">
+                    <XStack alignItems="center" gap={8}>
+                      <XStack alignItems="center" gap={4}>
+                        <Text fontSize={12} fontWeight={700} color="#FD4F01">
+                          {plan.coins}
+                        </Text>
+                        <Coin />
+                      </XStack>
+                      <Text fontSize={16} fontWeight={700} color="#1E1F20">
+                        +
                       </Text>
-                      <Coin />
+                      <XStack alignItems="center" gap={4}>
+                        <Text fontSize={12} fontWeight={700} color="#FD4F01">
+                          {plan.bonusCoins}
+                        </Text>
+                        <Coin />
+                        <Text
+                          color="#009A21"
+                          fontSize={12}
+                          fontWeight={700}
+                          px={8}
+                          py={4}
+                          borderRadius={40}
+                          bc="#E5F8EA">
+                          FREE
+                        </Text>
+                      </XStack>
                     </XStack>
-                    <Text fontSize={16} fontWeight={700} color="#1E1F20">
-                      +
+                    <Text fontSize={11} color="#25272C" fontWeight={500}>
+                      {plan.shippingPrice ? '+ €6.95 Shipping' : '  Free Shipping'}
                     </Text>
-                    <XStack alignItems="center" gap={4}>
-                      <Text fontSize={12} fontWeight={700} color="#FD4F01">
-                        {plan.bonusCoins}
-                      </Text>
-                      <Coin />
-                      <Text
-                        color="#009A21"
-                        fontSize={12}
-                        fontWeight={700}
-                        px={8}
-                        py={4}
-                        borderRadius={40}
-                        bc="#E5F8EA">
-                        FREE
-                      </Text>
-                    </XStack>
                   </XStack>
+                  <Text fontSize={12} fontWeight={500} color="#25272C">
+                    Average{' '}
+                    <Text fontSize={12} fontWeight={500} color="#25272C">
+                      ~36
+                    </Text>{' '}
+                    meals
+                  </Text>
                 </YStack>
               </TouchableOpacity>
             );
@@ -122,16 +159,7 @@ export default function SelectSubscriptionPlan({
           color="white"
           fontSize={14}
           fontWeight={700}
-          onPress={() =>
-            router.push({
-              pathname: '/cart',
-              params: {
-                cartType: 'subscription',
-                subscriptionType: selectedPlan.name === 'Weekly plan' ? 'weekly' : 'monthly',
-                packId: selectedPlan.plans[0].id,
-              },
-            })
-          }>
+          onPress={handleSubscription}>
           {selectedPlan.name === 'Weekly Plan' ? 'Buy Weekly Plan' : 'Buy Monthly Plan'}
         </Button>
       ) : (

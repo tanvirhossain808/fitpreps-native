@@ -1,5 +1,5 @@
-import { Dispatch, lazy } from 'react';
-import { Text, View, XStack } from 'tamagui';
+import { Dispatch } from 'react';
+import { Text, View, XStack, YStack } from 'tamagui';
 import { selectSuppdProductType } from '~/src/helper';
 import ShopSwitchingHeader from './shop/ShopSwitchingHeader';
 import ShopWomenHeader from './shop/ShopWomenHeader';
@@ -7,12 +7,12 @@ import SelectedFoodCategories from './SelectedFoodCategories';
 import FitlerButton from './Filters/FitlerButton';
 import SortButton from './Sort/SortButton';
 import TopSearchbar from './TopSearchbar';
-import { useDispatch, useSelector } from 'react-redux';
-import { useGetSmakelijkeProductsQuery } from '~/src/store/apiSlices/products/smakelijke';
-import useProductFilters from '~/src/hooks/useProductFilters';
-import { RootState } from '~/src/store';
+import { useDispatch } from 'react-redux';
 import { Productsmakelijke, SortOption } from '~/src/types/type';
 import { setSortBy } from '~/src/store/slices/filterSlice';
+import { ImageBackground } from 'react-native';
+import SubcriberCoin from '../ProducutBYCategory/Subscription';
+import SubscribedCoin from '../ProducutBYCategory/SubscribedCoin';
 
 export default function ProductHeader({
   productType,
@@ -23,6 +23,7 @@ export default function ProductHeader({
   setSelectCategory = () => {},
   gender = null,
   setGender = () => {},
+  subscription = false,
 }: {
   productType: string;
   selectCategory?: string;
@@ -32,9 +33,8 @@ export default function ProductHeader({
   setGender?: Dispatch<React.SetStateAction<'male' | 'female' | null>>;
   insets: { top: number };
   data: Productsmakelijke[] | any;
+  subscription?: boolean;
 }) {
-  // const { data } = useGetSmakelijkeProductsQuery(null);
-  // const { filteredProducts, updateSortBy } = useProductFilters(data, productType);
   const dispatch = useDispatch();
   const updateSortBy = (sortOption: SortOption) => dispatch(setSortBy(sortOption));
   return (
@@ -59,6 +59,7 @@ export default function ProductHeader({
             />
           </View>
         )}
+        {subscription && <SubscribedCoin />}
         {selectCategory === 'Gym Wear' && gender === 'female' && <ShopWomenHeader />}
         {(selectCategory !== 'Gym Wear' || gender !== null) && (
           <>

@@ -8,27 +8,37 @@ import { sliderData, suppdProductCategories } from '../constant';
 const useProductFilters = (initialProducts: Productsmakelijke[] = [], productType: string) => {
   const dispatch = useDispatch();
   const {
-    category,
-    sortBy,
-    filters: extraFilters,
+    // category,
+    // sortBy,
+    // filters: extraFilters,
+    // search,
   } = useSelector((state: RootState) => state.filter);
+  const category = useSelector((s: RootState) => s.filter.category);
+  const sortBy = useSelector((s: RootState) => s.filter.sortBy);
+  const search = useSelector((s: RootState) => s.filter.search);
+  const price = useSelector((s: RootState) => s.filter.filters.price);
+  /* ───────────────────────── SEARCH ───────────────────────── */
+
+  const searchProducts = useMemo(() => {
+    if (!search) return initialProducts;
+    return initialProducts.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()));
+  }, [initialProducts, search]);
 
   /* ───────────────────────── CATEGORY ───────────────────────── */
 
   const productsByCategory = useMemo(() => {
-    if (category?.toLowerCase() === 'alle') return initialProducts;
-    return initialProducts.filter(
-      (p) => p.categories[1]?.toLowerCase() === category?.toLowerCase()
-    );
-  }, [initialProducts, category]); // ← added initialProducts
+    if (category?.toLowerCase() === 'alle') return searchProducts;
+    return productType === 'fueld'
+      ? searchProducts.filter((p) => p.categories[0]?.toLowerCase() === category?.toLowerCase())
+      : searchProducts.filter((p) => p.categories[1]?.toLowerCase() === category?.toLowerCase());
+  }, [category, productType, searchProducts]);
 
   /* ───────────────────────── PRICE FILTER ───────────────────── */
   const filteredProducts = useMemo(() => {
     if (!productsByCategory.length) return [];
-    console.log('hey');
-    if (!extraFilters?.price?.length) return productsByCategory;
+    if (!price?.length) return productsByCategory;
 
-    const ranges = extraFilters.price;
+    const ranges = price;
     return productsByCategory.filter((product) => {
       if (productType === 'cookd') {
         const prices = product.metadata?.weight_options?.map((o) => +o.price) ?? [];
@@ -67,7 +77,7 @@ const useProductFilters = (initialProducts: Productsmakelijke[] = [], productTyp
         }
       });
     });
-  }, [productsByCategory, extraFilters.price, productType]);
+  }, [productsByCategory, price, productType]);
   /* ───────────────────────── SORTING ────────────────────────── */
   const sortProducts = useCallback(
     (products: Productsmakelijke[]): Productsmakelijke[] => {
@@ -124,7 +134,6 @@ const useProductFilters = (initialProducts: Productsmakelijke[] = [], productTyp
   const finalProducts = useMemo(() => {
     const sorted = sortProducts(filteredProducts);
     const slider = productType === 'suppd' ? suppdProductCategories : sliderData;
-
     // Inject slider + dummies based on number of products
     if (sorted.length >= 4) {
       return [...sorted.slice(0, 4), slider, { id: 'dummy', type: 'dummy' }, ...sorted.slice(4)];
@@ -157,9 +166,8 @@ const useProductFilters = (initialProducts: Productsmakelijke[] = [], productTyp
   const resetAllFilters = useCallback(() => dispatch(resetFilters()), [dispatch]);
 
   /* ───────────────────────── RETURN ─────────────────────────── */
-
   return {
-    filters: { category, sortBy, filters: extraFilters },
+    filters: { category, sortBy, filters: price },
     filteredProducts: finalProducts,
     updateCategory,
     updateSortBy,

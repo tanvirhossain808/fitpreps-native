@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, YStack, XStack, Portal, Text } from 'tamagui';
 import { router } from 'expo-router';
 import { AntDesign } from '@expo/vector-icons';
@@ -10,12 +10,36 @@ import DatePicker from '~/src/components/shared/DatePicker';
 import DatePickerCalendar from 'public/images/calendar.svg';
 import { DateData } from 'react-native-calendars';
 
-export default function CartDatePicker({ cartType = 'meals' }: { cartType?: string }) {
+export default function CartDatePicker({
+  cartType = 'meals',
+  handleDateSelect,
+  date = '',
+}: {
+  cartType?: string;
+  handleDateSelect?: (date: any) => any;
+  date?: string;
+}) {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState<DateData | null>(null);
-
+  useEffect(() => {
+    if (!selectedDate) return;
+    if (!selectedDate) {
+    }
+    if (handleDateSelect) {
+      handleDateSelect(selectedDate);
+    }
+  }, [selectedDate]);
+  useEffect(() => {
+    if (date) {
+      setSelectedDate({ dateString: date } as any);
+    }
+  }, []);
+  console.log(selectedDate, 'sel');
   const toggleDatePicker = () => setShowDatePicker(!showDatePicker);
   const formatSelectedDate = (date: DateData | null) => {
+    if (typeof date === 'string') {
+      return date;
+    }
     if (!date) return 'Pick delivery date';
     const dateObj = new Date(date.dateString);
     return dateObj.toLocaleDateString('en-US', {
@@ -72,7 +96,7 @@ export default function CartDatePicker({ cartType = 'meals' }: { cartType?: stri
             onPress={() => setShowDatePicker(!showDatePicker)}>
             <DatePickerCalendar size={20} />
             <Text alignSelf="stretch" flex={1} color="#8E95A2" fontSize={14}>
-              {formatSelectedDate(selectedDate)}
+              {date ? date : formatSelectedDate(selectedDate)}
             </Text>
             {showDatePicker ? (
               <Entypo name="chevron-small-up" size={20} color="#1E1F20" />

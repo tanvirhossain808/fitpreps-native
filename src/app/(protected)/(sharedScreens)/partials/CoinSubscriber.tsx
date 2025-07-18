@@ -30,8 +30,9 @@ export default function CoinSubscriber() {
         <Button
           onPress={() =>
             router.push({
-              pathname: '/(navigator)/(tabs)/meals',
-              params: { product: 'fueld' },
+              pathname: '/(protected)/(navigator)/(tabs)/meals',
+              // @ts-ignore
+              params: { product: 'fueld', subscription: true as boolean },
             })
           }
           color="white"

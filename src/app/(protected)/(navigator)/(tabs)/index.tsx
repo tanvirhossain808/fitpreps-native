@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import HomeIntroVideoSlider from '~/src/components/home/HomeIntroVideoSlider';
 import ReviewSlider from '~/src/components/home/ReviewSlider';
 import WeeklyOffer from '~/src/components/home/WeeklyOffer';
+import Toast from 'react-native-toast-message';
 export default function Home() {
   const [selectCategory, setSelectedCategory] = useState<number | null>(null);
   useEffect(() => {
@@ -28,7 +29,32 @@ export default function Home() {
 
     return () => backHandler.remove();
   }, []);
-
+  const handleOnpress = (path: string, sharedScreen: boolean, pathName: string) => () => {
+    // if (pathName === '/(sharedScreens)/subscription') {
+    //   router.push({
+    //     pathname: pathName as any,
+    //     params: { product: path, subscription: true as boolean },
+    //   });
+    // }
+    console.log('press');
+    if (path === '/(sharedScreens)/tracking') {
+      Toast.show({
+        type: 'success',
+        text1: 'Tracking is not available yet',
+      });
+      return;
+    }
+    if (sharedScreen) {
+      router.push({
+        pathname: `/(sharedScreens)/productSelect/${path}` as any,
+      });
+    } else {
+      router.push({
+        pathname: pathName as any,
+        params: { product: path },
+      });
+    }
+  };
   return (
     <>
       <StatusBar style="dark" />
@@ -65,18 +91,7 @@ export default function Home() {
                           borderRadius: 12,
                           borderColor: selectCategory === i ? border : 'transparent',
                         }}
-                        onPress={() => {
-                          if (sharedScreen) {
-                            router.push({
-                              pathname: `/(sharedScreens)/productSelect/${path}` as any,
-                            });
-                          } else {
-                            router.push({
-                              pathname: pathName as any,
-                              params: { product: path },
-                            });
-                          }
-                        }}
+                        onPress={handleOnpress(path, sharedScreen as boolean, pathName)}
                         onPressIn={() => setSelectedCategory(i)}
                         onPressOut={() => setSelectedCategory(null)}>
                         <Image source={img} width={width} h={'126'} borderRadius={'$3'} />

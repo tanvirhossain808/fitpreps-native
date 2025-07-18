@@ -3,11 +3,13 @@ import Feather from '@expo/vector-icons/Feather';
 import Octicons from '@expo/vector-icons/Octicons';
 import { useNavigation } from '@react-navigation/native';
 import { router } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Input, Text, TextProps, XStack } from 'tamagui';
 import { RootState } from '~/src/store';
 import { DrawerNavigation } from '~/src/types/navigation';
+import { setSearch as setSearchAction } from '~/src/store/slices/filterSlice';
 
 export default function TopSearchbar({
   placeholder,
@@ -32,6 +34,14 @@ export default function TopSearchbar({
   };
 
   const cartQuantity = useSelector((s: RootState) => s.cart.quantity);
+  const dispatch = useDispatch();
+  const [search, setSearch] = useState('');
+  const handleSearch = () => {
+    dispatch(setSearchAction(search));
+  };
+  useEffect(() => {
+    if (!search) dispatch(setSearchAction(''));
+  }, [search]);
   return (
     <XStack p="$4" justifyContent="space-between" gap="$3" flexWrap="wrap" width="100%">
       <XStack flex={1} alignItems="center" gap="1">
@@ -59,6 +69,8 @@ export default function TopSearchbar({
               placeholder={placeholder}
               fontSize={12}
               flex={1}
+              value={search}
+              onChangeText={setSearch}
               focusStyle={{
                 borderColor: 'transparent',
                 outlineWidth: 0,
@@ -68,7 +80,7 @@ export default function TopSearchbar({
               bg="transparent"
               borderColor="$colorTransparent"
             />
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleSearch}>
               <Octicons name="search" size={20} color="black" />
             </TouchableOpacity>
           </XStack>
@@ -93,7 +105,7 @@ export default function TopSearchbar({
           justifyContent="center"
           borderRadius={50}
           bg="#ffede5">
-          <TouchableOpacity onPress={() => router.push('/cart')}>
+          <TouchableOpacity onPress={() => router.push('/sub-cart/SubsProductsCart')}>
             <Feather name="shopping-cart" size={18} color="#FD4F01" />
           </TouchableOpacity>
           <XStack

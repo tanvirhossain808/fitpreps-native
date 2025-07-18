@@ -108,7 +108,13 @@ export function MapModal({
               <Text mt="$1" color="#1E1F20" fontSize={14}>
                 Street name, Block no., Locality, City Name, State - 000000.
               </Text>
-              <Button color="white" fontSize={16} fontWeight={700} bg="#FD4F01" h={45}>
+              <Button
+                onPress={() => onOpenChange(false)}
+                color="white"
+                fontSize={16}
+                fontWeight={700}
+                bg="#FD4F01"
+                h={45}>
                 Confirm
               </Button>
             </YStack>
@@ -129,7 +135,7 @@ interface MapViewerProps {
 function MapViewer({ onLocationSelect }: MapViewerProps) {
   const [locationName, setLocationName] = useState('Tap on the map');
   const [region, setRegion] = useState<Region>({
-    latitude: 23.8103, // Default to Dhaka coordinates
+    latitude: 23.8103,
     longitude: 90.4125,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
@@ -223,7 +229,12 @@ function MapViewer({ onLocationSelect }: MapViewerProps) {
           {locationName}
         </Text>
         <Button
-          onPress={() => {}}
+          onPress={() => {
+            onLocationSelect?.({
+              address: locationName,
+              coordinates: region,
+            });
+          }}
           backgroundColor="$orange9"
           color="white"
           fontSize="$5"

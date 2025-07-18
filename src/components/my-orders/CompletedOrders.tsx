@@ -51,7 +51,7 @@ export default function CompletedOrders() {
             <TouchableOpacity
               onPress={() =>
                 router.push({
-                  pathname: '/(orders)/order-details',
+                  pathname: '/(protected)/(orders)/order-details',
                   params: {},
                 })
               }>
@@ -68,7 +68,7 @@ export default function CompletedOrders() {
                 <TouchableOpacity
                   onPress={() =>
                     router.push({
-                      pathname: '/(orders)/order-details',
+                      pathname: '/(protected)/(orders)/order-details',
                       params: {},
                     })
                   }>

@@ -109,8 +109,9 @@ export default function CartPay({
         fontSize={16}
         fontWeight={700}
         color="white"
-        // onPress={() => setCurrentStep(1)}
-        onPress={handleCheckout}>
+        onPress={() => setCurrentStep(1)}
+        // onPress={handleCheckout}
+      >
         Checkout
       </Button>
     </YStack>

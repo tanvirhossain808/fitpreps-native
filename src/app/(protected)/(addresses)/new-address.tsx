@@ -127,7 +127,7 @@ export default function NewAddress() {
                       <TouchableOpacity
                         onPress={() =>
                           router.push({
-                            pathname: '/(addresses)/current-location',
+                            pathname: '/current-location',
                             params: {},
                           })
                         }>
@@ -212,7 +212,7 @@ export default function NewAddress() {
                 <Button
                   onPress={() =>
                     router.push({
-                      pathname: '/(navigator)/addresses',
+                      pathname: '/addresses',
                       params: {},
                     })
                   }

@@ -107,6 +107,7 @@ export type Productsmakelijke = {
   categories: string[];
   metadata: {
     dose?: string;
+    coin?: number;
     _price: string;
     _product_background_color: string;
     _stock: string;
@@ -135,6 +136,8 @@ export type Productsmakelijke = {
     price: string;
   };
 };
+
+export type SubscribedProduct = Productsmakelijke;
 
 export type SortOption = 'price_asc' | 'price_desc' | 'recent' | 'oldest';
 
@@ -217,4 +220,30 @@ export type Coupon = {
   minimumAmount: string;
   maximumAmount: string;
   totalDiscount: any;
+};
+export type FormDataType = {
+  email: string;
+  password: string;
+  first_name: string;
+  last_name: string;
+  confirm_password?: string; // Add this if you need to handle confirm password
+};
+export type SubPurchaseType = {
+  name: string;
+  plans: SubPlan;
+};
+
+export type SubPlan = {
+  title: string;
+  name: string;
+  badge: string;
+  price: number;
+  coins: number;
+  bonusCoins: number;
+  id: string;
+  originalPrice: number;
+  shippingPrice: number;
+  average: number;
+  planType: string;
+  points?: undefined;
 };

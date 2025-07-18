@@ -3,7 +3,8 @@ import Feather from '@expo/vector-icons/Feather';
 import Coin from 'public/images/coin.svg';
 import { TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
-export default function SubsHeader() {
+import { SubPlan } from '~/src/types/type';
+export default function SubsHeader({ selectedSubPlan }: { selectedSubPlan: SubPlan }) {
   return (
     <YStack gap="$3">
       <XStack alignItems="center" gap="$2" justifyContent="space-between" mt="$4">
@@ -17,16 +18,16 @@ export default function SubsHeader() {
         <YStack>
           <XStack alignItems="center" justifyContent="space-between">
             <Text color="#1E1F20" fontSize={16} fontWeight={500}>
-              Weekly Plan: Starter Pack
+              {selectedSubPlan.planType} Plan: {selectedSubPlan.name}
             </Text>
             <Text color="#1E1F20" fontSize={16} fontWeight={700}>
-              €63
+              €{Number(selectedSubPlan?.price).toFixed(2)}
             </Text>
           </XStack>
           <XStack mt={1} alignItems="center" gap={8}>
             <XStack alignItems="center" gap={4}>
               <Text color="#FD4F01" fontSize={14} fontWeight={700}>
-                630
+                {selectedSubPlan.coins}
               </Text>
               <Coin />
             </XStack>
@@ -35,7 +36,7 @@ export default function SubsHeader() {
             </Text>
             <XStack alignItems="center" gap={4}>
               <Text color="#FD4F01" fontSize={14} fontWeight={700}>
-                630
+                {selectedSubPlan.bonusCoins}
               </Text>
               <Coin />
               <View px={8} py={4} backgroundColor="#E5F8EA" borderRadius={40}>
@@ -48,7 +49,7 @@ export default function SubsHeader() {
         </YStack>
       </YStack>
       <XStack alignItems="center" justifyContent="flex-end">
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.replace('/subscription')}>
           <Text color="#FD4F01" fontSize={14} fontWeight={700} textDecorationLine="underline">
             Change Subscription Plan
           </Text>

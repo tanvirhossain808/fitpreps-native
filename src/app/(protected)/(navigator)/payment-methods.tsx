@@ -46,7 +46,7 @@ export default function PaymentMethods() {
                           style={style.manage}
                           onPress={() =>
                             router.push({
-                              pathname: '/(payments)/manage-card',
+                              pathname: '/manage-card',
                               params: {},
                             })
                           }>
@@ -65,7 +65,7 @@ export default function PaymentMethods() {
             <Button
               onPress={() =>
                 router.push({
-                  pathname: '/(payments)/add-cards',
+                  pathname: '/add-cards',
                   params: {},
                 })
               }

@@ -1,8 +1,7 @@
 import { Text, YStack, XStack, Image, debounce } from 'tamagui';
-import React, { ReactElement, useCallback, useEffect, useMemo } from 'react';
+import React, { ReactElement, useCallback, useMemo } from 'react';
 import { FlatList, TouchableOpacity } from 'react-native';
-import useProductFilters from '~/src/hooks/useProductFilters';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setCategory } from '~/src/store/slices/filterSlice';
 
 export default function SelectedFoodCategories({
@@ -19,7 +18,6 @@ export default function SelectedFoodCategories({
   activeStatsBarInfo: { name: string; color: string; tentColor: string } | null;
 }) {
   const [selectFoodCategory, setSelectedFoodCategory] = React.useState<string>('All');
-  // const { updateCategory } = useProductFilters();
   const dispatch = useDispatch();
   const handleUpdateCategory = (category: string, dutchName: string) => {
     setSelectedFoodCategory(() => category);

@@ -4,12 +4,58 @@ import { Feather } from '@expo/vector-icons';
 import Fitpreps from 'public/images/logo/fitpreps.svg';
 import { TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
+import { useRegisterMutation } from '~/src/store/apiSlices/auth/userSlice';
+import { FormDataType, RegisterBody } from '~/src/types/type';
+import Toast from 'react-native-toast-message';
 
 export default function CreateAccount() {
   const [showPassword, setShowPassword] = useState({
     password: false,
     confirmPassword: false,
   });
+  const [registerMutation, { isLoading, error, data }] = useRegisterMutation();
+  const [formData, setFormData] = useState<FormDataType>({
+    email: '',
+    password: '',
+    first_name: '',
+    confirm_password: '',
+    last_name: '',
+  });
+  const handleRegister = () => {
+    if (formData.password !== formData.confirm_password) {
+      Toast.show({
+        type: 'error',
+        text1: 'Passwords do not match',
+      });
+      return;
+    }
+    registerMutation({
+      email: formData.email,
+      password: formData.password,
+      metadata: {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+      },
+    })
+      .unwrap()
+      .then((data) => {
+        console.log(data, 'data');
+        Toast.show({
+          type: 'success',
+          text1: data.message,
+        });
+        router.replace('/(tabs)');
+      })
+      .catch((error) => {
+        console.log(error);
+        Toast.show({
+          type: 'error',
+          text1: error.data.message,
+          text2: 'Please try again',
+        });
+      });
+  };
+  console.log(formData);
   return (
     <YStack mt={180} gap={28} alignItems="center" px="$7" pb={50}>
       <XStack flex={1} alignItems="center" justifyContent="center">
@@ -38,6 +84,10 @@ export default function CreateAccount() {
                 elevation={0.4}
                 borderWidth={0.6}>
                 <Input
+                  value={formData[field.inputType as keyof FormDataType]}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, [field.inputType as keyof FormDataType]: text })
+                  }
                   flex={0}
                   p={0}
                   width="100%"
@@ -73,6 +123,10 @@ export default function CreateAccount() {
                   placeholder={field.placeholder}
                   color="#8E95A2"
                   fontSize={14}
+                  value={formData[field.inputType as keyof FormDataType]}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, [field.inputType as keyof FormDataType]: text })
+                  }
                   secureTextEntry={!showPassword[field.name as keyof typeof showPassword]}
                   keyboardType={field.type === 'email-address' ? 'email-address' : 'default'}
                   borderWidth={0}
@@ -122,7 +176,8 @@ export default function CreateAccount() {
       </YStack>
       <XStack justifyContent="center">
         <Button
-          onPress={() => router.replace('/(tabs)')}
+          // onPress={() => router.replace('/(tabs)')}
+          onPress={handleRegister}
           minWidth={0}
           px="$5"
           backgroundColor="#FD4F01"
@@ -172,29 +227,34 @@ const creaetAccoungFeilds = [
     icon: '',
     type: 'default',
     name: 'firstName',
+    inputType: 'first_name',
   },
   {
     placeholder: 'Enter Last Name',
     icon: '',
     type: 'default',
     name: 'lastName',
+    inputType: 'last_name',
   },
   {
     placeholder: 'Enter email',
     type: 'email-address',
     icon: '',
-    name: '',
+    name: 'email',
+    inputType: 'email',
   },
   {
     placeholder: 'Enter password',
     icon: ({ ...props }) => <Feather {...props} />,
     type: 'password',
     name: 'password',
+    inputType: 'password',
   },
   {
     placeholder: 'Confirm password',
     icon: ({ ...props }) => <Feather {...props} />,
     type: 'password',
     name: 'confirmPassword',
+    inputType: 'confirm_password',
   },
 ];

@@ -72,7 +72,7 @@ export default function Addresses() {
                           onPressOut={() => setIsPressEdit(false)}
                           onPress={() =>
                             router.push({
-                              pathname: '/(addresses)/edit-address',
+                              pathname: '/edit-address',
                               params: {},
                             })
                           }>
@@ -122,7 +122,7 @@ export default function Addresses() {
               flex={1}
               onPress={() =>
                 router.push({
-                  pathname: '/(addresses)/new-address',
+                  pathname: '/new-address',
                   params: {},
                 })
               }>
