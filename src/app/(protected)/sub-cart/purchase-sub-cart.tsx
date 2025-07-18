@@ -8,34 +8,44 @@ import PurchaseStep2 from './partials/purchase-sub/PurchaseStep-2';
 import PurchaseStep3 from './partials/purchase-sub/PurchaseStep-3';
 import { subscriptionPlans } from '~/src/constant';
 import { SubPlan as sp } from '~/src/types/type';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { resetSubscriptionForm } from '~/src/store/slices/subscriptionSlice';
+import { RootState } from '~/src/store';
 export default function PurchaseSubCart() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [isShowMapModal, setShowMapModal] = useState<boolean>(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isEditAddress, setIsEditAddress] = useState(false);
   const { selectedPlan: subPlan } = useLocalSearchParams() || {};
+  //selected index is the id of the selected address
+  const [selectedIndex, setSelectedIndex] = useState<string | null>(null);
   const [selectedSubPlan, setSelectedSubPlan] = useState<sp>(
     subPlan ? JSON.parse(subPlan as string) : null
   );
+  console.log(selectedSubPlan, 'selectedSubPlan');
   const dispatch = useDispatch();
   useEffect(() => {
+    setSelectedSubPlan(subPlan ? JSON.parse(subPlan as string) : null);
     return () => {
       dispatch(resetSubscriptionForm());
+      // console.log('hey');
     };
-  }, []);
+  }, [subPlan]);
+  const address = useSelector((s: RootState) => s.address);
   const cartSteps: { [key: number]: any } = {
     0: (
       <PurchaseStep1
         selectedSubPlan={selectedSubPlan}
         setCurrentStep={setCurrentStep}
         cartType={'meals' as string}
-        orderData={{}}
       />
     ),
     1: (
       <PurchaseStep2
+        selectedSubPlan={selectedSubPlan}
+        setSelectedSubPlan={setSelectedSubPlan}
+        selectedIndex={selectedIndex}
+        setSelectedIndex={setSelectedIndex}
         isAddressModalOpen={isAddressModalOpen}
         setIsAddressModalOpen={setIsAddressModalOpen}
         setCurrentStep={setCurrentStep}
@@ -45,7 +55,14 @@ export default function PurchaseSubCart() {
         setShowMapModal={setShowMapModal}
       />
     ),
-    2: <PurchaseStep3 setCurrentStep={setCurrentStep} subsType={'subscription' as string} />,
+    2: (
+      <PurchaseStep3
+        selectedIndex={selectedIndex as any}
+        setSelectedIndex={setSelectedIndex as any}
+        setCurrentStep={setCurrentStep}
+        subsType={'subscription' as string}
+      />
+    ),
   };
 
   const CurrentStep = cartSteps[currentStep] || cartSteps[0];

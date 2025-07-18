@@ -21,6 +21,7 @@ import {
 import DrawerPageHeader from '~/src/components/drawer/DrawerPageHeader';
 import Mark from 'public/images/mark.svg';
 import { router } from 'expo-router';
+import Toast from 'react-native-toast-message';
 export default function NewAddress() {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   useEffect(() => {
@@ -110,13 +111,14 @@ export default function NewAddress() {
                       Contact Details
                     </Text>
                     {contactFeilds.map((field) => (
-                      <Input
-                        key={field.id}
-                        placeholder={field.placeholder}
-                        // value={formData[field.id as keyof typeof formData] as string}
-                        // onChangeText={(text) => handleInputChange(field.id, text)}
-                        {...inputStyle}
-                      />
+                      <Fieldset key={field.id}>
+                        <Input
+                          placeholder={field.placeholder}
+                          // value={formData[field.id as keyof typeof formData] as string}
+                          // onChangeText={(text) => handleInputChange(field.id, text)}
+                          {...inputStyle}
+                        />
+                      </Fieldset>
                     ))}
                   </YStack>
                   <YStack gap="$3">
@@ -125,11 +127,17 @@ export default function NewAddress() {
                         Address
                       </Text>
                       <TouchableOpacity
-                        onPress={() =>
-                          router.push({
-                            pathname: '/current-location',
-                            params: {},
-                          })
+                        onPress={
+                          () =>
+                            Toast.show({
+                              type: 'error',
+                              text1: 'Error',
+                              text2: 'currently location is not available',
+                            })
+                          // router.push({
+                          //   pathname: '/current-location',
+                          //   params: {},
+                          // })
                         }>
                         <XStack alignItems="center" gap="$2">
                           <Mark />

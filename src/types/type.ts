@@ -247,3 +247,21 @@ export type SubPlan = {
   planType: string;
   points?: undefined;
 };
+export type AddressType = {
+  _id: string;
+  contactDetails: {
+    name: string;
+    email: string;
+    phone?: string;
+  };
+  addressDetails: {
+    // houseNo: string;
+    street: string;
+    apartment: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
+  };
+  addressType: string;
+};

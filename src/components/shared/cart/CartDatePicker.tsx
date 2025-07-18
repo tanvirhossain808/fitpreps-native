@@ -14,10 +14,12 @@ export default function CartDatePicker({
   cartType = 'meals',
   handleDateSelect,
   date = '',
+  isDisabled = false,
 }: {
   cartType?: string;
   handleDateSelect?: (date: any) => any;
   date?: string;
+  isDisabled?: boolean;
 }) {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState<DateData | null>(null);
@@ -72,6 +74,7 @@ export default function CartDatePicker({
             NOTE: We don’t deliver on Saturday and Sunday.
           </Text>
           <TouchableOpacity
+            disabled={isDisabled}
             style={{
               display: 'flex',
               alignItems: 'center',

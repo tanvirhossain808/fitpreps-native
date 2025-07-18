@@ -3,27 +3,23 @@ import { Button, Text, View, XStack, YStack } from 'tamagui';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '~/src/store';
-import { setOrderData } from '~/src/store/slices/cartSlice';
 import Toast from 'react-native-toast-message';
-import { setStartDate } from '~/src/store/slices/subscriptionSlice';
+import { SubPlan } from '~/src/types/type';
 
 export default function PurchaseSubPay({
   setCurrentStep,
-  orderData,
+  selectedSubPlan,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
-  orderData: any;
+  selectedSubPlan: SubPlan;
 }) {
   // const dispatch = useDispatch();
   // useEffect(() => {
   //   dispatch(setTotal as any);
   // }, []);
-  const { total, subTotal, shipping, tax } = useSelector((s: RootState) => s.cart);
-  const cartItems = useSelector((s: RootState) => s.cart.cartItems);
-  const dispatch = useDispatch();
   const isDateSelected = useSelector((s: RootState) => s.subPurchase.startDate);
   const handleCheckout = () => {
-    if (!isDateSelected) {
+    if (!isDateSelected && selectedSubPlan.planType.toLocaleLowerCase() !== 'monthly') {
       return Toast.show({
         type: 'error',
         text1: 'Please select your subscription start date',
@@ -46,7 +42,9 @@ export default function PurchaseSubPay({
             Subtotal
           </Text>
           <Text fontSize={14} fontWeight={500} color="#1E1F20">
-            €{subTotal.toFixed(2)}
+            €
+            {Number(selectedSubPlan.price.toFixed(2)) -
+              Number(selectedSubPlan.shippingPrice.toFixed(2))}
           </Text>
         </XStack>
         <XStack alignItems="center" justifyContent="space-between">
@@ -54,7 +52,7 @@ export default function PurchaseSubPay({
             Shipping cost
           </Text>
           <Text fontSize={14} fontWeight={500} color="#1E1F20">
-            €{(shipping + tax).toFixed(2)}
+            €{selectedSubPlan.shippingPrice.toFixed(2)}
           </Text>
         </XStack>
       </YStack>
@@ -64,7 +62,7 @@ export default function PurchaseSubPay({
           Total
         </Text>
         <Text fontWeight={700} fontSize={14} color="#1E1F20">
-          €{total.toFixed(2)}
+          €{selectedSubPlan.price.toFixed(2)}
         </Text>
       </XStack>
       <Button

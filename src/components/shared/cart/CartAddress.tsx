@@ -12,13 +12,19 @@ import {
   AnimatePresence,
   View,
 } from 'tamagui';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Keyboard, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import Mark from 'public/images/mark.svg';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { useDispatch, useSelector } from 'react-redux';
+import { AddressType } from '~/src/types/type';
+import { addAddress, updateAddress } from '~/src/store/slices/addressSlice';
+import { RootState } from '~/src/store';
+import Toast from 'react-native-toast-message';
 
 interface CartAddressProps {
   open: boolean;
+  addressId?: string;
   isEditAddress?: boolean;
   setIsEditAddress?: (isEditAddress: boolean) => void;
   address?: any | false;
@@ -31,7 +37,7 @@ interface CartAddressProps {
     email: string;
     addressType: 'home' | 'work' | 'other';
     apartment: string;
-    addressLine2: string;
+    street: string;
     city: string;
     zipCode: string;
     state: string;
@@ -41,6 +47,7 @@ interface CartAddressProps {
 
 export function CartAddress({
   open,
+  addressId,
   onOpenChange,
   onSave,
   address = false,
@@ -56,12 +63,23 @@ export function CartAddress({
     email: '',
     addressType: 'home' as 'home' | 'work' | 'other',
     apartment: '',
-    addressLine2: '',
+    street: '',
     city: '',
     zipCode: '',
     state: '',
   });
   const [isEditSuccessOpen, setIsEditSuccessOpen] = React.useState(false);
+  const initialError = {
+    name: '',
+    email: '',
+    addressType: '',
+    apartment: '',
+    street: '',
+    city: '',
+    zipCode: '',
+    state: '',
+  };
+  const [error, setErrors] = useState(initialError);
   const inputStyle = {
     py: 10,
     elevation: 2,
@@ -75,7 +93,9 @@ export function CartAddress({
     borderRadius: 8,
     borderWidth: 1,
   };
-
+  // const disPatch = useDispatch();
+  let type: AddressType;
+  const selector = useSelector((s: RootState) => s.address);
   const formFields = [
     {
       id: 'apartment',
@@ -83,7 +103,7 @@ export function CartAddress({
       fullWidth: true,
     },
     {
-      id: 'addressLine2',
+      id: 'street',
       placeholder: 'Block no., Street name, Area/Locality',
       fullWidth: true,
     },
@@ -104,19 +124,124 @@ export function CartAddress({
       fullWidth: true,
     },
   ];
-  const handleSubmit = () => {
+  useEffect(() => {
     if (isEditAddress) {
-      // onSave(formData); // Add this line to save the edited address
+      const selectedAddress = selector.find((address) => address._id === addressId);
+      if (selectedAddress)
+        setFormData({
+          name: selectedAddress.contactDetails.name,
+          email: selectedAddress.contactDetails.email,
+          addressType: selectedAddress.addressType as any,
+          apartment: selectedAddress.addressDetails.apartment,
+          street: selectedAddress.addressDetails.street,
+          city: selectedAddress.addressDetails.city,
+          zipCode: selectedAddress.addressDetails.zipCode,
+          state: selectedAddress.addressDetails.state,
+        });
+    }
+  }, [isEditAddress, addressId, selector]);
+  const disPatch = useDispatch();
+  const handleSubmit = () => {
+    setErrors(initialError);
+    const newErrors: Partial<typeof error> = {};
+
+    if (!formData.name?.trim()) {
+      newErrors.name = 'name is required';
+    }
+    if (!formData.email?.trim()) {
+      newErrors.email = 'email is required';
+    }
+    if (!formData.addressType?.trim()) {
+      newErrors.addressType = 'address type is required';
+    }
+    if (!formData.apartment?.trim()) {
+      newErrors.apartment = 'apartment is required';
+    }
+    if (!formData.street?.trim()) {
+      newErrors.street = 'street is required';
+    }
+    if (!formData.city?.trim()) {
+      newErrors.city = 'city is required';
+    }
+    if (!formData.zipCode?.trim()) {
+      newErrors.zipCode = 'zip code is required';
+    }
+    if (!formData.state?.trim()) {
+      newErrors.state = 'state is required';
+    }
+
+    setErrors(newErrors as typeof error);
+
+    // If any errors exist, return early
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
+
+    if (isEditAddress) {
+      disPatch(
+        updateAddress({
+          _id: addressId,
+          contactDetails: {
+            name: formData.name,
+            email: formData.email,
+          },
+          addressDetails: {
+            apartment: formData.apartment,
+            street: formData.street,
+            city: formData.city,
+            zipCode: formData.zipCode,
+            state: formData.state,
+          },
+          addressType: formData.addressType,
+        })
+      );
       setIsEditSuccessOpen(true);
     } else {
       if (setIsEditAddress) {
-        // setIsEditAddress(false);
+        setIsEditAddress(false);
         if (setConFirmAddress) {
           // setConFirmAddress(true);
+          disPatch(
+            addAddress({
+              contactDetails: {
+                name: formData.name,
+                email: formData.email,
+              },
+              addressDetails: {
+                apartment: formData.apartment,
+                street: formData.street,
+                city: formData.city,
+                zipCode: formData.zipCode,
+                state: formData.state,
+              },
+              addressType: formData.addressType,
+            })
+          );
         }
+        disPatch(
+          addAddress({
+            contactDetails: {
+              name: formData.name,
+              email: formData.email,
+            },
+            addressDetails: {
+              apartment: formData.apartment,
+              street: formData.street,
+              city: formData.city,
+              zipCode: formData.zipCode,
+              state: formData.state,
+            },
+            addressType: formData.addressType,
+          })
+        );
+        Toast.show({
+          type: 'success',
+          text1: 'Address added successfully',
+          position: 'top',
+        });
       }
       // onSave(formData);
-      onOpenChange(false);
+      // onOpenChange(false);
     }
 
     setFormData({
@@ -124,7 +249,7 @@ export function CartAddress({
       email: '',
       addressType: 'home',
       apartment: '',
-      addressLine2: '',
+      street: '',
       city: '',
       zipCode: '',
       state: '',
@@ -157,6 +282,11 @@ export function CartAddress({
                     placeholder={field?.placeholder}
                     keyboardType={field?.keyboardType}
                   />
+                  {error[fieldId as keyof typeof error] && (
+                    <Text mt={4} color="red" fontSize={12}>
+                      {error[fieldId as keyof typeof error]}
+                    </Text>
+                  )}
                 </Fieldset>
               );
             })}
@@ -177,6 +307,11 @@ export function CartAddress({
               placeholder={currentField.placeholder}
               keyboardType={currentField.keyboardType}
             />
+            {error[currentField.id as keyof typeof error] && (
+              <Text mt={4} color="red" fontSize={12}>
+                {error[currentField.id as keyof typeof error]}
+              </Text>
+            )}
           </Fieldset>
         );
       }
@@ -250,19 +385,33 @@ export function CartAddress({
                       Contact Details
                     </Text>
 
-                    <Input
-                      placeholder="Name"
-                      value={formData.name}
-                      onChangeText={(text) => handleInputChange('name', text)}
-                      {...inputStyle}
-                    />
-                    <Input
-                      placeholder="Email"
-                      value={formData.email}
-                      onChangeText={(text) => handleInputChange('email', text)}
-                      keyboardType="email-address"
-                      {...inputStyle}
-                    />
+                    <Fieldset>
+                      <Input
+                        placeholder="Name"
+                        value={formData.name}
+                        onChangeText={(text) => handleInputChange('name', text)}
+                        {...inputStyle}
+                      />
+                      {error.name && (
+                        <Text mt={4} color="red" fontSize={12}>
+                          Name field is required
+                        </Text>
+                      )}
+                    </Fieldset>
+                    <Fieldset>
+                      <Input
+                        placeholder="Email"
+                        value={formData.email}
+                        onChangeText={(text) => handleInputChange('email', text)}
+                        keyboardType="email-address"
+                        {...inputStyle}
+                      />
+                      {error.email && (
+                        <Text mt={4} color="red" fontSize={12}>
+                          Email field is required
+                        </Text>
+                      )}
+                    </Fieldset>
                   </YStack>
 
                   <YStack gap={12}>
@@ -272,9 +421,13 @@ export function CartAddress({
                       </Text>
                       <TouchableOpacity
                         onPress={() => {
-                          if (setIsShowMapModal) {
-                            setIsShowMapModal(true);
-                          }
+                          // if (setIsShowMapModal) {
+                          //   setIsShowMapModal(true);
+                          // }
+                          Toast.show({
+                            type: 'error',
+                            text1: 'Feature not available yet',
+                          });
                         }}
                         style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                         <Mark />
@@ -408,19 +561,6 @@ export function CartAddress({
   );
 }
 
-/**
- * A dialog that appears after a user successfully edits an address.
- *
- * @example
- * import { EditSuccess } from 'components/shared/cart/CartAddress';
- *
- * <EditSuccess open={isEditSuccessOpen} onOpenChange={setIsEditSuccessOpen} />
- *
- * @param {Object} props The props object.
- * @prop {boolean} open Is the dialog open?
- * @prop {Function} onOpenChange Called when the dialog should be opened or closed.
- * @return {ReactElement} A dialog for editing an address.
- */
 function EditSuccess({
   open,
 
@@ -485,7 +625,7 @@ function EditSuccess({
                   onPress={() => {
                     setIsEditAddress(false);
                     setIsAddressModalOpen(false);
-                    setConFirmAddress(true);
+                    // setConFirmAddress(true);
                     // onOpenChange(false);
                     if (setIsEditAddress) {
                       setIsEditAddress(false);

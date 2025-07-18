@@ -5,19 +5,20 @@ import { useLocalSearchParams } from 'expo-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { setStartDate } from '~/src/store/slices/subscriptionSlice';
 import { RootState } from '~/src/store';
+import { SubPlan } from '~/src/types/type';
 
-export default function SubsPlan() {
+export default function SubsPlan({ selectedSubPlan }: { selectedSubPlan: SubPlan }) {
   const { subscriptionType } = useLocalSearchParams() || {};
   const dispatch = useDispatch();
   const handleDatePicker = (date: any) => {
     dispatch(setStartDate(date.dateString));
   };
   const date = useSelector((s: RootState) => s.subPurchase.startDate);
-  console.log(subscriptionType, 'd');
   return (
-    <YStack gap={12} mb="$5">
+    <YStack gap={12} mb="$5" justifyContent="space-between">
       <Saving isCommingSoon={true} />
       <CartDatePicker
+        isDisabled={selectedSubPlan?.planType === 'Monthly' ? true : false}
         date={date}
         handleDateSelect={handleDatePicker}
         cartType={'subscription' as string}

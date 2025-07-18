@@ -142,7 +142,7 @@ export default function SelectSubscriptionPlan({
                   <Text fontSize={12} fontWeight={500} color="#25272C">
                     Average{' '}
                     <Text fontSize={12} fontWeight={500} color="#25272C">
-                      ~36
+                      ~{plan.average}
                     </Text>{' '}
                     meals
                   </Text>

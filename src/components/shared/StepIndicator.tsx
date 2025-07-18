@@ -59,6 +59,9 @@ export default function StepIndicator({
     text = 'Buy Subscription';
   }
   const handleBack = () => {
+    if (currentStep === 0) {
+      return router.replace('/(tabs)/subscription');
+    }
     if (isShowMapModal && setShowMapModal) {
       setShowMapModal(false);
     } else if (isEditAddress && setIsAddressModalOpen && setIsEditAddress && !setShowMapModal) {

@@ -7,15 +7,25 @@ import { Feather } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import Paypal from 'public/images/payment/paypal.svg';
 import { router } from 'expo-router';
+import { useSelector } from 'react-redux';
+import { RootState } from '~/src/store';
 export default function PurchaseStep3({
   setCurrentStep,
+  selectedIndex,
+  setSelectedIndex,
   subsType,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  selectedIndex: number | null;
+  setSelectedIndex: React.Dispatch<React.SetStateAction<number | null>>;
   subsType?: string | undefined;
 }) {
   const [showPass, setShowPass] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('creditCard');
+  const selectedAddress = useSelector((s: RootState) =>
+    s.address.find((item) => item?._id === selectedIndex?.toString())
+  );
+  console.log(selectedAddress, 'selectedAddress');
   return (
     <YStack flex={1} padding={16} justifyContent="space-between">
       <YStack py="$5">
