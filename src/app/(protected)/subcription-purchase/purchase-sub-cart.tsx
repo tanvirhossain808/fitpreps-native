@@ -6,7 +6,6 @@ import { StatusBar } from 'expo-status-bar';
 import PurchaseStep1 from './partials/purchase-sub/PurchaseStep-1';
 import PurchaseStep2 from './partials/purchase-sub/PurchaseStep-2';
 import PurchaseStep3 from './partials/purchase-sub/PurchaseStep-3';
-import { subscriptionPlans } from '~/src/constant';
 import { SubPlan as sp } from '~/src/types/type';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetSubscriptionForm } from '~/src/store/slices/subscriptionSlice';
@@ -18,7 +17,7 @@ export default function PurchaseSubCart() {
   const [isEditAddress, setIsEditAddress] = useState(false);
   const { selectedPlan: subPlan } = useLocalSearchParams() || {};
   //selected index is the id of the selected address
-  const [selectedIndex, setSelectedIndex] = useState<string | null>(null);
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
   const [selectedSubPlan, setSelectedSubPlan] = useState<sp>(
     subPlan ? JSON.parse(subPlan as string) : null
   );
@@ -28,10 +27,8 @@ export default function PurchaseSubCart() {
     setSelectedSubPlan(subPlan ? JSON.parse(subPlan as string) : null);
     return () => {
       dispatch(resetSubscriptionForm());
-      // console.log('hey');
     };
   }, [subPlan]);
-  const address = useSelector((s: RootState) => s.address);
   const cartSteps: { [key: number]: any } = {
     0: (
       <PurchaseStep1
@@ -44,8 +41,8 @@ export default function PurchaseSubCart() {
       <PurchaseStep2
         selectedSubPlan={selectedSubPlan}
         setSelectedSubPlan={setSelectedSubPlan}
-        selectedIndex={selectedIndex}
-        setSelectedIndex={setSelectedIndex}
+        selectedIndex={selectedAddressId}
+        setSelectedIndex={setSelectedAddressId}
         isAddressModalOpen={isAddressModalOpen}
         setIsAddressModalOpen={setIsAddressModalOpen}
         setCurrentStep={setCurrentStep}
@@ -57,8 +54,8 @@ export default function PurchaseSubCart() {
     ),
     2: (
       <PurchaseStep3
-        selectedIndex={selectedIndex as any}
-        setSelectedIndex={setSelectedIndex as any}
+        selectedIndex={selectedAddressId as any}
+        setSelectedIndex={setSelectedAddressId as any}
         setCurrentStep={setCurrentStep}
         subsType={'subscription' as string}
       />

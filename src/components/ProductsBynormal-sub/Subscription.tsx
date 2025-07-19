@@ -1,4 +1,4 @@
-import { View, YStack } from 'tamagui';
+import { View } from 'tamagui';
 import ProductHeader from '../shared/ProductHeader';
 import LoadingSpinner from '../shared/Loading';
 import { lazy, Suspense } from 'react';
@@ -9,14 +9,19 @@ import { activeStatsBarInfo } from '~/src/helper';
 import { statusBarColor } from '~/src/constant';
 import { StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-const SubProductList = lazy(() => import('../shared/SubProductLists'));
+const SubProductList = lazy(() => import('./SubProductLists'));
 
-export default function Subscription({ subscription }: { subscription: boolean }) {
-  const { data, isLoading: fueldLoading } = useGetProductsQuery(null);
-  const { filteredProducts } = useProductFilters(data?.subscribedProducts, 'fueld');
-  console.log(filteredProducts, 'filterProducts');
+export default function Subscription({
+  subscription,
+  product,
+}: {
+  subscription: boolean;
+  product: string;
+}) {
+  const { data } = useGetProductsQuery(null);
+  const { filteredProducts } = useProductFilters(data?.subscribedProducts, product);
   const insets = useSafeAreaInsets();
-  const statusBarInfo = activeStatsBarInfo('fueld' as string);
+  const statusBarInfo = activeStatsBarInfo(product as string);
   return (
     <>
       <StatusBar style="light" />

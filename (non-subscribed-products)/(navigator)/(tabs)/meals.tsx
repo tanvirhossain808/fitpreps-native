@@ -11,7 +11,7 @@ import LoadingSpinner from '~/src/components/shared/Loading';
 import { useGetSmakelijkeProductsQuery } from '~/src/store/apiSlices/products/smakelijke';
 import useProductFilters from '~/src/hooks/useProductFilters';
 import { useGetProductsQuery } from '~/src/store/apiSlices/products/productsSlice';
-const ProductLists = lazy(() => import('~/src/components/shared/ProductLists'));
+const ProductLists = lazy(() => import('~/src/components/ProductWithotuSub/ProductLists'));
 export default function Home() {
   const insets = useSafeAreaInsets();
   const { product = 'cookd' } = useLocalSearchParams();

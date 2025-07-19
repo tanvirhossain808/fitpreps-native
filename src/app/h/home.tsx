@@ -13,7 +13,7 @@ import { cookdFoodCategories, foodOfItems, foodSortByOptions } from '~/src/const
 import SelectedFoodCategories from '~/src/components/shared/SelectedFoodCategories';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import FilterModal from '~/src/components/modal/Filter';
-import ProductLists from '~/src/components/shared/ProductLists';
+import ProductLists from '~/src/components/ProductWithotuSub/ProductLists';
 import { useSharedValue, withTiming } from 'react-native-reanimated';
 
 // Styled Components

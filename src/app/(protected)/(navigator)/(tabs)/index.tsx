@@ -45,11 +45,11 @@ export default function Home() {
       return;
     }
     if (sharedScreen) {
-      router.push({
+      router.replace({
         pathname: `/(sharedScreens)/productSelect/${path}` as any,
       });
     } else {
-      router.push({
+      router.replace({
         pathname: pathName as any,
         params: { product: path },
       });

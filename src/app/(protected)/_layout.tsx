@@ -1,10 +1,10 @@
-import { Slot } from 'expo-router';
+import { Stack } from 'expo-router';
 import AuthGuard from '~/src/components/auth/AuthGuard';
 
 export default function ProtectedLayout() {
   return (
     <AuthGuard>
-      <Slot screenOptions={{ headerShown: false }} />
+      <Stack screenOptions={{ headerShown: false }} />
     </AuthGuard>
   );
 }

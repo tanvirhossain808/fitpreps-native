@@ -112,10 +112,16 @@ export default function () {
                     <Button
                       disabled={pressButton === null}
                       onPress={() =>
-                        router.push({
+                        router.replace({
                           pathname:
-                            pressButton === 'meal' ? '/(tabs)/meals' : '/(tabs)/subscription',
-                          params: { product },
+                            pressButton === 'meal'
+                              ? '/(protected)/(navigator)/(tabs)/meals'
+                              : '/(protected)/(navigator)/(tabs)/subscription',
+                          params: {
+                            product,
+                            // @ts-ignore
+                            subscription: pressButton === 'meal' ? 0 : 1,
+                          },
                         })
                       }
                       py={'$3'}

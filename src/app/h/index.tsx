@@ -18,7 +18,7 @@ import SelectedFoodCategories from '~/src/components/shared/SelectedFoodCategori
 import Entypo from '@expo/vector-icons/Entypo';
 import { router, useNavigation } from 'expo-router';
 import FilterModal from '~/src/components/modal/Filter';
-import ProductLists from '~/src/components/shared/ProductLists';
+import ProductLists from '~/src/components/ProductWithotuSub/ProductLists';
 import { useFocusEffect } from '@react-navigation/native';
 
 const defaultTabBarStyle = {

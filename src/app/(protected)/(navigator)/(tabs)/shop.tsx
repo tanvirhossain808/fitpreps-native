@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { YStack } from 'tamagui';
 import LoadingSpinner from '~/src/components/shared/Loading';
 import ProductHeader from '~/src/components/shared/ProductHeader';
-import ProductLists from '~/src/components/shared/ProductLists';
+import ProductLists from '~/src/components/ProductWithotuSub/ProductLists';
 import GymProductsForWomen from '~/src/components/shared/shop/GymProductsForWomen';
 import ShopByCategoryList from '~/src/components/shop/ShopByCategoryList';
 import { suppdProductCategories } from '~/src/constant';

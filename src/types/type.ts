@@ -123,6 +123,7 @@ export type Productsmakelijke = {
     allergenen: string[];
     badges: string[];
     weight_options?: {
+      coin: number;
       weight: string;
       price: string;
     }[];

@@ -3,18 +3,19 @@ import { Productsmakelijke, SliderItem } from '~/src/types/type';
 import { useGetSmakelijkeProductsQuery } from '~/src/store/apiSlices/products/smakelijke';
 import { useTabBarVisibility } from '~/src/hooks/useTabBarVisibility';
 import { lazy, useCallback, useEffect, useRef } from 'react';
-import LoadingSpinner from './Loading';
+import LoadingSpinner from '../shared/Loading';
 import useProductFilters from '~/src/hooks/useProductFilters';
 import { Button, Text, YStack } from 'tamagui';
 import { useDispatch } from 'react-redux';
 import { resetFilters } from '~/src/store/slices/filterSlice';
 
-const SubItemList = lazy(() => import('./SubsItemsList'));
+const ProductsmakelijkeLists = lazy(() => import('../shared/ProductsmakelijkeLists'));
 
 export const unstable_settings = {
   lazy: true,
 };
-export default function SubProductList({
+export default function ProductLists({
+  productType = 'cookd',
   contentContainerStyle,
   showsVerticalScrollIndicator,
   scrollEventThrottle,
@@ -30,10 +31,7 @@ export default function SubProductList({
   data: any;
 }) {
   const { handleScroll } = useTabBarVisibility();
-  // console.log(productType, 'type');
   const dispatch = useDispatch();
-  // const { filteredProducts } = useProductFilters(data2);
-  // console.log('filt', filteredProducts);
   const flatListRef = useRef<FlatList>(null);
   useEffect(() => {
     if (flatListRef.current && data?.length > 0) {
@@ -46,10 +44,10 @@ export default function SubProductList({
 
   const renderItem = useCallback(
     ({ item, index }: { item: Productsmakelijke | SliderItem; index: number }) => {
-      return <SubItemList item={item} index={index} productType={'fueld'} />;
+      return <ProductsmakelijkeLists item={item} index={index} productType={productType} />;
     },
 
-    []
+    [productType]
   );
   if (isLoading) {
     return <LoadingSpinner color="white" />;
@@ -57,6 +55,7 @@ export default function SubProductList({
   return (
     <FlatList
       ref={flatListRef}
+      // ItemSeparatorComponent={() => <View h={20} />}
       initialNumToRender={20}
       windowSize={20}
       maxToRenderPerBatch={20}

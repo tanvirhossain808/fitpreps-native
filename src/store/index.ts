@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import subscriptionSlice from './slices/subscriptionSlice';
 import addressSlice from './slices/addressSlice';
+import subCartSlice from './slices/subcartSlice';
 
 const rootReducer = combineReducers({
   [rootApiSlice.reducerPath]: rootApiSlice.reducer,
@@ -16,12 +17,13 @@ const rootReducer = combineReducers({
   cart: cartSlice,
   subPurchase: subscriptionSlice,
   address: addressSlice,
+  subCart: subCartSlice,
 });
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['cart', 'user', 'address'],
+  whitelist: ['cart', 'user', 'address', 'subCart'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

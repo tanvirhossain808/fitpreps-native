@@ -10,7 +10,8 @@ const addressSlice = createSlice({
       state.push(action.payload);
     },
     removeAddress: (state, action) => {
-      state = state.filter((address) => address._id !== action.payload);
+      console.log(action.payload);
+      return state.filter((address) => address._id !== action.payload);
     },
     updateAddress: (state, action) => {
       const index = state.findIndex((address) => address._id === action.payload._id);
@@ -18,8 +19,8 @@ const addressSlice = createSlice({
         state[index] = action.payload;
       }
     },
-    clearAddress: (state) => {
-      state = [];
+    clearAddress: () => {
+      return [];
     },
   },
 });

@@ -38,7 +38,7 @@ export default function SubCartAddedToast({ props }: { props: ToastProps & { qua
               bg="#FD4F01"
               px="$5"
               py="$3"
-              onPress={() => router.push('/sub-cart/subsProductsCart')}>
+              onPress={() => router.push('/sub-cart/sub-cart')}>
               <Text color="white" fontSize={16} fontWeight={700}>
                 Add{' '}
                 <Text color="white" fontSize={16} fontWeight={700}>
@@ -58,7 +58,7 @@ export default function SubCartAddedToast({ props }: { props: ToastProps & { qua
           <Text fontSize={12} color="#FD4F01" fontWeight={500}>
             Get points here.
           </Text>
-          <TouchableOpacity onPress={() => router.push('/subscription')}>
+          <TouchableOpacity onPress={() => router.push('/sub-cart/subsProductsCart')}>
             <Text
               color="#FD4F01"
               fontSize={14}

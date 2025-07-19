@@ -23,7 +23,7 @@ export default function CartStep1({
   cartType: string;
   orderData: any;
 }) {
-  const { cartItems } = useSelector((state: RootState) => state.cart);
+  const cartItems = useSelector((state: RootState) => state.subCart.subCartItems);
   const cartItemsList = Object.values(cartItems) || [];
   const dispatch = useDispatch();
   const renderItem = useCallback(({ item, index }: { item: any; index: number }) => {

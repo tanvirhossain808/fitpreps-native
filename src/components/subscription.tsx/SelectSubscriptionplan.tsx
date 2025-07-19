@@ -23,7 +23,7 @@ export default function SelectSubscriptionPlan({
       return;
     } else {
       router.push({
-        pathname: '/sub-cart/purchase-sub-cart',
+        pathname: '/subcription-purchase/purchase-sub-cart',
         params: {
           selectedPlan: JSON.stringify(plan),
           // cartType: 'subscription',

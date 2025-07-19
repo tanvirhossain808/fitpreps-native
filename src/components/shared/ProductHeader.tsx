@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import { Productsmakelijke, SortOption } from '~/src/types/type';
 import { setSortBy } from '~/src/store/slices/filterSlice';
 import { ImageBackground } from 'react-native';
-import SubcriberCoin from '../ProducutBYCategory/Subscription';
+import SubcriberCoin from '../ProductsBynormal-sub/Subscription';
 import SubscribedCoin from '../ProducutBYCategory/SubscribedCoin';
 
 export default function ProductHeader({

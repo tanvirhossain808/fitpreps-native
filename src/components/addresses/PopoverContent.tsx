@@ -9,9 +9,9 @@ const PopoverContent = ({
   handleEdit,
 }: {
   index: number;
-  handleDelete: (index: number) => void;
+  handleDelete: () => void;
   setPressedItem: Dispatch<React.SetStateAction<string | null>>;
-  handleEdit: (index: number) => void;
+  handleEdit: () => void;
 }) => (
   <Popover.Content
     position="absolute"
@@ -33,7 +33,7 @@ const PopoverContent = ({
     minWidth={120}>
     <YStack width="100%">
       <Pressable
-        onPress={() => handleEdit(index)}
+        onPress={handleEdit}
         onPressIn={() => setPressedItem('edit')}
         onPressOut={() => setPressedItem(null)}
         style={({ pressed }) => ({
@@ -50,7 +50,7 @@ const PopoverContent = ({
       <View height={1} backgroundColor="#F0F0F0" width="100%" />
 
       <Pressable
-        onPress={() => handleDelete(index)}
+        onPress={handleDelete}
         onPressIn={() => setPressedItem('delete')}
         onPressOut={() => setPressedItem(null)}
         style={({ pressed }) => ({

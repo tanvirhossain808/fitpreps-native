@@ -9,9 +9,9 @@ import {
   AnimatePresence,
   ScrollView,
 } from 'tamagui';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { address } from '~/src/constant';
-import { TouchableOpacity, Pressable } from 'react-native';
+import { TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
@@ -20,11 +20,12 @@ import PopoverContent from '~/src/components/addresses/PopoverContent';
 import { CartAddress } from '~/src/components/shared/cart/CartAddress';
 import Toast from 'react-native-toast-message';
 import { router } from 'expo-router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '~/src/store';
 import { AddressType, SubPlan } from '~/src/types/type';
 import { useSubPurchaseMutation } from '~/src/store/apiSlices/subPurchaseSlice';
-
+import { WebView } from 'react-native-webview';
+import { removeAddress } from '~/src/store/slices/addressSlice';
 export default function PurchaseStep2({
   setCurrentStep,
   isEditAddress,
@@ -55,11 +56,21 @@ export default function PurchaseStep2({
   const [confirmAddress, setConFirmAddress] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectAddressId, setSelectAddressId] = useState<string | null>(null);
-  const handleDelete = (index: number) => {
+  const [selectedDeleteAddressId, setSelectedDeleteAddressId] = useState<string | null>(null);
+  const handleDelete = (addressId: string) => {
     setSelectedAddress(null);
+    if (selectedIndex === addressId) {
+      setSelectedIndex(null);
+    }
+    setSelectedDeleteAddressId(addressId);
     setIsDeleteDialogOpen(true);
-    setSelectAddressId(addressLists[index]._id);
+    setSelectAddressId(addressId);
   };
+  useEffect(() => {
+    if (selectedIndex) {
+      setSelectedIndex(null);
+    }
+  }, []);
   const handleEdit = (addressId: string) => {
     setSelectedAddress(() => null);
     setSelectAddressId(addressId);
@@ -68,7 +79,7 @@ export default function PurchaseStep2({
     // Add your edit logic here
   };
   const addressLists = useSelector((s: RootState) => s.address);
-
+  console.log(selectedIndex, 'selectedIndex');
   return (
     <>
       <SafeAreaView style={{ flex: 1 }}>
@@ -78,8 +89,7 @@ export default function PurchaseStep2({
             setSelectedSubPlan={setSelectedSubPlan}
             setConFirmAddress={setConFirmAddress}
             setCurrentStep={setCurrentStep}
-            //@ts-ignore
-            address={addressLists.find((item) => item?._id === selectedIndex)}
+            address={addressLists.find((item) => item?._id === selectedIndex) || null}
           />
         ) : (
           <YStack flex={1} justifyContent="space-between">
@@ -107,93 +117,105 @@ export default function PurchaseStep2({
                   elevation={2}>
                   Add New Address
                 </Button>
-                <YStack gap="$3">
-                  <Text color="#1E1F20" fontSize={16} fontWeight={700}>
-                    Saved Address
-                  </Text>
+                {addressLists?.length === 0 ? (
+                  <YStack gap="$3">
+                    <Text color="#1E1F20" fontSize={16} fontWeight={700}>
+                      No Address Found,Please add new
+                    </Text>
+                  </YStack>
+                ) : (
+                  <YStack gap="$3">
+                    <Text color="#1E1F20" fontSize={16} fontWeight={700}>
+                      Saved Address
+                    </Text>
 
-                  {addressLists?.map((addressDetails: any, i: number) => (
-                    <TouchableOpacity
-                      key={i}
-                      onPress={() => setSelectedIndex(addressDetails._id)}
-                      activeOpacity={0.4}>
-                      <XStack
-                        p="$3"
-                        gap="$3"
-                        borderRadius={12}
-                        bg="#FFF9F7"
-                        alignItems="flex-start">
+                    {addressLists?.map((addressDetails: any, i: number) => (
+                      <TouchableOpacity
+                        key={i}
+                        onPress={() => setSelectedIndex(addressDetails._id)}
+                        activeOpacity={0.4}>
                         <XStack
-                          mt="8"
-                          alignItems="center"
-                          justifyContent="center"
-                          width={14}
-                          height={14}
-                          borderRadius={50}
-                          borderWidth={1}
-                          borderColor="#FD4F01">
-                          <View
-                            backgroundColor={
-                              selectedIndex === addressDetails?._id ? '#FD4F01' : 'transparent'
-                            }
-                            width={10}
-                            height={10}
-                            borderRadius={selectedIndex === addressDetails?._id ? 50 : 0}
-                          />
-                        </XStack>
-                        <YStack flex={1} alignSelf="stretch">
-                          <XStack justifyContent="space-between" alignItems="flex-start">
-                            <XStack gap={4} alignItems="center" flex={1} mr="$2">
-                              <Text
-                                color="#1E1F20"
-                                fontSize={16}
-                                fontWeight={700}
-                                numberOfLines={1}>
-                                {addressDetails?.contactDetails?.name}
-                              </Text>
-                              <Text
-                                color="#009A21"
-                                fontSize={10}
-                                fontWeight={700}
-                                p="$2"
-                                bg="#E5F8EA"
-                                borderRadius={20}>
-                                {addressDetails?.addressType}
-                              </Text>
-                            </XStack>
-                            <Popover
-                              open={selectedAddress === i}
-                              onOpenChange={() => {
-                                setSelectedAddress(selectedAddress === i ? null : i);
-                              }}
-                              placement="left-start"
-                              offset={{ mainAxis: 100, crossAxis: 20 }}>
-                              <Popover.Trigger asChild>
-                                <TouchableOpacity
-                                  onPress={(e) => {
-                                    e.stopPropagation();
-                                    setSelectedAddress(selectedAddress === i ? null : i);
-                                  }}
-                                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-                                  <Entypo name="dots-three-horizontal" size={24} color="#FD4F01" />
-                                </TouchableOpacity>
-                              </Popover.Trigger>
-                              <PopoverContent
-                                setPressedItem={setPressedItem}
-                                handleEdit={() => handleEdit(addressDetails._id)}
-                                handleDelete={handleDelete}
-                                index={i}
-                              />
-                            </Popover>
+                          p="$3"
+                          gap="$3"
+                          borderRadius={12}
+                          bg="#FFF9F7"
+                          alignItems="flex-start">
+                          <XStack
+                            mt="8"
+                            alignItems="center"
+                            justifyContent="center"
+                            width={14}
+                            height={14}
+                            borderRadius={50}
+                            borderWidth={1}
+                            borderColor="#FD4F01">
+                            <View
+                              backgroundColor={
+                                selectedIndex === addressDetails?._id ? '#FD4F01' : 'transparent'
+                              }
+                              width={10}
+                              height={10}
+                              borderRadius={selectedIndex === addressDetails?._id ? 50 : 0}
+                            />
                           </XStack>
-                          <Text fontSize={14} marginTop={4}>
-                            {addressDetails?.addressDetails?.street}
-                          </Text>
-                        </YStack>
-                      </XStack>
-                    </TouchableOpacity>
-                  ))}
-                </YStack>
+                          <YStack flex={1} alignSelf="stretch">
+                            <XStack justifyContent="space-between" alignItems="flex-start">
+                              <XStack gap={4} alignItems="center" flex={1} mr="$2">
+                                <Text
+                                  color="#1E1F20"
+                                  fontSize={16}
+                                  fontWeight={700}
+                                  numberOfLines={1}>
+                                  {addressDetails?.contactDetails?.name}
+                                </Text>
+                                <Text
+                                  color="#009A21"
+                                  fontSize={10}
+                                  fontWeight={700}
+                                  p="$2"
+                                  bg="#E5F8EA"
+                                  borderRadius={20}>
+                                  {addressDetails?.addressType}
+                                </Text>
+                              </XStack>
+                              <Popover
+                                open={selectedAddress === i}
+                                onOpenChange={() => {
+                                  setSelectedAddress(selectedAddress === i ? null : i);
+                                }}
+                                placement="left-start"
+                                offset={{ mainAxis: 100, crossAxis: 20 }}>
+                                <Popover.Trigger asChild>
+                                  <TouchableOpacity
+                                    onPress={(e) => {
+                                      e.stopPropagation();
+                                      setSelectedAddress(selectedAddress === i ? null : i);
+                                    }}
+                                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+                                    <Entypo
+                                      name="dots-three-horizontal"
+                                      size={24}
+                                      color="#FD4F01"
+                                    />
+                                  </TouchableOpacity>
+                                </Popover.Trigger>
+                                <PopoverContent
+                                  setPressedItem={setPressedItem}
+                                  handleEdit={() => handleEdit(addressDetails._id)}
+                                  handleDelete={() => handleDelete(addressDetails._id)}
+                                  index={i}
+                                />
+                              </Popover>
+                            </XStack>
+                            <Text fontSize={14} marginTop={4}>
+                              {addressDetails?.addressDetails?.street}
+                            </Text>
+                          </YStack>
+                        </XStack>
+                      </TouchableOpacity>
+                    ))}
+                  </YStack>
+                )}
               </YStack>
             </ScrollView>
             <XStack alignItems="center" px={'$4'} pb="$5">
@@ -226,9 +248,9 @@ export default function PurchaseStep2({
       </SafeAreaView>
       <DeleteConfirmationDialog
         open={isDeleteDialogOpen}
+        selectedAddress={selectedDeleteAddressId as string}
         onOpenChange={() => {}}
         onConfirm={() => {
-          // Handle delete logic here
           setIsDeleteDialogOpen(false);
         }}
         onCancel={() => setIsDeleteDialogOpen(false)}
@@ -260,12 +282,21 @@ function DeleteConfirmationDialog({
   onOpenChange,
   onConfirm,
   onCancel,
+  selectedAddress,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
   onCancel: () => void;
+  selectedAddress: string;
 }) {
+  const dispatch = useDispatch();
+  const handleConfirm = () => {
+    if (selectedAddress) {
+      dispatch(removeAddress(selectedAddress));
+      onConfirm();
+    }
+  };
   return (
     <Dialog open={open} onOpenChange={onOpenChange} modal>
       <AnimatePresence>
@@ -324,7 +355,7 @@ function DeleteConfirmationDialog({
                   <Button
                     flex={1}
                     alignSelf="stretch"
-                    onPress={() => onOpenChange(false)}
+                    onPress={onCancel}
                     borderWidth={1}
                     borderColor="#FD4F01"
                     color="#FD4F01"
@@ -336,7 +367,7 @@ function DeleteConfirmationDialog({
                     Cancel
                   </Button>
                   <Button
-                    onPress={onConfirm}
+                    onPress={handleConfirm}
                     backgroundColor="#FD4F01"
                     color="white"
                     fontSize={16}
@@ -371,11 +402,8 @@ const ConfirmAddress = ({
   const token = useSelector((s: RootState) => s.user?.user?.token) || '';
   const userId = useSelector((s: RootState) => s.user?.user?.user._id) || '';
   const date = useSelector((s: RootState) => s.subPurchase.startDate);
-  console.log(selectedSubPlan, 'd');
-
+  const selectedDAte = useSelector((s: RootState) => s.subPurchase.startDate);
   const handleConfirmAddress = () => {
-    // setCurrentStep(2);
-    // console.log('hey');
     purchaseSubMutation({
       body: {
         startDate:
@@ -386,41 +414,52 @@ const ConfirmAddress = ({
         totalPoints: selectedSubPlan.coins + selectedSubPlan.bonusCoins,
         frequency: selectedSubPlan.planType.toLowerCase(),
         amount: selectedSubPlan.price.toFixed(2),
-        _billing_email: address?.contactDetails.email,
-        _billing_first_name: address?.contactDetails.name,
-        // _billing_last_name: address?.contactDetails.lastName,
-        _billing_country: 'NL',
-        _billing_address_1: address?.addressDetails.street,
-        // _billing_address_2: 'Apt 4B',
-        _billing_city: address?.addressDetails.city,
-        _billing_state: address?.addressDetails.state,
-        _billing_postcode: address?.addressDetails.zipCode,
-        _billing_phone: address?.contactDetails.phone,
-        // _billing_company: 'Doe Inc.',
-        // _billing_company_kvk: '12345678',
-        // _billing_company_vat: 'NL123456789B01',
-        _shipping_email: address?.contactDetails.email,
-        _shipping_first_name: address?.contactDetails.name,
-        // _shipping_last_name: 'Doe',
-        _shipping_country: 'NL',
-        _shipping_address_1: address?.addressDetails.street,
-        // _shipping_address_2: 'Apt 4B',
-        _shipping_city: address?.addressDetails.city,
-        _shipping_state: address?.addressDetails.state,
-        _shipping_postcode: address?.addressDetails.zipCode,
-        _shipping_phone: address?.contactDetails.phone,
-        // _shipping_company: 'Doe Inc.',
-        // _shipping_company_kvk: '12345678',
-        // _shipping_company_vat: 'NL123456789B01',
-        // _delivery_time: '17:00-18:00',
-        _newsletter: false,
+        type: 'fueld',
+        data: {
+          _billing_email: address?.contactDetails.email,
+          _billing_first_name: address?.contactDetails.name,
+
+          // _billing_last_name: address?.contactDetails.lastName,
+          _billing_country: 'NL',
+          _billing_address_1: address?.addressDetails.street,
+          // _billing_address_2: 'Apt 4B',
+          _billing_city: address?.addressDetails.city,
+          _billing_state: address?.addressDetails.state,
+          _billing_postcode: address?.addressDetails.zipCode,
+          _billing_phone: address?.contactDetails.phone,
+          // _billing_company: 'Doe Inc.',
+          // _billing_company_kvk: '12345678',
+          // _billing_company_vat: 'NL123456789B01',
+          _shipping_email: address?.contactDetails.email,
+          _shipping_first_name: address?.contactDetails.name,
+          // _shipping_last_name: 'Doe',
+          _shipping_country: 'NL',
+          _shipping_address_1: address?.addressDetails.street,
+          // _shipping_address_2: 'Apt 4B',
+          _shipping_city: address?.addressDetails.city,
+          _shipping_state: address?.addressDetails.state,
+          _shipping_postcode: address?.addressDetails.zipCode,
+          _shipping_phone: address?.contactDetails.phone,
+          // _shipping_company: 'Doe Inc.',
+          // _shipping_company_kvk: '12345678',
+          // _shipping_company_vat: 'NL123456789B01',
+          // _delivery_time: '17:00-18:00',
+          _newsletter: false,
+        },
       },
       token,
     })
       .unwrap()
       .then((res) => {
         if (res.success) {
-          router.push(res.checkoutUrl);
+          // router.push(res.checkoutUrl);
+          router.push({
+            pathname: '/verifyPayment/verifyPayment',
+            params: {
+              redirectUrl: res.checkoutUrl,
+            },
+          });
+          // setRedirectUrl(res.checkoutUrl);
         }
       })
       .catch((err) => {
@@ -433,59 +472,65 @@ const ConfirmAddress = ({
       });
   };
   return (
-    <YStack px="$4" flex={1} justifyContent="space-between">
-      <YStack>
-        <Text color="#1E1F20" fontWeight={700} fontSize={16}>
-          Deliver to:
-        </Text>
-        <XStack alignItems="center" gap={4}>
-          <Text color="#1E1F20" fontWeight={700} fontSize={16} mt="$3">
-            {address?.addressDetails.apartment}
+    <>
+      <YStack px="$4" flex={1} justifyContent="space-between">
+        <YStack>
+          <Text color="#1E1F20" fontWeight={700} fontSize={16}>
+            Deliver to:
           </Text>
-          <View mt={6} bg="#E5F8EA" borderRadius={20} p="$2">
-            <Text color="#009A21" fontSize={10} fontWeight={700}>
-              {address?.addressType}
+          <XStack alignItems="center" gap={4}>
+            <Text color="#1E1F20" fontWeight={700} fontSize={16} mt="$3">
+              {address?.addressDetails.apartment}
             </Text>
-          </View>
-        </XStack>
-        <Text color="#1E1F20" fontSize={16} mt={6}>
-          {address?.addressDetails.street}, {address?.addressDetails.apartment},
-          {address?.addressDetails.city}, {address?.addressDetails.state} -{' '}
-          {address?.addressDetails.zipCode}
-        </Text>
-        <TouchableOpacity
-          style={{ marginTop: 8, display: 'flex', alignItems: 'flex-start' }}
-          onPress={() => setConFirmAddress(false)}>
-          <Text
-            color="#FD4F01"
-            borderBottomWidth={2}
-            fontSize={16}
-            fontWeight={700}
-            borderColor="#FD4F01">
-            Change
+            <View mt={6} bg="#E5F8EA" borderRadius={20} p="$2">
+              <Text color="#009A21" fontSize={10} fontWeight={700}>
+                {address?.addressType}
+              </Text>
+            </View>
+          </XStack>
+          <Text color="#1E1F20" fontSize={16} mt={6}>
+            {address?.addressDetails.street}, {address?.addressDetails.apartment},
+            {address?.addressDetails.city}, {address?.addressDetails.state} -{' '}
+            {address?.addressDetails.zipCode}
           </Text>
-        </TouchableOpacity>
-      </YStack>
-      <YStack py="$5">
-        <YStack pb="$5">
-          <Text color="#1E1F20" fontSize={16} fontWeight={700}>
-            NOTE:
-          </Text>
-          <Text mt="$2" fontSize={16} fontWeight={500}>
-            Your order will be delivered on <Text color="#FD4F01">April 14, Monday.</Text>
-          </Text>
+          <TouchableOpacity
+            style={{ marginTop: 8, display: 'flex', alignItems: 'flex-start' }}
+            onPress={() => setConFirmAddress(false)}>
+            <Text
+              color="#FD4F01"
+              borderBottomWidth={2}
+              fontSize={16}
+              fontWeight={700}
+              borderColor="#FD4F01">
+              Change
+            </Text>
+          </TouchableOpacity>
         </YStack>
-        <Button
-          onPress={handleConfirmAddress}
-          mt="$5"
-          borderRadius={12}
-          color="white"
-          fontWeight={700}
-          fontSize={16}
-          backgroundColor="#FD4F01">
-          Continue
-        </Button>
+        <YStack py="$5">
+          <YStack pb="$5">
+            <Text color="#1E1F20" fontSize={16} fontWeight={700}>
+              NOTE:
+            </Text>
+
+            <Text mt="$2" fontSize={16} fontWeight={500}>
+              Your subscription will start on{' '}
+              <Text color="#FD4F01">
+                {selectedDAte ? selectedDAte : new Date().toISOString().split('T')[0]}
+              </Text>
+            </Text>
+          </YStack>
+          <Button
+            onPress={handleConfirmAddress}
+            mt="$5"
+            borderRadius={12}
+            color="white"
+            fontWeight={700}
+            fontSize={16}
+            backgroundColor="#FD4F01">
+            Continue
+          </Button>
+        </YStack>
       </YStack>
-    </YStack>
+    </>
   );
 };

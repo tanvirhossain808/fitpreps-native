@@ -3,18 +3,18 @@ import { Productsmakelijke, SliderItem } from '~/src/types/type';
 import { useGetSmakelijkeProductsQuery } from '~/src/store/apiSlices/products/smakelijke';
 import { useTabBarVisibility } from '~/src/hooks/useTabBarVisibility';
 import { lazy, useCallback, useEffect, useRef } from 'react';
-import LoadingSpinner from './Loading';
+import LoadingSpinner from '../shared/Loading';
 import useProductFilters from '~/src/hooks/useProductFilters';
 import { Button, Text, YStack } from 'tamagui';
 import { useDispatch } from 'react-redux';
 import { resetFilters } from '~/src/store/slices/filterSlice';
 
-const ProductsmakelijkeLists = lazy(() => import('./ProductsmakelijkeLists'));
+const ProductFueldListsCard = lazy(() => import('./ProductFueldListsCard'));
 
 export const unstable_settings = {
   lazy: true,
 };
-export default function ProductLists({
+export default function FueldProductLists({
   productType = 'cookd',
   contentContainerStyle,
   showsVerticalScrollIndicator,
@@ -44,16 +44,10 @@ export default function ProductLists({
       });
     }
   }, [data]);
-
+  //   console.log(data, 'data');
   const renderItem = useCallback(
     ({ item, index }: { item: Productsmakelijke | SliderItem; index: number }) => {
-      // return <View />;j
-      // if (productType === 'cookd')
-      // return <ProductsmakelijkeLists item={item} index={index} productType={productType} />;
-      // else if (productType === 'suppd')
-      // return <ProductsmakelijkeLists item={item} index={index} productType={productType} />;
-      return <ProductsmakelijkeLists item={item} index={index} productType={productType} />;
-      // return <View />;
+      return <ProductFueldListsCard item={item} index={index} productType={productType} />;
     },
 
     [productType]

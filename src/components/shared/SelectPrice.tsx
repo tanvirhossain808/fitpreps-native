@@ -1,13 +1,13 @@
-import { Adapt, Select, Sheet, Text, XStack } from 'tamagui';
+import { Adapt, Select, Sheet, Text, View, XStack } from 'tamagui';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Productsmakelijke } from '~/src/types/type';
-
+import Coin from '~/public/images/coin.svg';
 export default function SelectPrice({
   values,
   setSelectProduct,
   quantity,
 }: {
-  values?: { weight: string; price: string }[];
+  values?: { weight: string; price: string; coin?: string }[];
   setSelectProduct: React.Dispatch<React.SetStateAction<Productsmakelijke | undefined>>;
   quantity: number;
 }) {
@@ -58,11 +58,24 @@ export default function SelectPrice({
             {values?.map((value, index) => (
               <Select.Item key={index} index={index} value={value?.weight}>
                 <Select.ItemText>
-                  <XStack>
-                    <Text color="#1E1F20" fontWeight={600} fontSize={12}>
-                      {value?.weight} - <Text color="#FD4F01">€{value?.price}</Text>
-                    </Text>
-                  </XStack>
+                  {!value?.coin ? (
+                    <XStack alignItems="center">
+                      <Text color="#1E1F20" fontWeight={600} fontSize={12}>
+                        {value?.weight} - <Text color="#FD4F01">€{value?.price}s</Text>
+                      </Text>
+                    </XStack>
+                  ) : (
+                    <XStack alignItems="center">
+                      <Text color="#1E1F20" fontWeight={600} fontSize={12}>
+                        {value?.weight} -{' '}
+                      </Text>
+                      <View>
+                        <Coin />
+                      </View>
+                      <Text></Text>
+                      <Text>{value?.coin}</Text>
+                    </XStack>
+                  )}
                 </Select.ItemText>
                 <Select.ItemIndicator marginLeft="auto">
                   <AntDesign name="check" size={24} color="black" />

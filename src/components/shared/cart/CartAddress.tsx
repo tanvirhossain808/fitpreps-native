@@ -18,9 +18,10 @@ import Mark from 'public/images/mark.svg';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useDispatch, useSelector } from 'react-redux';
 import { AddressType } from '~/src/types/type';
-import { addAddress, updateAddress } from '~/src/store/slices/addressSlice';
+import { addAddress, clearAddress, updateAddress } from '~/src/store/slices/addressSlice';
 import { RootState } from '~/src/store';
 import Toast from 'react-native-toast-message';
+import useGetAddressDetails from '~/src/hooks/useGetAddressDetails';
 
 interface CartAddressProps {
   open: boolean;
@@ -114,7 +115,7 @@ export function CartAddress({
     },
     {
       id: 'zipCode',
-      placeholder: 'ZIP code',
+      placeholder: 'Post code',
       keyboardType: 'number-pad' as const,
       fullWidth: false,
     },
@@ -124,22 +125,25 @@ export function CartAddress({
       fullWidth: true,
     },
   ];
+  const { data: addressDetails } = useGetAddressDetails(formData.zipCode);
+  console.log(addressDetails, 'data');
   useEffect(() => {
     if (isEditAddress) {
-      const selectedAddress = selector.find((address) => address._id === addressId);
+      const selectedAddress = selector.find((address) => address?._id === addressId);
       if (selectedAddress)
         setFormData({
-          name: selectedAddress.contactDetails.name,
-          email: selectedAddress.contactDetails.email,
-          addressType: selectedAddress.addressType as any,
-          apartment: selectedAddress.addressDetails.apartment,
-          street: selectedAddress.addressDetails.street,
-          city: selectedAddress.addressDetails.city,
-          zipCode: selectedAddress.addressDetails.zipCode,
-          state: selectedAddress.addressDetails.state,
+          name: selectedAddress?.contactDetails.name,
+          email: selectedAddress?.contactDetails.email,
+          addressType: selectedAddress?.addressType as any,
+          apartment: selectedAddress?.addressDetails.apartment,
+          street: selectedAddress?.addressDetails.street,
+          city: selectedAddress?.addressDetails.city,
+          zipCode: selectedAddress?.addressDetails.zipCode,
+          state: selectedAddress?.addressDetails.state,
         });
     }
   }, [isEditAddress, addressId, selector]);
+
   const disPatch = useDispatch();
   const handleSubmit = () => {
     setErrors(initialError);
@@ -149,7 +153,9 @@ export function CartAddress({
       newErrors.name = 'name is required';
     }
     if (!formData.email?.trim()) {
-      newErrors.email = 'email is required';
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      newErrors.email = 'Please enter a valid email address';
     }
     if (!formData.addressType?.trim()) {
       newErrors.addressType = 'address type is required';
@@ -218,22 +224,6 @@ export function CartAddress({
             })
           );
         }
-        disPatch(
-          addAddress({
-            contactDetails: {
-              name: formData.name,
-              email: formData.email,
-            },
-            addressDetails: {
-              apartment: formData.apartment,
-              street: formData.street,
-              city: formData.city,
-              zipCode: formData.zipCode,
-              state: formData.state,
-            },
-            addressType: formData.addressType,
-          })
-        );
         Toast.show({
           type: 'success',
           text1: 'Address added successfully',
@@ -241,7 +231,7 @@ export function CartAddress({
         });
       }
       // onSave(formData);
-      // onOpenChange(false);
+      onOpenChange(false);
     }
 
     setFormData({
@@ -259,6 +249,21 @@ export function CartAddress({
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
+  const handleZipCodeChange = (value: string, field: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+  useEffect(() => {
+    if (addressDetails) {
+      console.log('hey');
+      setFormData((prev) => ({
+        ...prev,
+
+        city: addressDetails?.city,
+        street: addressDetails?.street,
+        state: addressDetails?.provincie,
+      }));
+    }
+  }, [addressDetails]);
 
   const renderFormFields = () => {
     const fields = [];
@@ -278,9 +283,15 @@ export function CartAddress({
                     {...inputStyle}
                     id={fieldId}
                     value={formData[fieldId as keyof typeof formData] as string}
-                    onChangeText={(text) => handleInputChange(fieldId, text)}
+                    onChangeText={(text) => {
+                      if (fieldId === 'zipCode') {
+                        handleZipCodeChange(text, fieldId);
+                      } else {
+                        handleInputChange(fieldId, text);
+                      }
+                    }}
                     placeholder={field?.placeholder}
-                    keyboardType={field?.keyboardType}
+                    keyboardType="ascii-capable"
                   />
                   {error[fieldId as keyof typeof error] && (
                     <Text mt={4} color="red" fontSize={12}>
@@ -408,7 +419,7 @@ export function CartAddress({
                       />
                       {error.email && (
                         <Text mt={4} color="red" fontSize={12}>
-                          Email field is required
+                          {error.email}
                         </Text>
                       )}
                     </Fieldset>

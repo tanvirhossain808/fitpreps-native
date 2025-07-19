@@ -105,7 +105,7 @@ export default function TopSearchbar({
           justifyContent="center"
           borderRadius={50}
           bg="#ffede5">
-          <TouchableOpacity onPress={() => router.push('/sub-cart/SubsProductsCart')}>
+          <TouchableOpacity onPress={() => router.push('/cart')}>
             <Feather name="shopping-cart" size={18} color="#FD4F01" />
           </TouchableOpacity>
           <XStack

@@ -1,9 +1,8 @@
 import { Button, Text, View, XStack, YStack, Image } from 'tamagui';
-import SliderCarousel from './SliderCarousel';
+import SliderCarousel from '../shared/SliderCarousel';
 import { Productsmakelijke, SliderItem } from '~/src/types/type';
 import { LinearGradient } from 'expo-linear-gradient';
 import { badgesColor } from '~/src/constants/colorConstants';
-import SelectPrice from './SelectPrice';
 import { baseUrl } from '~/src/constants/baseConstant';
 import { TouchableOpacity } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -11,13 +10,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { increment, decrement } from '~/src/store/slices/cartSlice';
 import Toast from 'react-native-toast-message';
 import { RootState } from '~/src/store';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { productBg, shadows } from '~/src/constant';
 import Coin from '~/public/images/coin.svg';
-import SubCartAddedToast from '../toast/SubCartAddedToast';
-export default function ProductsmakelijkeLists({
+export default function SubItemsList({
   item,
-  productType,
   index,
 }: {
   item: Productsmakelijke | SliderItem | { type: 'dummy' };
@@ -32,62 +29,36 @@ export default function ProductsmakelijkeLists({
     }
     return undefined;
   });
-  useEffect(() => {
-    if (productType === 'cookd') {
-      const selectedWeight = item as Productsmakelijke;
-      if (selectedWeight?.metadata?.weight_options) {
-        setSelectProduct({ selectedWeight: selectedWeight?.metadata?.weight_options[0] });
-      }
-    }
-  }, [productType]);
+
   const handlePlus = () => {
     const productData = { ...item } as Productsmakelijke;
     let data;
-    if (productType === 'cookd') {
-      data = {
-        ...productData,
-        selectedWeight: selectedProduct.selectedWeight,
 
-        metadata: {
-          ...productData.metadata,
-          _price: selectedProduct.selectedWeight?.price,
-          _coin: selectedProduct.selectedWeight?.coin,
-        },
-      };
-    }
     {
       data = { ...productData };
     }
-    // const data = {
-    //   ...productData,
-    //   selectedWeight: selectedProduct.selectedWeight,
 
-    //   metadata: {
-    //     ...productData.metadata,
-    //     _price: selectedProduct.selectedWeight?.price,
-    //   },
-    // };
-    // setTimeout(() => {
     Toast.show({
-      type: 'cardAddedToast',
+      type: 'subCartToast',
       text1: 'Product added to cart',
       props: {
         quantity: quantity?.quantity ? quantity.quantity + 1 : 1,
       },
       position: 'bottom',
+      // autoHide: false,
     });
     // }, 0);
     dispatch(increment(data));
   };
   const handleMinus = () => {
-    if (quantity?.quantity && quantity.quantity > 0) {
+    if (quantity?.quantity && quantity?.quantity > 0) {
       dispatch(decrement(item as Productsmakelijke));
     }
   };
   if ((item as SliderItem)?.type === 'slider') {
     return (
       <YStack w="100%" py={0} my={0}>
-        <SliderCarousel images={(item as SliderItem)?.images} productType={productType} />
+        <SliderCarousel images={(item as SliderItem)?.images} productType={'fuled'} />
       </YStack>
     );
   }
@@ -96,6 +67,7 @@ export default function ProductsmakelijkeLists({
   }
   return (
     <>
+      {/* <SubCartAddedToast /> */}
       {item.type === 'dummy1' ? (
         <View />
       ) : (
@@ -118,7 +90,7 @@ export default function ProductsmakelijkeLists({
             width={'100%'}
             alignSelf="stretch"
             flex={1}
-            bg={productBg[productType as keyof typeof productBg]}
+            bg={productBg['fueld' as keyof typeof productBg]}
             borderRadius={4}>
             <Image
               source={{
@@ -184,45 +156,35 @@ export default function ProductsmakelijkeLists({
                     </Text>
                   );
                 })}
-                {productType === 'suppd' && (
-                  <Text
-                    p={5}
-                    fontSize={7}
-                    fontWeight={700}
-                    {...badgesColor['20% Korting' as keyof typeof badgesColor]}
-                    borderRadius={20}>
-                    20% Korting
-                  </Text>
-                )}
               </XStack>
             )}
-            {productType === 'fueld' && (item as Productsmakelijke)?.eiwitten && (
-              <YStack
-                borderTopWidth={1}
-                borderLeftWidth={0.1}
-                borderRightWidth={0.1}
-                borderColor="#FD4F01"
-                alignItems="center"
-                justifyContent="center"
-                position="absolute"
-                bottom={-20}
-                top="100%"
-                right={'50%'}
-                transform={[{ translateX: '50%' }]}
-                width={50}
-                height={50}
-                bg="#FFF"
-                borderRadius={50}>
-                <View bg="white" position="absolute" inset={0} borderRadius={25} top={20}></View>
-                <Text fontSize={13} color="#FD4F01" fontFamily="$oswald" fontWeight={700}>
-                  {/* {(food as fueld)?.protein} */}
-                  {(item as Productsmakelijke)?.eiwitten}
-                </Text>
-                <Text color="#1E1F20" fontWeight={500} fontSize={12}>
-                  protein
-                </Text>
-              </YStack>
-            )}
+            {/* {productType === 'fueld' && (item as Productsmakelijke)?.eiwitten && ( */}
+            <YStack
+              borderTopWidth={1}
+              borderLeftWidth={0.1}
+              borderRightWidth={0.1}
+              borderColor="#FD4F01"
+              alignItems="center"
+              justifyContent="center"
+              position="absolute"
+              bottom={-20}
+              top="100%"
+              right={'50%'}
+              transform={[{ translateX: '50%' }]}
+              width={50}
+              height={50}
+              bg="#FFF"
+              borderRadius={50}>
+              <View bg="white" position="absolute" inset={0} borderRadius={25} top={20}></View>
+              <Text fontSize={13} color="#FD4F01" fontFamily="$oswald" fontWeight={700}>
+                {/* {(food as fueld)?.protein} */}
+                {(item as Productsmakelijke)?.eiwitten}
+              </Text>
+              <Text color="#1E1F20" fontWeight={500} fontSize={12}>
+                protein
+              </Text>
+            </YStack>
+            {/* )} */}
           </View>
           <YStack gap={8} justifyContent="space-between" f={1}>
             {/* <Text
@@ -247,53 +209,34 @@ export default function ProductsmakelijkeLists({
               {(item as Productsmakelijke)?.name}
             </Text>
 
-            {(item as Productsmakelijke)?.metadata?.weight_options !== undefined && (
-              <View>
-                <SelectPrice
-                  quantity={quantity?.quantity ? quantity.quantity : 0}
-                  setSelectProduct={setSelectProduct}
-                  values={(item as Productsmakelijke)?.metadata?.weight_options?.map((item) => ({
-                    ...item,
-                    coin: item.coin?.toString(),
-                  }))}
-                />
-              </View>
-            )}
-
-            {productType !== 'cookd' && (
-              <View>
-                {(item as Productsmakelijke)?.metadata?.coin ? (
-                  <XStack gap={4} alignItems="center">
-                    <Text fontSize={14} fontWeight={700} color="#FD4F01">
-                      {(item as Productsmakelijke)?.metadata?.coin}
-                    </Text>
-                    <Coin />
-                  </XStack>
-                ) : (
+            <View>
+              {(item as Productsmakelijke)?.metadata?.coin ? (
+                <XStack gap={4} alignItems="center">
                   <Text fontSize={14} fontWeight={700} color="#FD4F01">
-                    <Coin /> €{(item as Productsmakelijke)?.metadata?._price}
+                    {(item as Productsmakelijke)?.metadata?.coin}
                   </Text>
-                )}
+                  <Coin />
+                </XStack>
+              ) : (
+                <Text fontSize={14} fontWeight={700} color="#FD4F01">
+                  €{(item as Productsmakelijke)?.metadata?._price}
+                </Text>
+              )}
 
-                {(item as Productsmakelijke).categories.includes('Supplements') ? (
-                  <Text fontSize={12} fontWeight={500} color="#1E1F20">
-                    {(item as Productsmakelijke)?.metadata?.dose}
-                  </Text>
-                ) : (
-                  <Text fontSize={12} fontWeight={500} color="#1E1F20">
-                    {
-                      (item as Productsmakelijke)?.metadata?.nutretions_data[0]
-                        ?.voedingswaarde_contents
-                    }
-                  </Text>
-                )}
-              </View>
-            )}
-
-            {/* <Button fontSize={15} color="white" fontWeight={700} bg="#FD4F01" borderRadius={8}>
-              {productType === 'cookd' ? 'Add & Fuel Up' : 'Add'}
-            </Button> */}
-            {quantity?.quantity && quantity.quantity > 0 ? (
+              {(item as Productsmakelijke).categories.includes('Supplements') ? (
+                <Text fontSize={12} fontWeight={500} color="#1E1F20">
+                  {(item as Productsmakelijke)?.metadata?.dose}
+                </Text>
+              ) : (
+                <Text fontSize={12} fontWeight={500} color="#1E1F20">
+                  {
+                    (item as Productsmakelijke)?.metadata?.nutretions_data[0]
+                      ?.voedingswaarde_contents
+                  }
+                </Text>
+              )}
+            </View>
+            {quantity?.quantity && quantity?.quantity > 0 ? (
               <XStack
                 overflow="hidden"
                 borderWidth={1}
@@ -322,7 +265,8 @@ export default function ProductsmakelijkeLists({
                 bg="#FD4F01"
                 borderRadius={8}
                 onPress={handlePlus}>
-                {productType === 'cookd' ? 'Add & Fuel Up' : 'Add'}
+                Add
+                {/* {productType === 'cookd' ? 'Add & Fuel Up' : ''} */}
               </Button>
             )}
           </YStack>

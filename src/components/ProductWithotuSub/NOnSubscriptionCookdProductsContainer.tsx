@@ -4,15 +4,14 @@ import LoadingSpinner from '../shared/Loading';
 import { lazy, Suspense } from 'react';
 import { useGetSmakelijkeProductsQuery } from '~/src/store/apiSlices/products/smakelijke';
 import useProductFilters from '~/src/hooks/useProductFilters';
-import { useGetProductsQuery } from '~/src/store/apiSlices/products/productsSlice';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { activeStatsBarInfo } from '~/src/helper';
 import { statusBarColor } from '~/src/constant';
 import { StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-const ProductLists = lazy(() => import('~/src/components/shared/ProductLists'));
+const ProductLists = lazy(() => import('~/src/components/ProductWithotuSub/ProductLists'));
 
-export default function NOnSubscription({
+export default function NOnSubscriptionCookdProductsContainer({
   product,
   subscription,
 }: {
@@ -20,9 +19,8 @@ export default function NOnSubscription({
   subscription: boolean;
 }) {
   const { data: cookd, isLoading } = useGetSmakelijkeProductsQuery(null);
-  const { data: fueld, isLoading: fueldLoading } = useGetProductsQuery(null);
   const { filteredProducts } = useProductFilters(
-    product === 'fueld' ? fueld?.nonSubscribedProducts || [] : cookd,
+    cookd?.nonSubscribedProducts || [],
     product as string
   );
   const insets = useSafeAreaInsets();
@@ -40,7 +38,7 @@ export default function NOnSubscription({
 
         <View style={styles.contentContainer}>
           <View style={{ flex: 1 }} zIndex={0}>
-            {isLoading || fueldLoading ? (
+            {isLoading ? (
               <LoadingSpinner color={statusBarColor[product as keyof typeof statusBarColor]} />
             ) : (
               <Suspense

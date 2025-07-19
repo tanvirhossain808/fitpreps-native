@@ -1,10 +1,7 @@
 import { Button, Text, View, XStack, YStack, Image } from 'tamagui';
-import SliderCarousel from './SliderCarousel';
 import { Productsmakelijke, SliderItem } from '~/src/types/type';
 import { LinearGradient } from 'expo-linear-gradient';
 import { badgesColor } from '~/src/constants/colorConstants';
-import SelectPrice from './SelectPrice';
-import { baseUrl } from '~/src/constants/baseConstant';
 import { TouchableOpacity } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,7 +12,11 @@ import { useEffect, useState } from 'react';
 import { productBg, shadows } from '~/src/constant';
 import Coin from '~/public/images/coin.svg';
 import SubCartAddedToast from '../toast/SubCartAddedToast';
-export default function ProductsmakelijkeLists({
+import SliderCarousel from '../shared/SliderCarousel';
+import { baseUrl } from '~/src/constants/baseConstant';
+import SelectPrice from '../shared/SelectPrice';
+import { phpUnserialize } from '~/src/helper';
+export default function ProductFueldListsCard({
   item,
   productType,
   index,
@@ -51,7 +52,6 @@ export default function ProductsmakelijkeLists({
         metadata: {
           ...productData.metadata,
           _price: selectedProduct.selectedWeight?.price,
-          _coin: selectedProduct.selectedWeight?.coin,
         },
       };
     }
@@ -94,6 +94,8 @@ export default function ProductsmakelijkeLists({
   if ((item as { type: string })?.type === 'dummy') {
     return <View h={0} />;
   }
+  // console.log(item, 'item');
+
   return (
     <>
       {item.type === 'dummy1' ? (
@@ -132,6 +134,7 @@ export default function ProductsmakelijkeLists({
               aspectRatio={1}
               resizeMode="cover"
             />
+
             {(item as Productsmakelijke)?.metadata?.badges && (
               <XStack top={4} gap={2} left={6} position="absolute">
                 {(item as Productsmakelijke)?.metadata?.badges?.map((badge, i) => {
@@ -158,6 +161,7 @@ export default function ProductsmakelijkeLists({
                       </LinearGradient>
                     );
                   }
+
                   const chefFav = badge === 'Chef’s Favoriet';
                   if (chefFav) {
                     return (
@@ -247,22 +251,12 @@ export default function ProductsmakelijkeLists({
               {(item as Productsmakelijke)?.name}
             </Text>
 
-            {(item as Productsmakelijke)?.metadata?.weight_options !== undefined && (
-              <View>
-                <SelectPrice
-                  quantity={quantity?.quantity ? quantity.quantity : 0}
-                  setSelectProduct={setSelectProduct}
-                  values={(item as Productsmakelijke)?.metadata?.weight_options?.map((item) => ({
-                    ...item,
-                    coin: item.coin?.toString(),
-                  }))}
-                />
-              </View>
-            )}
-
             {productType !== 'cookd' && (
               <View>
-                {(item as Productsmakelijke)?.metadata?.coin ? (
+                <Text fontSize={14} fontWeight={700} color="#FD4F01">
+                  €{(item as Productsmakelijke)?.metadata?._price}
+                </Text>
+                {/* {(item as Productsmakelijke)?.metadata?.coin ? (
                   <XStack gap={4} alignItems="center">
                     <Text fontSize={14} fontWeight={700} color="#FD4F01">
                       {(item as Productsmakelijke)?.metadata?.coin}
@@ -271,28 +265,27 @@ export default function ProductsmakelijkeLists({
                   </XStack>
                 ) : (
                   <Text fontSize={14} fontWeight={700} color="#FD4F01">
-                    <Coin /> €{(item as Productsmakelijke)?.metadata?._price}
+                    €{(item as Productsmakelijke)?.metadata?._price}
                   </Text>
-                )}
+                )} */}
 
-                {(item as Productsmakelijke).categories.includes('Supplements') ? (
+                {/* {(item as Productsmakelijke).categories.includes('Supplements') ? (
                   <Text fontSize={12} fontWeight={500} color="#1E1F20">
                     {(item as Productsmakelijke)?.metadata?.dose}
                   </Text>
                 ) : (
-                  <Text fontSize={12} fontWeight={500} color="#1E1F20">
-                    {
-                      (item as Productsmakelijke)?.metadata?.nutretions_data[0]
-                        ?.voedingswaarde_contents
-                    }
-                  </Text>
-                )}
+                
+                )} */}
+                <Text fontSize={12} fontWeight={500} color="#1E1F20">
+                  {phpUnserialize((item as Productsmakelijke)?.metadata?.nutretions_data)?.kcal &&
+                    phpUnserialize((item as Productsmakelijke)?.metadata?.nutretions_data)?.kcal +
+                      ' kCal |'}{' '}
+                  {phpUnserialize((item as Productsmakelijke)?.metadata?.nutretions_data)?.weight &&
+                    phpUnserialize((item as Productsmakelijke)?.metadata?.nutretions_data)?.weight +
+                      ' g'}
+                </Text>
               </View>
             )}
-
-            {/* <Button fontSize={15} color="white" fontWeight={700} bg="#FD4F01" borderRadius={8}>
-              {productType === 'cookd' ? 'Add & Fuel Up' : 'Add'}
-            </Button> */}
             {quantity?.quantity && quantity.quantity > 0 ? (
               <XStack
                 overflow="hidden"
