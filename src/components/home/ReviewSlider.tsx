@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import Carousel from 'react-native-reanimated-carousel';
-import { Image, Text, View, YStack } from 'tamagui';
+import { Image, Text, useWindowDimensions, View, YStack } from 'tamagui';
 import { WeeklyReview } from '~/src/constant';
 
 export default function ReviewSlider() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const width = useWindowDimensions().width;
 
   return (
     <>
@@ -15,12 +16,12 @@ export default function ReviewSlider() {
         <Carousel
           autoPlay={true}
           onSnapToItem={(index) => setActiveIndex(index)}
-          width={358}
+          width={width - 32}
           height={500}
           data={WeeklyReview}
           renderItem={({ item }) => (
             <YStack mt="$3">
-              <Image source={item.img} width={358} height={358} />
+              <Image source={item.img} width={width - 32} height={358} />
               <YStack mt="$3">
                 <Text color="#959595" fontSize={20} fontWeight={500}>
                   {item.title}

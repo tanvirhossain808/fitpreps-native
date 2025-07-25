@@ -1,4 +1,4 @@
-import { Button, Text, View, XStack, YStack, Image } from 'tamagui';
+import { Button, Text, View, XStack, YStack, Image, useWindowDimensions } from 'tamagui';
 import { Productsmakelijke, SliderItem } from '~/src/types/type';
 import { LinearGradient } from 'expo-linear-gradient';
 import { badgesColor } from '~/src/constants/colorConstants';
@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { increment, decrement } from '~/src/store/slices/cartSlice';
 import Toast from 'react-native-toast-message';
 import { RootState } from '~/src/store';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { productBg, shadows } from '~/src/constant';
 import Coin from '~/public/images/coin.svg';
 import SliderCarousel from '../shared/SliderCarousel';
@@ -25,7 +25,10 @@ export default function ProductsmakelijkeListsSubLists({
   index: number;
 }) {
   const [selectedProduct, setSelectProduct] = useState<Productsmakelijke | any>();
+  const [openSelectedProduct, setOpenSelectedProduct] = useState(false);
   const dispatch = useDispatch();
+  const width = useWindowDimensions().width / 2;
+
   const quantity = useSelector((state: RootState) => {
     if ('_id' in item) {
       return state?.subCart?.subCartItems[item?._id];
@@ -52,8 +55,8 @@ export default function ProductsmakelijkeListsSubLists({
     }
 
     const productData = { ...item } as Productsmakelijke;
-    let data;
-    data = {
+
+    const data = {
       ...productData,
       selectedWeight: selectedProduct.selectedWeight,
 
@@ -62,10 +65,6 @@ export default function ProductsmakelijkeListsSubLists({
         _price: selectedProduct.selectedWeight?.price,
       },
     };
-    {
-      data = { ...productData };
-    }
-
     Toast.show({
       type: 'subCartToast',
       text1: 'Product added to cart',
@@ -78,14 +77,14 @@ export default function ProductsmakelijkeListsSubLists({
   };
   const handleMinus = () => {
     if (quantity?.quantity && quantity.quantity > 0) {
-      dispatch(subDecrement(item as Productsmakelijke));
+      dispatch(subDecrement(quantity as Productsmakelijke));
     }
   };
   if ((item as SliderItem)?.type === 'slider') {
     return (
-      <YStack w="100%" py={0} my={0}>
+      <XStack w="100%" style={{ width: '100%' }} my={0}>
         <SliderCarousel images={(item as SliderItem)?.images} productType={productType} />
-      </YStack>
+      </XStack>
     );
   }
   if ((item as { type: string })?.type === 'dummy') {
@@ -98,9 +97,12 @@ export default function ProductsmakelijkeListsSubLists({
         <View />
       ) : (
         <YStack
-          mt={index === 7 || index === 6 ? 0 : 20}
+          h={325}
+          mb={20}
           key={(item as Productsmakelijke)?._id}
-          w={'48%'}
+          w={'98%'}
+          // ml="auto"
+          // background={}
           p={8}
           bg="white"
           gap={20}
@@ -239,6 +241,7 @@ export default function ProductsmakelijkeListsSubLists({
               </Text> */}
 
             <Text
+              h={25}
               fontSize={11.5}
               fontWeight={700}
               color="#1E1F20"
@@ -249,14 +252,47 @@ export default function ProductsmakelijkeListsSubLists({
 
             {(item as Productsmakelijke)?.metadata?.weight_options !== undefined && (
               <View>
-                <SelectPrice
-                  quantity={quantity?.quantity ? quantity.quantity : 0}
-                  setSelectProduct={setSelectProduct}
-                  values={(item as Productsmakelijke)?.metadata?.weight_options?.map((o) => ({
-                    ...o,
-                    coin: o.coin?.toString(),
-                  }))}
-                />
+                {openSelectedProduct ? (
+                  <SelectPrice
+                    setOpenSelectedProduct={setOpenSelectedProduct}
+                    quantity={quantity?.quantity ? quantity.quantity : 0}
+                    setSelectProduct={setSelectProduct}
+                    values={(item as any)?.metadata?.weight_options}
+                  />
+                ) : (
+                  <TouchableOpacity onPress={() => setOpenSelectedProduct(true)}>
+                    <XStack
+                      borderWidth={1}
+                      borderColor="#A1A1A1"
+                      borderRadius={4}
+                      p={8}
+                      alignItems="center"
+                      justifyContent="space-between">
+                      <View>
+                        {!selectedProduct?.selectedWeight?.coin ? (
+                          <XStack alignItems="center">
+                            <Text color="#1E1F20" fontWeight={600} fontSize={12}>
+                              {selectedProduct?.selectedWeight?.weight} -{' '}
+                              <Text color="#FD4F01">€{selectedProduct?.selectedWeight?.price}</Text>
+                            </Text>
+                          </XStack>
+                        ) : (
+                          <XStack alignItems="center">
+                            <Text color="#1E1F20" fontWeight={600} fontSize={12}>
+                              {selectedProduct?.selectedWeight?.weight} -{' '}
+                            </Text>
+                            <View>
+                              <Coin />
+                            </View>
+                            <Text></Text>
+                            <Text>{selectedProduct?.selectedWeight?.coin}</Text>
+                          </XStack>
+                        )}
+                      </View>
+                      <AntDesign name="down" size={16} color="#A1A1A1" />
+                    </XStack>
+                  </TouchableOpacity>
+                )}
               </View>
             )}
 

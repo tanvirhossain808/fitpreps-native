@@ -4,6 +4,7 @@
     "slug": "fitpreps",
     "version": "1.0.0",
     "scheme": "fitpreps",
+    "jsEngine": "jsc",
     "web": {
       "bundler": "metro",
       "output": "static",

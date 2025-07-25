@@ -37,14 +37,14 @@ LocaleConfig.defaultLocale = 'custom';
 
 export default function CustomHeaderCalendar({
   toggleDatePicker,
-  selectedDate,
-  setSelectedDate,
   title = '',
+  date,
+  setDate,
 }: {
   toggleDatePicker: () => void;
-  selectedDate: DateData | null;
   title?: string;
-  setSelectedDate: React.Dispatch<React.SetStateAction<DateData | null>>;
+  date?: DateData | null;
+  setDate?: React.Dispatch<React.SetStateAction<DateData | null>>;
 }) {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -108,8 +108,8 @@ export default function CustomHeaderCalendar({
   };
 
   const isMultipleAfterSelected = (day: number): boolean => {
-    if (!selectedDate || !selectedDate.day) return false;
-    const dayStr = String(selectedDate.day);
+    if (!date || !date.day) return false;
+    const dayStr = String(date.day);
     const selectedDay = parseInt(dayStr, 10);
     if (isNaN(selectedDay) || selectedDay === 0) return false;
     return day > selectedDay && (day - selectedDay) % 7 === 0 && day <= daysInMonth;
@@ -180,7 +180,7 @@ export default function CustomHeaderCalendar({
 
     const dayNumber = Number(day.day);
     const isToday = day.dateString === new Date().toISOString().split('T')[0];
-    const isSelected = selectedDate?.dateString === day.dateString;
+    const isSelected = date?.dateString === day.dateString;
     const highlightMultiple = isMultipleAfterSelected(dayNumber);
     const weekend = isWeekend(day);
     const fromOtherMonth = isFromOtherMonth(day);
@@ -189,7 +189,10 @@ export default function CustomHeaderCalendar({
 
     const handlePress = () => {
       if (isDisabled) return;
-      setSelectedDate(day);
+      if (setDate) {
+        setDate(day);
+      }
+
       toggleDatePicker();
     };
 

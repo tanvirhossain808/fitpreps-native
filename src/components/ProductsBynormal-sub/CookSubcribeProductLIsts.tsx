@@ -1,4 +1,4 @@
-import { FlatList } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import { Productsmakelijke, SliderItem } from '~/src/types/type';
 import { useTabBarVisibility } from '~/src/hooks/useTabBarVisibility';
 import { lazy, useCallback, useEffect, useRef } from 'react';
@@ -6,8 +6,10 @@ import LoadingSpinner from '../shared/Loading';
 import { Button, Text, YStack } from 'tamagui';
 import { useDispatch } from 'react-redux';
 import { resetFilters } from '~/src/store/slices/filterSlice';
+import { FlashList } from '@shopify/flash-list';
+import ProductsmakelijkeListsSubLists from './ProductsmakelijkeListsSubLists';
 
-const ProductsmakelijkeListsSubLists = lazy(() => import('./ProductsmakelijkeListsSubLists'));
+// const ProductsmakelijkeListsSubLists = lazy(() => import('./ProductsmakelijkeListsSubLists'));
 export const unstable_settings = {
   lazy: true,
 };
@@ -32,7 +34,7 @@ export default function CookSubcribeProductLIsts({
   const dispatch = useDispatch();
   // const { filteredProducts } = useProductFilters(data2);
   // console.log('filt', filteredProducts);
-  const flatListRef = useRef<FlatList>(null);
+  const flatListRef = useRef<FlashList<Productsmakelijke>>(null);
   useEffect(() => {
     if (flatListRef.current && data?.length > 0) {
       flatListRef.current.scrollToIndex({
@@ -49,16 +51,57 @@ export default function CookSubcribeProductLIsts({
 
     [productType]
   );
-  if (isLoading) {
-    return <LoadingSpinner color="white" />;
-  }
+  // if (isLoading) {
+  //   return <LoadingSpinner color="white" />;
+  // }
   return (
-    <FlatList
+    // <FlatList
+    //   removeClippedSubviews={true}
+    //   ref={flatListRef}
+    //   initialNumToRender={20}
+    //   windowSize={15}
+    //   maxToRenderPerBatch={5}
+    //   numColumns={2}
+    //   ListEmptyComponent={
+    //     <YStack alignItems="center" f={1} justifyContent="center">
+    //       <Text fontSize={18} color="#FD4F01">
+    //         No products found
+    //       </Text>
+    //       <Button
+    //         onPress={() => {
+    //           dispatch(resetFilters());
+    //         }}
+    //         bg="#FD4F01"
+    //         color="white"
+    //         mt={16}
+    //         fontWeight={700}>
+    //         Reset filters
+    //       </Button>
+    //     </YStack>
+    //   }
+    //   columnWrapperStyle={{ gap: 8 }}
+    //   updateCellsBatchingPeriod={50}
+    //   data={(data as (Productsmakelijke | SliderItem)[]) || []}
+    //   keyExtractor={(item) => item?._id?.toString()}
+    //   renderItem={renderItem}
+    //   contentContainerStyle={[{ paddingBottom: 50 }, contentContainerStyle]}
+    //   showsVerticalScrollIndicator={showsVerticalScrollIndicator}
+    //   scrollEventThrottle={scrollEventThrottle}
+    //   onScroll={handleScroll}
+    //   style={{
+    //     padding: 16,
+    //   }}
+    // />
+    <FlashList
+      showsVerticalScrollIndicator={false}
+      scrollEventThrottle={scrollEventThrottle}
+      onScroll={handleScroll}
+      estimatedItemSize={325}
+      data={data}
       ref={flatListRef}
-      initialNumToRender={20}
-      windowSize={20}
-      maxToRenderPerBatch={20}
+      renderItem={renderItem}
       numColumns={2}
+      contentContainerStyle={{ ...styles.flashList }}
       ListEmptyComponent={
         <YStack alignItems="center" f={1} justifyContent="center">
           <Text fontSize={18} color="#FD4F01">
@@ -76,18 +119,18 @@ export default function CookSubcribeProductLIsts({
           </Button>
         </YStack>
       }
-      columnWrapperStyle={{ gap: 8 }}
-      updateCellsBatchingPeriod={50}
-      data={(data as (Productsmakelijke | SliderItem)[]) || []}
-      keyExtractor={(item) => item?._id?.toString()}
-      renderItem={renderItem}
-      contentContainerStyle={[{ paddingBottom: 50 }, contentContainerStyle]}
-      showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-      scrollEventThrottle={scrollEventThrottle}
-      onScroll={handleScroll}
-      style={{
-        padding: 16,
-      }}
     />
   );
 }
+
+const styles = StyleSheet.create({
+  contentContainer: {
+    flex: 1,
+  },
+  flashList: {
+    paddingBottom: 10,
+    paddingTop: 20,
+    paddingHorizontal: 16,
+    justifyContent: 'space-between',
+  },
+});

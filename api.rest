@@ -78,3 +78,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODczZ
     "_delivery_time": "17:00-18:00",
     "_newsletter": false
 }
+
+
+### get subscription details
+
+GET {{baseUrl}}/api/subscription/user/67e2a75fc6c55d0533dc64a3

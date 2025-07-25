@@ -5,10 +5,12 @@ import Coin from '~/public/images/coin.svg';
 export default function SelectPrice({
   values,
   setSelectProduct,
+  setOpenSelectedProduct,
   quantity,
 }: {
   values?: { weight: string; price: string; coin?: string }[];
   setSelectProduct: React.Dispatch<React.SetStateAction<Productsmakelijke | undefined>>;
+  setOpenSelectedProduct: React.Dispatch<React.SetStateAction<boolean>>;
   quantity: number;
 }) {
   const handleSelectedValue = (value: string) => {
@@ -25,8 +27,10 @@ export default function SelectPrice({
   return (
     <Select
       defaultValue={values?.[0]?.weight}
+      defaultOpen={true}
       onValueChange={(value) => {
         handleSelectedValue(value);
+        setOpenSelectedProduct(false);
       }}>
       <Select.Trigger
         disabled={quantity < 0}

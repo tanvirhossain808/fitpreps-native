@@ -1,15 +1,26 @@
-import { useLocalSearchParams } from 'expo-router';
-import { lazy } from 'react';
+import { useFocusEffect, useLocalSearchParams } from 'expo-router';
+import { lazy, useEffect } from 'react';
 
 import Subscription from '~/src/components/ProductsBynormal-sub/Subscription';
 import CookdSubscriptionContainer from '~/src/components/ProductsBynormal-sub/CookdSubscriptionContainer';
 import FueldProductsContainer from '~/src/components/ProductWithotuSub/FueldProductsContainer';
 import NOnSubscriptionCookdProductsContainer from '~/src/components/ProductWithotuSub/NOnSubscriptionCookdProductsContainer';
 import { Text, YStack } from 'tamagui';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { resetSubCart } from '~/src/store/slices/subcartSlice';
 
 export default function Home() {
   const { product = 'cookd', subscription = false as boolean } = useLocalSearchParams();
-  const subscriptionType = Number(subscription) === 1 ? true : false;
+  console.log(product, subscription);
+  const [subscriptionType, setSubscriptionType] = useState(false);
+  useFocusEffect(() => {
+    setSubscriptionType(Number(subscription) === 1 ? true : false);
+  });
+  const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(resetSubCart());
+  // }, []);
   switch (product) {
     case 'cookd':
       return !subscriptionType ? (

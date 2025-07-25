@@ -8,24 +8,27 @@ import { router } from 'expo-router';
 import CartFoodList from '~/src/components/shared/cart/CartFoodList';
 import Saving from '~/src/components/shared/cart/Saving';
 import CartCarousel from '~/src/components/shared/cart/CartCarosuel';
-import FooterCart from '~/src/components/shared/cart/CartFooter';
 import CartDatePicker from '~/src/components/shared/cart/CartDatePicker';
-import SubsHeader from '~/src/components/shared/cart/Subscription/SubsHeader';
-import SubsPlan from '~/src/components/shared/cart/Subscription/SubsPlan';
 import SubscribeFooter from './SubscribedProductFooter';
+import SubscribedFoodLists from './SubscribedFoodLists';
+import SubDatePicker from '~/src/components/shared/cart/Subscription/SubDatePicker';
+import { DateData } from 'react-native-calendars';
 
 export default function CartStep1({
   setCurrentStep,
   cartType,
   orderData,
+  date,
+  setDate,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   cartType: string;
   orderData: any;
+  date: DateData | null;
+  setDate: React.Dispatch<React.SetStateAction<DateData | null>>;
 }) {
   const cartItems = useSelector((state: RootState) => state.subCart.subCartItems);
   const cartItemsList = Object.values(cartItems) || [];
-  const dispatch = useDispatch();
   const renderItem = useCallback(({ item, index }: { item: any; index: number }) => {
     return (
       <View
@@ -34,7 +37,7 @@ export default function CartStep1({
           marginTop: index === 0 ? 20 : 0,
           marginBottom: index === extraFoods.length - 1 ? 20 : 0,
         }}>
-        <CartFoodList item={item} />
+        <SubscribedFoodLists item={item} />
       </View>
     );
   }, []);
@@ -43,9 +46,13 @@ export default function CartStep1({
       <FlatList
         ListFooterComponent={
           <YStack>
-            <Saving />
+            <Saving isCommingSoon={true} />
             <CartCarousel />
-            <SubscribeFooter setCurrentStep={setCurrentStep} orderData={orderData} />
+            <SubscribeFooter
+              selectedDate={date}
+              setCurrentStep={setCurrentStep}
+              orderData={orderData}
+            />
           </YStack>
         }
         ListEmptyComponent={() => (
@@ -73,7 +80,7 @@ export default function CartStep1({
         style={{ ...style.flastListContainer }}
         ListHeaderComponent={
           <YStack>
-            <CartDatePicker cartType="purchase-sub" />
+            <SubDatePicker cartType="meals" date={date} setDate={setDate} />
           </YStack>
         }
         ListHeaderComponentStyle={{ marginBottom: 20 }}

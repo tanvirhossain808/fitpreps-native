@@ -35,9 +35,12 @@ export default function ({
   }, [filterPrices]);
   useFocusEffect(
     useCallback(() => {
-      setFilters({});
-      dispatch(resetAllFilters());
-    }, [])
+      return () => {
+        // This cleanup function runs when the component unmounts or loses focus
+        setFilters({});
+        dispatch(resetAllFilters());
+      };
+    }, [dispatch])
   );
   const filterOption = filterItems(productType);
   return (

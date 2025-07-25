@@ -32,9 +32,11 @@ const subCartSlice = createSlice({
       if (state.subCartItems[id]) {
         state.subCartItems[id].quantity += 1;
         state.quantity += 1;
+        state.subTotal += Number(action.payload.selectedWeight.coin);
       } else {
         state.subCartItems[id] = { ...action.payload, quantity: 1 };
         state.quantity += 1;
+        state.subTotal += Number(action.payload.selectedWeight.coin);
       }
     },
     subDecrement: (state, action) => {
@@ -43,9 +45,12 @@ const subCartSlice = createSlice({
         if (state.subCartItems[id].quantity > 1) {
           state.subCartItems[id].quantity -= 1;
           state.quantity -= 1;
+
+          state.subTotal -= Number(action.payload.selectedWeight?.coin);
         } else {
           state.quantity -= state.subCartItems[id].quantity;
           delete state.subCartItems[id];
+          state.subTotal -= Number(action.payload.selectedWeight?.coin);
         }
       }
     },
@@ -53,8 +58,12 @@ const subCartSlice = createSlice({
     SubEmptyCart: (state) => {
       state.subCartItems = {};
     },
+    resetSubCart: (state) => {
+      return initialState;
+    },
   },
 });
 
 export default subCartSlice.reducer;
-export const { subIncrement, subDecrement, subRemoveItem, SubEmptyCart } = subCartSlice.actions;
+export const { subIncrement, subDecrement, subRemoveItem, SubEmptyCart, resetSubCart } =
+  subCartSlice.actions;

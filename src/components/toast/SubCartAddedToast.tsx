@@ -38,7 +38,7 @@ export default function SubCartAddedToast({ props }: { props: ToastProps & { qua
               bg="#FD4F01"
               px="$5"
               py="$3"
-              onPress={() => router.push('/sub-cart/sub-cart')}>
+              onPress={() => router.push('/sub-cart')}>
               <Text color="white" fontSize={16} fontWeight={700}>
                 Add{' '}
                 <Text color="white" fontSize={16} fontWeight={700}>

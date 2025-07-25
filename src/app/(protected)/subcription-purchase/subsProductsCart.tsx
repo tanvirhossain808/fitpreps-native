@@ -12,12 +12,14 @@ import SubscribedProductCartStep1 from './partials/SubscribedProducts/Subscribed
 import SubscribedProductCartStep2 from './partials/SubscribedProducts/SubscribedProductCartStep2';
 import SubscribeStep from './partials/SubscribedProducts/SubscribeStep';
 import CartStep1 from '~/src/components/shared/cart/CartStep1';
+import { DateData } from 'react-native-calendars';
 
 export default function PurchaseSubCart() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [isShowMapModal, setShowMapModal] = useState<boolean>(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isEditAddress, setIsEditAddress] = useState(false);
+  const [date, setDate] = useState<DateData | null>(null);
   const { cartType = 'meals', subscriptionType } = useLocalSearchParams() || {};
 
   // const { sub, tax, shippingFee, discount, final } = useCartLogic();
@@ -27,17 +29,21 @@ export default function PurchaseSubCart() {
   //   }
   //   dispatch(setSubTotal(sub));
   // }, [sub]);
-
+  console.log(date, 'd');
   const cartSteps: { [key: number]: any } = {
     0: (
       <SubscribedProductCartStep1
         setCurrentStep={setCurrentStep}
         cartType={cartType as string}
         orderData={{}}
+        date={date}
+        setDate={setDate}
       />
     ),
     1: (
       <SubscribedProductCartStep2
+        date={date}
+        setDate={setDate}
         isAddressModalOpen={isAddressModalOpen}
         setIsAddressModalOpen={setIsAddressModalOpen}
         setCurrentStep={setCurrentStep}

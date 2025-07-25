@@ -1,72 +1,42 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Text, View, XStack, YStack } from 'tamagui';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '~/src/store';
 import { setOrderData } from '~/src/store/slices/cartSlice';
 import Toast from 'react-native-toast-message';
-
+import Coin from 'public/images/coin.svg';
+import { DateData } from 'react-native-calendars';
 export default function SubscribedProductsPay({
   setCurrentStep,
+  selectedDate,
   orderData,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  selectedDate: DateData | null;
   orderData: any;
 }) {
   // const dispatch = useDispatch();
   // useEffect(() => {
   //   dispatch(setTotal as any);
   // }, []);
-  const { total, subTotal, shipping, tax } = useSelector((s: RootState) => s.cart);
-  const cartItems = useSelector((s: RootState) => s.cart.cartItems);
+  const { subTotal } = useSelector((s: RootState) => s.subCart);
+  const cartItems = useSelector((s: RootState) => s.subCart);
+
   const dispatch = useDispatch();
+  useEffect(() => {}, []);
   const handleCheckout = () => {
-    console.log('hey', 'cartItems');
-    const c = Object.values(cartItems);
-    const isSupplimentInTheCart = c.find((data) => data.categories.includes('Supplements'));
-
-    let value = 0;
-    let isTastyFoodInsideCart = false;
-
-    if (isSupplimentInTheCart) {
-      for (let i = 0; i < c.length; i++) {
-        const item = c[i];
-
-        if (!item.categories.includes('Supplements')) {
-          if (!isTastyFoodInsideCart) {
-            isTastyFoodInsideCart = true;
-          }
-          console.log(value, 'value');
-
-          value += Number(item.metadata._price) * item.quantity;
-          if (value >= 45) {
-            break;
-          }
-        }
-      }
-      console.log(value, 'value');
-      if (isTastyFoodInsideCart && value < 45) {
-        console.log('hey3');
-        Toast.show({
-          type: 'minimumOrderAmountToast',
-          text1: 'De minimale bestelwaarde voor maaltijden is €45',
-          position: 'top',
-        });
-        return;
-      }
-    } else if (subTotal > 0 && subTotal < 45) {
-      console.log('hey4');
-      Toast.show({
-        type: 'minimumOrderAmountToast',
-        text1: 'De minimale bestelwaarde voor maaltijden is €45',
+    // const c = Object.values(cartItems);
+    if (!selectedDate) {
+      return Toast.show({
+        type: 'error',
+        text1: 'Please select delivery date',
         position: 'top',
       });
-      return;
     }
-    console.log('hey2');
+    setCurrentStep(1);
     dispatch(setOrderData(orderData));
   };
-
   return (
     <YStack flex={1} pb="$5">
       <XStack alignItems="center" justifyContent="space-between">
@@ -80,16 +50,19 @@ export default function SubscribedProductsPay({
           <Text fontSize={14} fontWeight={500} color="#1E1F20">
             Subtotal
           </Text>
-          <Text fontSize={14} fontWeight={500} color="#1E1F20">
-            €{subTotal.toFixed(2)}
-          </Text>
+          <XStack gap={2}>
+            <Coin />
+            <Text fontSize={14} fontWeight={500} color="#1E1F20">
+              {subTotal}
+            </Text>
+          </XStack>
         </XStack>
         <XStack alignItems="center" justifyContent="space-between">
           <Text fontSize={14} fontWeight={500} color="#1E1F20">
             Shipping cost
           </Text>
           <Text fontSize={14} fontWeight={500} color="#1E1F20">
-            €{(shipping + tax).toFixed(2)}
+            €0
           </Text>
         </XStack>
       </YStack>
@@ -98,9 +71,12 @@ export default function SubscribedProductsPay({
         <Text fontWeight={700} fontSize={14} color="#1E1F20">
           Total
         </Text>
-        <Text fontWeight={700} fontSize={14} color="#1E1F20">
-          €{total.toFixed(2)}
-        </Text>
+        <XStack gap={2}>
+          <Coin />
+          <Text fontWeight={700} fontSize={14} color="#1E1F20">
+            {subTotal}
+          </Text>
+        </XStack>
       </XStack>
       <Button
         mt="$3"
@@ -109,9 +85,8 @@ export default function SubscribedProductsPay({
         fontSize={16}
         fontWeight={700}
         color="white"
-        onPress={() => setCurrentStep(1)}
-        // onPress={handleCheckout}
-      >
+        // onPress={() => setCurrentStep(1)}
+        onPress={handleCheckout}>
         Checkout
       </Button>
     </YStack>

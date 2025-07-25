@@ -129,3 +129,10 @@ export function phpUnserialize(data: string): any {
 
   return parse();
 }
+
+export function getFormattedDate() {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    year: 'numeric',
+  }).format(Date.now());
+}

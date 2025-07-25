@@ -134,6 +134,7 @@ export type Productsmakelijke = {
   eiwitten: string;
   selectedWeight?: {
     weight: string;
+    coin: number;
     price: string;
   };
 };

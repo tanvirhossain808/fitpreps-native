@@ -147,7 +147,7 @@ export function generateOrderData(params: {
       meta: {
         _qty: i.quantity,
         _line_total: Number(i.metadata._price) * Number(i.quantity),
-        _weight: optimizer(i),
+        _weight: optimizer(i) / 1000,
         _id: i._id,
         _bundled_items: i.metadata._yith_wcpb_bundle_data ?? null,
         _asnp_wepb_items: asnp,

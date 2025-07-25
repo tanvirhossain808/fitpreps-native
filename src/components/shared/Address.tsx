@@ -8,7 +8,6 @@ import {
   Dialog,
   AnimatePresence,
   ScrollView,
-  Spinner,
 } from 'tamagui';
 import React, { useEffect, useState } from 'react';
 import { address } from '~/src/constant';
@@ -25,15 +24,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '~/src/store';
 import { AddressType, SubPlan } from '~/src/types/type';
 import { useSubPurchaseMutation } from '~/src/store/apiSlices/subPurchaseSlice';
+import { WebView } from 'react-native-webview';
 import { removeAddress } from '~/src/store/slices/addressSlice';
-import { DateData } from 'react-native-calendars';
-import { useOrderData } from '~/src/hooks/useOrderData';
-import { useSubProductOrderMutation } from '~/src/store/apiSlices/subProductsOrderSlice';
-import { getFormattedDate } from '~/src/helper';
-export default function SubscribedProductCartStep2({
+export default function PurchaseStep2({
   setCurrentStep,
   isEditAddress,
-  date,
   setIsEditAddress,
   isShowMapModal,
   setShowMapModal,
@@ -46,17 +41,15 @@ export default function SubscribedProductCartStep2({
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   isEditAddress: boolean;
-  date: DateData | null;
-  setDate: React.Dispatch<React.SetStateAction<DateData | null>>;
-  selectedIndex?: string | null;
-  setSelectedIndex?: React.Dispatch<React.SetStateAction<string | null>>;
+  selectedIndex: string | null;
+  setSelectedIndex: React.Dispatch<React.SetStateAction<string | null>>;
   setIsEditAddress: React.Dispatch<React.SetStateAction<boolean>>;
   isShowMapModal: boolean;
   setShowMapModal: React.Dispatch<React.SetStateAction<boolean>>;
   setIsAddressModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isAddressModalOpen: boolean;
-  selectedSubPlan?: any;
-  setSelectedSubPlan?: React.Dispatch<React.SetStateAction<any>>;
+  selectedSubPlan: any;
+  setSelectedSubPlan: React.Dispatch<React.SetStateAction<any>>;
 }) {
   const [selectedAddress, setSelectedAddress] = useState<number | null>(null);
   const [pressedItem, setPressedItem] = useState<string | null>(null);
@@ -64,23 +57,23 @@ export default function SubscribedProductCartStep2({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectAddressId, setSelectAddressId] = useState<string | null>(null);
   const [selectedDeleteAddressId, setSelectedDeleteAddressId] = useState<string | null>(null);
-  const [selectEditAddressId, setSelectEditAddressId] = useState<string | null>(null);
   const handleDelete = (addressId: string) => {
     setSelectedAddress(null);
-    // if (selectedIndex === addressId) {
-    //   setSelectedIndex(null);
-    // }
+    if (selectedIndex === addressId) {
+      setSelectedIndex(null);
+    }
     setSelectedDeleteAddressId(addressId);
     setIsDeleteDialogOpen(true);
+    setSelectAddressId(addressId);
   };
-  // useEffect(() => {
-  //   if (selectedIndex) {
-  //     setSelectedIndex(null);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (selectedIndex) {
+      setSelectedIndex(null);
+    }
+  }, []);
   const handleEdit = (addressId: string) => {
     setSelectedAddress(() => null);
-    setSelectEditAddressId(addressId);
+    setSelectAddressId(addressId);
     setIsAddressModalOpen(() => true);
     setIsEditAddress(() => true);
     // Add your edit logic here
@@ -92,11 +85,11 @@ export default function SubscribedProductCartStep2({
       <SafeAreaView style={{ flex: 1 }}>
         {confirmAddress ? (
           <ConfirmAddress
-            date={date}
-            // setSelectedSubPlan={setSelectedSubPlan}
+            selectedSubPlan={selectedSubPlan}
+            setSelectedSubPlan={setSelectedSubPlan}
             setConFirmAddress={setConFirmAddress}
             setCurrentStep={setCurrentStep}
-            address={addressLists.find((item) => item?._id === selectAddressId) || null}
+            address={addressLists.find((item) => item?._id === selectedIndex) || null}
           />
         ) : (
           <YStack flex={1} justifyContent="space-between">
@@ -104,6 +97,7 @@ export default function SubscribedProductCartStep2({
               <YStack flex={1} px={'$4'} gap="$7">
                 <Button
                   onPress={() => {
+                    setSelectAddressId(null);
                     setIsEditAddress(false);
                     setIsAddressModalOpen(true);
                   }}
@@ -138,7 +132,7 @@ export default function SubscribedProductCartStep2({
                     {addressLists?.map((addressDetails: any, i: number) => (
                       <TouchableOpacity
                         key={i}
-                        onPress={() => setSelectAddressId(addressDetails._id)}
+                        onPress={() => setSelectedIndex(addressDetails._id)}
                         activeOpacity={0.4}>
                         <XStack
                           p="$3"
@@ -157,11 +151,11 @@ export default function SubscribedProductCartStep2({
                             borderColor="#FD4F01">
                             <View
                               backgroundColor={
-                                selectAddressId === addressDetails?._id ? '#FD4F01' : 'transparent'
+                                selectedIndex === addressDetails?._id ? '#FD4F01' : 'transparent'
                               }
                               width={10}
                               height={10}
-                              borderRadius={selectAddressId === addressDetails?._id ? 50 : 0}
+                              borderRadius={selectedIndex === addressDetails?._id ? 50 : 0}
                             />
                           </XStack>
                           <YStack flex={1} alignSelf="stretch">
@@ -234,7 +228,7 @@ export default function SubscribedProductCartStep2({
                 fontWeight={700}
                 color="white"
                 onPress={() => {
-                  if (selectAddressId === null) {
+                  if (selectedIndex === null) {
                     Toast.show({
                       type: 'error',
                       text1: 'Error',
@@ -263,7 +257,7 @@ export default function SubscribedProductCartStep2({
       />
       {isAddressModalOpen && (
         <CartAddress
-          addressId={selectEditAddressId as string}
+          addressId={selectAddressId as string}
           setConFirmAddress={setConFirmAddress}
           isEditAddress={isEditAddress}
           setIsEditAddress={setIsEditAddress}
@@ -397,162 +391,86 @@ const ConfirmAddress = ({
   setConFirmAddress,
   selectedSubPlan,
   setSelectedSubPlan,
-  date,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   address: AddressType | null;
   setConFirmAddress: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedSubPlan?: SubPlan;
-  setSelectedSubPlan?: React.Dispatch<React.SetStateAction<any>>;
-  date: DateData | null;
+  selectedSubPlan: SubPlan;
+  setSelectedSubPlan: React.Dispatch<React.SetStateAction<any>>;
 }) => {
   const [purchaseSubMutation] = useSubPurchaseMutation();
   const token = useSelector((s: RootState) => s.user?.user?.token) || '';
-  const user = useSelector((s: RootState) => s.user) || '';
-  const cartItems = useSelector((s: RootState) => s.subCart.subCartItems);
-  const subTotal = useSelector((s: RootState) => s.subCart.subTotal);
-  const { orderData } = useOrderData({
-    user: user?.user!.user,
-    cart: Object.values(cartItems),
-    detectedCountry: 'NL',
-  });
-  const dispatch = useDispatch();
-  const [action] = useSubProductOrderMutation();
-  const [isLoading, setIsLoading] = useState(false);
-  const handleSubscription = () => {
-    setIsLoading(true);
-    // const
-    action({
+  const userId = useSelector((s: RootState) => s.user?.user?.user._id) || '';
+  const date = useSelector((s: RootState) => s.subPurchase.startDate);
+  const selectedDAte = useSelector((s: RootState) => s.subPurchase.startDate);
+  const handleConfirmAddress = () => {
+    purchaseSubMutation({
       body: {
-        userId: user.user?.user._id,
-        createdAt: getFormattedDate(),
-        items: orderData.items,
-        startDate: date?.dateString,
-        metadata: {
-          _billing_address_1: address?.addressDetails?.street,
-          // _billing_address_2: 'Eligendi asperiores ',
-          _billing_city: address?.addressDetails?.city,
-          _billing_company: '',
-          _billing_company_kvk: '',
-          _billing_company_vat: '',
-          _billing_country: 'NL',
+        startDate:
+          selectedSubPlan.planType.toLowerCase() === 'monthly'
+            ? new Date().toISOString().split('T')[0]
+            : date,
+        userId,
+        totalPoints: selectedSubPlan.coins + selectedSubPlan.bonusCoins,
+        frequency: selectedSubPlan.planType.toLowerCase(),
+        amount: selectedSubPlan.price.toFixed(2),
+        type: 'fueld',
+        data: {
           _billing_email: address?.contactDetails.email,
           _billing_first_name: address?.contactDetails.name,
-          // _billing_last_name: 'Todd',
-          // _billing_phone: '+1 (852) 776-4299',
+
+          // _billing_last_name: address?.contactDetails.lastName,
+          _billing_country: 'NL',
+          _billing_address_1: address?.addressDetails.street,
+          // _billing_address_2: 'Apt 4B',
+          _billing_city: address?.addressDetails.city,
+          _billing_state: address?.addressDetails.state,
           _billing_postcode: address?.addressDetails.zipCode,
-          _billing_state: '',
-          _cart_discount: 0,
-          _delivery_company: 'trunkrs',
-          _delivery_date: date?.dateString,
-          // _delivery_time: '17:00 - 22:00',
-          // _order_shipping: '5.74',
-          // _order_shipping_tax: '1.21',
-          // _order_tax: '9.20',
-          _order_total: orderData.total,
-          // _paymentMethod: 'ideal',
-          // _payment_method_id: 10,
-          // _prioritized_fee: 0,
-          // _prioritized_order: false,
-          _shipping_address_1: address?.addressDetails?.street,
-          // _shipping_address_2: 'Eligendi asperiores ',
-          _shipping_city: address?.addressDetails?.city,
-          _shipping_company: '',
-          _shipping_company_kvk: '',
-          _shipping_company_vat: '',
+          _billing_phone: address?.contactDetails.phone,
+          // _billing_company: 'Doe Inc.',
+          // _billing_company_kvk: '12345678',
+          // _billing_company_vat: 'NL123456789B01',
+          _shipping_email: address?.contactDetails.email,
+          _shipping_first_name: address?.contactDetails.name,
+          // _shipping_last_name: 'Doe',
           _shipping_country: 'NL',
-          _shipping_email: address?.contactDetails?.email,
-          _shipping_first_name: address?.contactDetails?.name,
-          // _shipping_last_name: 'Todd',
-          // _shipping_phone: '+1 (852) 776-4299',
-          _shipping_postcode: address?.addressDetails?.zipCode,
-          // _shipping_state: '',
-          // _supplements_total: '13.95',
+          _shipping_address_1: address?.addressDetails.street,
+          // _shipping_address_2: 'Apt 4B',
+          _shipping_city: address?.addressDetails.city,
+          _shipping_state: address?.addressDetails.state,
+          _shipping_postcode: address?.addressDetails.zipCode,
+          _shipping_phone: address?.contactDetails.phone,
+          // _shipping_company: 'Doe Inc.',
+          // _shipping_company_kvk: '12345678',
+          // _shipping_company_vat: 'NL123456789B01',
+          // _delivery_time: '17:00-18:00',
+          _newsletter: false,
         },
-        mollieCustomerId: '',
-        pointsUsed: subTotal,
       },
-      token: token,
+      token,
     })
       .unwrap()
-      .then((res) => console.log(res))
+      .then((res) => {
+        if (res.success) {
+          // router.push(res.checkoutUrl);
+          router.push({
+            pathname: '/verifyPayment/verifyPayment',
+            params: {
+              redirectUrl: res.checkoutUrl,
+            },
+          });
+          // setRedirectUrl(res.checkoutUrl);
+        }
+      })
       .catch((err) => {
+        console.log(err, 'err');
         Toast.show({
           type: 'error',
-          text1: err.data.error,
+          text1: err?.data?.message || 'Something went wrong',
+          position: 'top',
         });
-        router.replace('/subscription');
       });
-    setIsLoading(false);
   };
-  // const handleConfirmAddress = () => {
-  //   purchaseSubMutation({
-  //     body: {
-  //       startDate:
-  //         selectedSubPlan.planType.toLowerCase() === 'monthly'
-  //           ? new Date().toISOString().split('T')[0]
-  //           : date,
-  //       userId,
-  //       totalPoints: selectedSubPlan.coins + selectedSubPlan.bonusCoins,
-  //       frequency: selectedSubPlan.planType.toLowerCase(),
-  //       amount: selectedSubPlan.price.toFixed(2),
-  //       type: 'fueld',
-  //       data: {
-  //         _billing_email: address?.contactDetails.email,
-  //         _billing_first_name: address?.contactDetails.name,
-
-  //         // _billing_last_name: address?.contactDetails.lastName,
-  //         _billing_country: 'NL',
-  //         _billing_address_1: address?.addressDetails.street,
-  //         // _billing_address_2: 'Apt 4B',
-  //         _billing_city: address?.addressDetails.city,
-  //         _billing_state: address?.addressDetails.state,
-  //         _billing_postcode: address?.addressDetails.zipCode,
-  //         _billing_phone: address?.contactDetails.phone,
-  //         // _billing_company: 'Doe Inc.',
-  //         // _billing_company_kvk: '12345678',
-  //         // _billing_company_vat: 'NL123456789B01',
-  //         _shipping_email: address?.contactDetails.email,
-  //         _shipping_first_name: address?.contactDetails.name,
-  //         // _shipping_last_name: 'Doe',
-  //         _shipping_country: 'NL',
-  //         _shipping_address_1: address?.addressDetails.street,
-  //         // _shipping_address_2: 'Apt 4B',
-  //         _shipping_city: address?.addressDetails.city,
-  //         _shipping_state: address?.addressDetails.state,
-  //         _shipping_postcode: address?.addressDetails.zipCode,
-  //         _shipping_phone: address?.contactDetails.phone,
-  //         // _shipping_company: 'Doe Inc.',
-  //         // _shipping_company_kvk: '12345678',
-  //         // _shipping_company_vat: 'NL123456789B01',
-  //         // _delivery_time: '17:00-18:00',
-  //         _newsletter: false,
-  //       },
-  //     },
-  //     token,
-  //   })
-  //     .unwrap()
-  //     .then((res) => {
-  //       if (res.success) {
-  //         // router.push(res.checkoutUrl);
-  //         router.push({
-  //           pathname: '/verifyPayment/verifyPayment',
-  //           params: {
-  //             redirectUrl: res.checkoutUrl,
-  //           },
-  //         });
-  //         // setRedirectUrl(res.checkoutUrl);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err, 'err');
-  //       Toast.show({
-  //         type: 'error',
-  //         text1: err?.data?.message || 'Something went wrong',
-  //         position: 'top',
-  //       });
-  //     });
-  // };
   return (
     <>
       <YStack px="$4" flex={1} justifyContent="space-between">
@@ -597,20 +515,19 @@ const ConfirmAddress = ({
             <Text mt="$2" fontSize={16} fontWeight={500}>
               Your subscription will start on{' '}
               <Text color="#FD4F01">
-                {date ? date.dateString : new Date().toISOString().split('T')[0]}
+                {selectedDAte ? selectedDAte : new Date().toISOString().split('T')[0]}
               </Text>
             </Text>
           </YStack>
           <Button
-            disabled={isLoading}
-            onPress={handleSubscription}
+            onPress={handleConfirmAddress}
             mt="$5"
             borderRadius={12}
             color="white"
             fontWeight={700}
             fontSize={16}
             backgroundColor="#FD4F01">
-            {isLoading ? <Spinner size="large" color="$orange10" /> : 'Continue'}
+            Continue
           </Button>
         </YStack>
       </YStack>

@@ -21,7 +21,6 @@ export default function CartPay({
   const cartItems = useSelector((s: RootState) => s.cart.cartItems);
   const dispatch = useDispatch();
   const handleCheckout = () => {
-    console.log('hey', 'cartItems');
     const c = Object.values(cartItems);
     const isSupplimentInTheCart = c.find((data) => data.categories.includes('Supplements'));
 
@@ -36,7 +35,6 @@ export default function CartPay({
           if (!isTastyFoodInsideCart) {
             isTastyFoodInsideCart = true;
           }
-          console.log(value, 'value');
 
           value += Number(item.metadata._price) * item.quantity;
           if (value >= 45) {
@@ -44,9 +42,7 @@ export default function CartPay({
           }
         }
       }
-      console.log(value, 'value');
       if (isTastyFoodInsideCart && value < 45) {
-        console.log('hey3');
         Toast.show({
           type: 'minimumOrderAmountToast',
           text1: 'De minimale bestelwaarde voor maaltijden is €45',
@@ -55,7 +51,6 @@ export default function CartPay({
         return;
       }
     } else if (subTotal > 0 && subTotal < 45) {
-      console.log('hey4');
       Toast.show({
         type: 'minimumOrderAmountToast',
         text1: 'De minimale bestelwaarde voor maaltijden is €45',
@@ -63,7 +58,6 @@ export default function CartPay({
       });
       return;
     }
-    console.log('hey2');
     dispatch(setOrderData(orderData));
   };
 
