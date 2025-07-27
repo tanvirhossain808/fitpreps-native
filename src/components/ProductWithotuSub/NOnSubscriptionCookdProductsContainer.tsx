@@ -9,7 +9,8 @@ import { activeStatsBarInfo } from '~/src/helper';
 import { statusBarColor } from '~/src/constant';
 import { StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-const ProductLists = lazy(() => import('~/src/components/ProductWithotuSub/ProductLists'));
+import ProductLists from './ProductLists';
+// const ProductLists = lazy(() => import('~/src/components/ProductWithotuSub/ProductLists'));
 
 export default function NOnSubscriptionCookdProductsContainer({
   product,
@@ -38,21 +39,12 @@ export default function NOnSubscriptionCookdProductsContainer({
 
         <View style={styles.contentContainer}>
           <View style={{ flex: 1 }} zIndex={0}>
-            {isLoading ? (
-              <LoadingSpinner color={statusBarColor[product as keyof typeof statusBarColor]} />
-            ) : (
-              <Suspense
-                fallback={
-                  <LoadingSpinner color={statusBarColor[product as keyof typeof statusBarColor]} />
-                }>
-                <ProductLists
-                  productType={product as string}
-                  showsVerticalScrollIndicator={false}
-                  scrollEventThrottle={16}
-                  data={filteredProducts}
-                />
-              </Suspense>
-            )}
+            <ProductLists
+              productType={product as string}
+              showsVerticalScrollIndicator={false}
+              scrollEventThrottle={16}
+              data={filteredProducts}
+            />
           </View>
         </View>
       </View>

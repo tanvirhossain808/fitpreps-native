@@ -15,6 +15,7 @@ export default function CartFoodList({
     quantity: number;
   };
 }) {
+  console.log(item, 'item');
   const dispatch = useDispatch();
   const cartItem = useSelector((s: RootState) => s.subCart.subCartItems[item._id]);
   // const quantity = useSelector((state: RootState) => {

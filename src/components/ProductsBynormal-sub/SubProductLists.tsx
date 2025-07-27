@@ -1,4 +1,4 @@
-import { FlatList } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import { Productsmakelijke, SliderItem } from '~/src/types/type';
 import { useGetSmakelijkeProductsQuery } from '~/src/store/apiSlices/products/smakelijke';
 import { useTabBarVisibility } from '~/src/hooks/useTabBarVisibility';
@@ -8,8 +8,8 @@ import useProductFilters from '~/src/hooks/useProductFilters';
 import { Button, Text, YStack } from 'tamagui';
 import { useDispatch } from 'react-redux';
 import { resetFilters } from '~/src/store/slices/filterSlice';
-
-const SubItemList = lazy(() => import('./SubsItemsListCart'));
+import { FlashList } from '@shopify/flash-list';
+import SubItemsList from './SubsItemsListCart';
 
 export const unstable_settings = {
   lazy: true,
@@ -37,30 +37,72 @@ export default function SubProductList({
   const flatListRef = useRef<FlatList>(null);
   useEffect(() => {
     if (flatListRef.current && data?.length > 0) {
-      flatListRef.current.scrollToIndex({
-        index: 0,
-        animated: true,
-      });
+      setTimeout(() => {
+        flatListRef.current?.scrollToIndex({
+          index: 0,
+          animated: true,
+        });
+      }, 0);
     }
   }, [data]);
 
   const renderItem = useCallback(
     ({ item, index }: { item: Productsmakelijke | SliderItem; index: number }) => {
-      return <SubItemList item={item} index={index} productType={'fueld'} />;
+      return <SubItemsList item={item} index={index} productType={'fueld'} />;
     },
 
     []
   );
-  if (isLoading) {
-    return <LoadingSpinner color="white" />;
-  }
+
   return (
-    <FlatList
-      ref={flatListRef}
-      initialNumToRender={20}
-      windowSize={20}
-      maxToRenderPerBatch={20}
+    // <FlatList
+    //   ref={flatListRef}
+    //   initialNumToRender={20}
+    //   windowSize={20}
+    //   maxToRenderPerBatch={20}
+    //   numColumns={2}
+    //   ListEmptyComponent={
+    //     <YStack alignItems="center" f={1} justifyContent="center">
+    //       <Text fontSize={18} color="#FD4F01">
+    //         No products found
+    //       </Text>
+    //       <Button
+    //         onPress={() => {
+    //           dispatch(resetFilters());
+    //         }}
+    //         bg="#FD4F01"
+    //         color="white"
+    //         mt={16}
+    //         fontWeight={700}>
+    //         Reset filters
+    //       </Button>
+    //     </YStack>
+    //   }
+    //   columnWrapperStyle={{ gap: 8 }}
+    //   updateCellsBatchingPeriod={50}
+    //   data={(data as (Productsmakelijke | SliderItem)[]) || []}
+    //   keyExtractor={(item) => item?._id?.toString()}
+    //   renderItem={renderItem}
+    //   contentContainerStyle={[{ paddingBottom: 50 }, contentContainerStyle]}
+    //   showsVerticalScrollIndicator={showsVerticalScrollIndicator}
+    //   scrollEventThrottle={scrollEventThrottle}
+    //   onScroll={handleScroll}
+    //   style={{
+    //     padding: 16,
+    //   }}
+    // />
+    <FlashList
+      showsVerticalScrollIndicator={false}
+      scrollEventThrottle={scrollEventThrottle}
+      onScroll={handleScroll}
+      keyExtractor={(item) => item?._id?.toString()}
+      estimatedItemSize={325}
+      data={data}
+      // style={{ flex: 1 }}
+      ref={flatListRef as any}
+      renderItem={renderItem}
       numColumns={2}
+      contentContainerStyle={{ ...styles.flashList }}
       ListEmptyComponent={
         <YStack alignItems="center" f={1} justifyContent="center">
           <Text fontSize={18} color="#FD4F01">
@@ -78,18 +120,17 @@ export default function SubProductList({
           </Button>
         </YStack>
       }
-      columnWrapperStyle={{ gap: 8 }}
-      updateCellsBatchingPeriod={50}
-      data={(data as (Productsmakelijke | SliderItem)[]) || []}
-      keyExtractor={(item) => item?._id?.toString()}
-      renderItem={renderItem}
-      contentContainerStyle={[{ paddingBottom: 50 }, contentContainerStyle]}
-      showsVerticalScrollIndicator={showsVerticalScrollIndicator}
-      scrollEventThrottle={scrollEventThrottle}
-      onScroll={handleScroll}
-      style={{
-        padding: 16,
-      }}
     />
   );
 }
+const styles = StyleSheet.create({
+  contentContainer: {
+    flex: 1,
+  },
+  flashList: {
+    paddingBottom: 10,
+    paddingTop: 20,
+    paddingHorizontal: 16,
+    justifyContent: 'space-between',
+  },
+});

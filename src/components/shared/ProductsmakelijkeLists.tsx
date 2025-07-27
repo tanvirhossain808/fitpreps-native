@@ -25,6 +25,8 @@ export default function ProductsmakelijkeLists({
   index: number;
 }) {
   const [selectedProduct, setSelectProduct] = useState<Productsmakelijke | any>();
+  const [openSelectedProduct, setOpenSelectedProduct] = useState(false);
+
   const dispatch = useDispatch();
   const quantity = useSelector((state: RootState) => {
     if ('_id' in item) {
@@ -32,42 +34,44 @@ export default function ProductsmakelijkeLists({
     }
     return undefined;
   });
+  // console.log(item?.metadata?.weight_options, 'item');
   useEffect(() => {
     if (productType === 'cookd') {
       const selectedWeight = item as Productsmakelijke;
+      // console.log(selectedWeight?.metadata?.weight_options, 'selectedWeight');
+      if (quantity) {
+        const selectedProduct = selectedWeight.metadata.weight_options?.find(
+          (w) => w.weight === quantity.selectedWeight?.weight
+        );
+        return setSelectProduct({ selectedWeight: selectedProduct });
+      }
+      if (!selectedWeight?.metadata?.weight_options) {
+        return;
+      }
       if (selectedWeight?.metadata?.weight_options) {
         setSelectProduct({ selectedWeight: selectedWeight?.metadata?.weight_options[0] });
       }
     }
-  }, [productType]);
+  }, [productType, item]);
+  // console.log(selectedProduct);
   const handlePlus = () => {
     const productData = { ...item } as Productsmakelijke;
     let data;
+
     if (productType === 'cookd') {
       data = {
         ...productData,
         selectedWeight: selectedProduct.selectedWeight,
-
         metadata: {
           ...productData.metadata,
           _price: selectedProduct.selectedWeight?.price,
-          _coin: selectedProduct.selectedWeight?.coin,
+          // _coin: selectedProduct.selectedWeight?.coin,
         },
       };
+    } else {
+      data = productData;
     }
-    {
-      data = { ...productData };
-    }
-    // const data = {
-    //   ...productData,
-    //   selectedWeight: selectedProduct.selectedWeight,
 
-    //   metadata: {
-    //     ...productData.metadata,
-    //     _price: selectedProduct.selectedWeight?.price,
-    //   },
-    // };
-    // setTimeout(() => {
     Toast.show({
       type: 'cardAddedToast',
       text1: 'Product added to cart',
@@ -86,9 +90,9 @@ export default function ProductsmakelijkeLists({
   };
   if ((item as SliderItem)?.type === 'slider') {
     return (
-      <YStack w="100%" py={0} my={0}>
+      <XStack w="100%" height={180} py={0} my={0}>
         <SliderCarousel images={(item as SliderItem)?.images} productType={productType} />
-      </YStack>
+      </XStack>
     );
   }
   if ((item as { type: string })?.type === 'dummy') {
@@ -97,12 +101,13 @@ export default function ProductsmakelijkeLists({
   return (
     <>
       {item.type === 'dummy1' ? (
-        <View />
+        <View h={0} />
       ) : (
         <YStack
+          h={325}
           mt={index === 7 || index === 6 ? 0 : 20}
           key={(item as Productsmakelijke)?._id}
-          w={'48%'}
+          w={'98%'}
           p={8}
           bg="white"
           gap={20}
@@ -240,23 +245,59 @@ export default function ProductsmakelijkeLists({
 
             <Text
               fontSize={11.5}
+              h={30}
               fontWeight={700}
               color="#1E1F20"
               numberOfLines={2}
               ellipsizeMode="tail">
               {(item as Productsmakelijke)?.name}
             </Text>
-
             {(item as Productsmakelijke)?.metadata?.weight_options !== undefined && (
               <View>
-                <SelectPrice
-                  quantity={quantity?.quantity ? quantity.quantity : 0}
-                  setSelectProduct={setSelectProduct}
-                  values={(item as Productsmakelijke)?.metadata?.weight_options?.map((item) => ({
-                    ...item,
-                    coin: item.coin?.toString(),
-                  }))}
-                />
+                {openSelectedProduct ? (
+                  <SelectPrice
+                    selectedWeight={selectedProduct.selectedWeight.weight as string}
+                    setOpenSelectedProduct={setOpenSelectedProduct}
+                    quantity={quantity?.quantity ? quantity.quantity : 0}
+                    setSelectProduct={setSelectProduct}
+                    values={(item as any)?.metadata?.weight_options}
+                  />
+                ) : (
+                  <TouchableOpacity
+                    disabled={quantity ? true : false}
+                    onPress={() => setOpenSelectedProduct(true)}>
+                    <XStack
+                      borderWidth={1}
+                      borderColor="#A1A1A1"
+                      borderRadius={4}
+                      p={8}
+                      alignItems="center"
+                      justifyContent="space-between">
+                      <View>
+                        {!selectedProduct?.selectedWeight?.coin ? (
+                          <XStack alignItems="center">
+                            <Text color="#1E1F20" fontWeight={600} fontSize={12}>
+                              {selectedProduct?.selectedWeight?.weight} -{' '}
+                              <Text color="#FD4F01">€{selectedProduct?.selectedWeight?.price}</Text>
+                            </Text>
+                          </XStack>
+                        ) : (
+                          <XStack alignItems="center">
+                            <Text color="#1E1F20" fontWeight={600} fontSize={12}>
+                              {selectedProduct?.selectedWeight?.weight} -{' '}
+                            </Text>
+                            <View>
+                              <Coin />
+                            </View>
+                            <Text></Text>
+                            <Text>{selectedProduct?.selectedWeight?.coin}</Text>
+                          </XStack>
+                        )}
+                      </View>
+                      <AntDesign name="down" size={16} color="#A1A1A1" />
+                    </XStack>
+                  </TouchableOpacity>
+                )}
               </View>
             )}
 
@@ -271,7 +312,7 @@ export default function ProductsmakelijkeLists({
                   </XStack>
                 ) : (
                   <Text fontSize={14} fontWeight={700} color="#FD4F01">
-                    <Coin /> €{(item as Productsmakelijke)?.metadata?._price}
+                    {/*      <Coin /> */} €{(item as Productsmakelijke)?.metadata?._price}
                   </Text>
                 )}
 
@@ -289,10 +330,6 @@ export default function ProductsmakelijkeLists({
                 )}
               </View>
             )}
-
-            {/* <Button fontSize={15} color="white" fontWeight={700} bg="#FD4F01" borderRadius={8}>
-              {productType === 'cookd' ? 'Add & Fuel Up' : 'Add'}
-            </Button> */}
             {quantity?.quantity && quantity.quantity > 0 ? (
               <XStack
                 overflow="hidden"

@@ -68,7 +68,6 @@ export default function ProductHeader({
                 What are you looking for today?
               </Text>
             </XStack>
-
             <SelectedFoodCategories
               activeStatsBarInfo={
                 activeStatsBarInfo as { name: string; color: string; tentColor: string } | null

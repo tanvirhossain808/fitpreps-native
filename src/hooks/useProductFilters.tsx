@@ -136,19 +136,39 @@ const useProductFilters = (initialProducts: Productsmakelijke[] = [], productTyp
     const slider = productType === 'suppd' ? suppdProductCategories : sliderData;
     // Inject slider + dummies based on number of products
     if (sorted.length >= 4) {
-      return [...sorted.slice(0, 4), slider, { id: 'dummy', type: 'dummy' }, ...sorted.slice(4)];
+      return [
+        ...sorted.slice(0, 4),
+        slider,
+        { _id: 'dummy', id: 'dummy', type: 'dummy' },
+        ...sorted.slice(4),
+      ];
     }
 
     if (sorted.length === 3) {
-      return [...sorted, { id: 'dummy1', type: 'dummy1' }, slider, { id: 'dummy', type: 'dummy' }];
+      return [
+        ...sorted,
+        { _id: 'dummy1', id: 'dummy1', type: 'dummy1' },
+        slider,
+        { _id: 'dummy', id: 'dummy', type: 'dummy' },
+      ];
     }
 
     if (sorted.length === 2) {
-      return [...sorted, { id: 'dummy1', type: 'dummy1' }, slider, { id: 'dummy', type: 'dummy' }];
+      return [
+        ...sorted,
+        { _id: 'dummy1', id: 'dummy1', type: 'dummy1' },
+        slider,
+        { _id: 'dummy', id: 'dummy', type: 'dummy' },
+      ];
     }
 
     if (sorted.length === 1) {
-      return [sorted[0], { id: 'dummy1', type: 'dummy1' }, slider, { id: 'dummy', type: 'dummy' }];
+      return [
+        sorted[0],
+        { _id: 'dummy1', id: 'dummy1', type: 'dummy1' },
+        slider,
+        { _id: 'dummy', id: 'dummy', type: 'dummy' },
+      ];
     }
 
     // No products case

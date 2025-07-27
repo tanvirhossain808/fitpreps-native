@@ -69,15 +69,22 @@ export default function Shop() {
         ) : (
           <>
             {selectCategory !== 'Gym Wear' && gender === null ? (
-              <Suspense fallback={<LoadingSpinner color={statusBarInfo?.color as string} />}>
-                <ProductLists
-                  isLoading={isLoading}
-                  data={filteredProducts}
-                  productType={product as string}
-                  showsVerticalScrollIndicator={false}
-                  scrollEventThrottle={16}
-                />
-              </Suspense>
+              // <Suspense fallback={<LoadingSpinner color={statusBarInfo?.color as string} />}>
+              //   <ProductLists
+              //     isLoading={isLoading}
+              //     data={filteredProducts}
+              //     productType={product as string}
+              //     showsVerticalScrollIndicator={false}
+              //     scrollEventThrottle={16}
+              //   />
+              // </Suspense>
+              <ProductLists
+                isLoading={isLoading}
+                data={filteredProducts}
+                productType={product as string}
+                showsVerticalScrollIndicator={false}
+                scrollEventThrottle={16}
+              />
             ) : (
               <YStack flex={1}>
                 {selectCategory === 'Gym Wear' && gender === null && (

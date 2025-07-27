@@ -13,6 +13,8 @@ import { RootState } from '~/src/store';
 import { useState } from 'react';
 import { productBg, shadows } from '~/src/constant';
 import Coin from '~/public/images/coin.svg';
+import { phpUnserialize } from '~/src/helper';
+import { subDecrement, subIncrement } from '~/src/store/slices/subcartSlice';
 export default function SubItemsList({
   item,
   index,
@@ -25,18 +27,14 @@ export default function SubItemsList({
   const dispatch = useDispatch();
   const quantity = useSelector((state: RootState) => {
     if ('_id' in item) {
-      return state?.cart?.cartItems[item?._id];
+      return state?.subCart.subCartItems[item?._id];
     }
     return undefined;
   });
-
+  console.log(item);
   const handlePlus = () => {
-    const productData = { ...item } as Productsmakelijke;
-    let data;
-
-    {
-      data = { ...productData };
-    }
+    // const productData = { ...item, selectedWeight: { coin:item. } } as Productsmakelijke;
+    // let data;
 
     Toast.show({
       type: 'subCartToast',
@@ -44,22 +42,23 @@ export default function SubItemsList({
       props: {
         quantity: quantity?.quantity ? quantity.quantity + 1 : 1,
       },
+
       position: 'bottom',
       // autoHide: false,
     });
     // }, 0);
-    dispatch(increment(data));
+    dispatch(subIncrement(item));
   };
   const handleMinus = () => {
     if (quantity?.quantity && quantity?.quantity > 0) {
-      dispatch(decrement(item as Productsmakelijke));
+      dispatch(subDecrement(item as Productsmakelijke));
     }
   };
   if ((item as SliderItem)?.type === 'slider') {
     return (
-      <YStack w="100%" py={0} my={0}>
-        <SliderCarousel images={(item as SliderItem)?.images} productType={'fuled'} />
-      </YStack>
+      <XStack w="100%" py={0} my={0}>
+        <SliderCarousel images={(item as SliderItem)?.images} productType={'cookd'} />
+      </XStack>
     );
   }
   if ((item as { type: string })?.type === 'dummy') {
@@ -74,7 +73,7 @@ export default function SubItemsList({
         <YStack
           mt={index === 7 || index === 6 ? 0 : 20}
           key={(item as Productsmakelijke)?._id}
-          w={'48%'}
+          w={'98%'}
           p={8}
           bg="white"
           gap={20}
@@ -235,6 +234,14 @@ export default function SubItemsList({
                   }
                 </Text>
               )}
+              <Text fontSize={12} fontWeight={500} color="#1E1F20">
+                {phpUnserialize((item as Productsmakelijke)?.metadata?.nutretions_data)?.kcal &&
+                  phpUnserialize((item as Productsmakelijke)?.metadata?.nutretions_data)?.kcal +
+                    ' kCal |'}{' '}
+                {phpUnserialize((item as Productsmakelijke)?.metadata?.nutretions_data)?.weight &&
+                  phpUnserialize((item as Productsmakelijke)?.metadata?.nutretions_data)?.weight +
+                    ' g'}
+              </Text>
             </View>
             {quantity?.quantity && quantity?.quantity > 0 ? (
               <XStack

@@ -10,7 +10,7 @@ type SliderCarouselProps = {
 export default function SliderCarousel({ images, productType }: SliderCarouselProps) {
   const { width } = Dimensions.get('window');
   return (
-    <View width={width - 32} height={180} alignSelf="center">
+    <View width={width - 32} alignSelf="center">
       <Carousel
         width={width - 32}
         height={180}

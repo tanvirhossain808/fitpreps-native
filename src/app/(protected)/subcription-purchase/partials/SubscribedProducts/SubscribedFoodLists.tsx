@@ -89,9 +89,15 @@ export default function SubscribedFoodLists({
           </Text>
           <XStack gap={2}>
             <Coin />
-            <Text fontSize={14} fontWeight={500} color="#1E1F20">
-              {Number(item?.selectedWeight?.coin) * Number(item?.quantity)}
-            </Text>
+            {item.categories.includes('Pakket Samenstellen') ? (
+              <Text fontSize={14} fontWeight={500} color="#1E1F20">
+                {Number(item?.selectedWeight?.coin) * Number(item?.quantity)}
+              </Text>
+            ) : (
+              <Text fontSize={14} fontWeight={500} color="#1E1F20">
+                {Number(item?.metadata?.coin) * Number(item?.quantity)}
+              </Text>
+            )}
           </XStack>
         </YStack>
       </XStack>

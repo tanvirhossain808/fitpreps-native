@@ -9,7 +9,7 @@ import { persistReducer, persistStore } from 'redux-persist';
 import subscriptionSlice from './slices/subscriptionSlice';
 import addressSlice from './slices/addressSlice';
 import subCartSlice from './slices/subcartSlice';
-
+import scrollSlice from './slices/scrollSlice';
 const rootReducer = combineReducers({
   [rootApiSlice.reducerPath]: rootApiSlice.reducer,
   filter: filterSlice,
@@ -18,6 +18,7 @@ const rootReducer = combineReducers({
   subPurchase: subscriptionSlice,
   address: addressSlice,
   subCart: subCartSlice,
+  scroll: scrollSlice,
 });
 
 const persistConfig = {

@@ -9,9 +9,6 @@ import { activeStatsBarInfo } from '~/src/helper';
 import { statusBarColor } from '~/src/constant';
 import { StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-// const CookdSubscirbedProductsLists = lazy(
-//   () => import('~/src/components/ProductsBynormal-sub/CookSubcribeProductLIsts')
-// );
 import CookdSubscirbedProductsLists from '~/src/components/ProductsBynormal-sub/CookSubcribeProductLIsts';
 export default function CookdSubscriptionContainer({
   product,
@@ -39,23 +36,14 @@ export default function CookdSubscriptionContainer({
           subscription={subscription}
         />
 
-        <View debug={true} style={styles.contentContainer}>
+        <View /* debug={true} */ style={styles.contentContainer}>
           <View style={{ flex: 1 }} zIndex={0}>
-            {isLoading ? (
-              <LoadingSpinner color={statusBarColor[product as keyof typeof statusBarColor]} />
-            ) : (
-              <Suspense
-                fallback={
-                  <LoadingSpinner color={statusBarColor[product as keyof typeof statusBarColor]} />
-                }>
-                <CookdSubscirbedProductsLists
-                  productType={product as string}
-                  showsVerticalScrollIndicator={false}
-                  scrollEventThrottle={16}
-                  data={filteredProducts}
-                />
-              </Suspense>
-            )}
+            <CookdSubscirbedProductsLists
+              productType={product as string}
+              showsVerticalScrollIndicator={false}
+              scrollEventThrottle={16}
+              data={filteredProducts}
+            />
           </View>
         </View>
       </View>

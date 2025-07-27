@@ -7,12 +7,15 @@ export default function SelectPrice({
   setSelectProduct,
   setOpenSelectedProduct,
   quantity,
+  selectedWeight,
 }: {
   values?: { weight: string; price: string; coin?: string }[];
   setSelectProduct: React.Dispatch<React.SetStateAction<Productsmakelijke | undefined>>;
   setOpenSelectedProduct: React.Dispatch<React.SetStateAction<boolean>>;
   quantity: number;
+  selectedWeight: string;
 }) {
+  // console.log(selectetWeight, 'weight');
   const handleSelectedValue = (value: string) => {
     const selectedOption = values?.find((v) => v.weight === value);
     if (selectedOption) {
@@ -26,11 +29,14 @@ export default function SelectPrice({
   };
   return (
     <Select
-      defaultValue={values?.[0]?.weight}
+      // defaultValue={values?.[0]?.weight}
+      defaultValue={
+        values?.find((value) => Number(value.weight) === Number(selectedWeight))?.weight
+      }
       defaultOpen={true}
+      onOpenChange={() => setOpenSelectedProduct(false)}
       onValueChange={(value) => {
         handleSelectedValue(value);
-        setOpenSelectedProduct(false);
       }}>
       <Select.Trigger
         disabled={quantity < 0}
@@ -65,7 +71,7 @@ export default function SelectPrice({
                   {!value?.coin ? (
                     <XStack alignItems="center">
                       <Text color="#1E1F20" fontWeight={600} fontSize={12}>
-                        {value?.weight} - <Text color="#FD4F01">€{value?.price}s</Text>
+                        {value?.weight} - <Text color="#FD4F01">€{value?.price}</Text>
                       </Text>
                     </XStack>
                   ) : (

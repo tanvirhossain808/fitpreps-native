@@ -28,15 +28,24 @@ const subCartSlice = createSlice({
   initialState,
   reducers: {
     subIncrement: (state, action) => {
+      console.log(action.payload);
       const id = action.payload._id;
       if (state.subCartItems[id]) {
         state.subCartItems[id].quantity += 1;
         state.quantity += 1;
-        state.subTotal += Number(action.payload.selectedWeight.coin);
+        if (action.payload.selectedWeight?.coin) {
+          state.subTotal += Number(action.payload.selectedWeight.coin);
+        } else {
+          state.subTotal += Number(action.payload.metadata?.coin);
+        }
       } else {
         state.subCartItems[id] = { ...action.payload, quantity: 1 };
         state.quantity += 1;
-        state.subTotal += Number(action.payload.selectedWeight.coin);
+        if (action.payload.selectedWeight?.coin) {
+          state.subTotal += Number(action.payload.selectedWeight.coin);
+        } else {
+          state.subTotal += Number(action.payload.metadata?.coin);
+        }
       }
     },
     subDecrement: (state, action) => {
@@ -45,12 +54,19 @@ const subCartSlice = createSlice({
         if (state.subCartItems[id].quantity > 1) {
           state.subCartItems[id].quantity -= 1;
           state.quantity -= 1;
-
-          state.subTotal -= Number(action.payload.selectedWeight?.coin);
+          if (action.payload.selectedWeight?.coin) {
+            state.subTotal -= Number(action.payload.selectedWeight?.coin);
+          } else {
+            state.subTotal -= Number(action.payload.metadata?.coin);
+          }
         } else {
           state.quantity -= state.subCartItems[id].quantity;
           delete state.subCartItems[id];
-          state.subTotal -= Number(action.payload.selectedWeight?.coin);
+          if (action.payload.selectedWeight?.coin) {
+            state.subTotal -= Number(action.payload.selectedWeight?.coin);
+          } else {
+            state.subTotal -= Number(action.payload.metadata?.coin);
+          }
         }
       }
     },

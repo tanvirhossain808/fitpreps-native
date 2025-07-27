@@ -38,9 +38,15 @@ export default function ProductsmakelijkeListsSubLists({
   useEffect(() => {
     const selectedWeight = item as Productsmakelijke;
     if (selectedWeight?.metadata?.weight_options) {
+      if (quantity) {
+        const selectedProduct = selectedWeight.metadata.weight_options?.find(
+          (w) => w.weight === quantity.selectedWeight?.weight
+        );
+        return setSelectProduct({ selectedWeight: selectedProduct });
+      }
       setSelectProduct({ selectedWeight: selectedWeight?.metadata?.weight_options[0] });
     }
-  }, [productType]);
+  }, [productType, item]);
   const handlePlus = () => {
     const stock = Number((item as Productsmakelijke)?.metadata?._stock);
     const currentQuantity = quantity?.quantity || 0;
@@ -101,8 +107,6 @@ export default function ProductsmakelijkeListsSubLists({
           mb={20}
           key={(item as Productsmakelijke)?._id}
           w={'98%'}
-          // ml="auto"
-          // background={}
           p={8}
           bg="white"
           gap={20}
@@ -227,19 +231,6 @@ export default function ProductsmakelijkeListsSubLists({
             )}
           </View>
           <YStack gap={8} justifyContent="space-between" f={1}>
-            {/* <Text
-                px={6}
-                py={4}
-                maxWidth={71}
-                textAlign="center"
-                bg="#E5F8EA"
-                borderRadius={20}
-                color="#009A21"
-                fontSize={10}
-                fontWeight={500}>
-                {product?.name}
-              </Text> */}
-
             <Text
               h={25}
               fontSize={11.5}
@@ -254,13 +245,16 @@ export default function ProductsmakelijkeListsSubLists({
               <View>
                 {openSelectedProduct ? (
                   <SelectPrice
+                    selectedWeight={selectedProduct.selectedWeight.weight as string}
                     setOpenSelectedProduct={setOpenSelectedProduct}
                     quantity={quantity?.quantity ? quantity.quantity : 0}
                     setSelectProduct={setSelectProduct}
                     values={(item as any)?.metadata?.weight_options}
                   />
                 ) : (
-                  <TouchableOpacity onPress={() => setOpenSelectedProduct(true)}>
+                  <TouchableOpacity
+                    disabled={quantity ? true : false}
+                    onPress={() => setOpenSelectedProduct(true)}>
                     <XStack
                       borderWidth={1}
                       borderColor="#A1A1A1"

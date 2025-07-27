@@ -86,9 +86,9 @@ export default function ProductFueldListsCard({
   };
   if ((item as SliderItem)?.type === 'slider') {
     return (
-      <YStack w="100%" py={0} my={0}>
+      <XStack w="100%" py={0} my={0}>
         <SliderCarousel images={(item as SliderItem)?.images} productType={productType} />
-      </YStack>
+      </XStack>
     );
   }
   if ((item as { type: string })?.type === 'dummy') {
@@ -104,7 +104,7 @@ export default function ProductFueldListsCard({
         <YStack
           mt={index === 7 || index === 6 ? 0 : 20}
           key={(item as Productsmakelijke)?._id}
-          w={'48%'}
+          w={'98%'}
           p={8}
           bg="white"
           gap={20}

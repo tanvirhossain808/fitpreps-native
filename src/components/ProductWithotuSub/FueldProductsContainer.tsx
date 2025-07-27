@@ -38,21 +38,12 @@ export default function FueldSubscriptionContainer({
 
         <View style={styles.contentContainer}>
           <View style={{ flex: 1 }} zIndex={0}>
-            {isLoading ? (
-              <LoadingSpinner color={statusBarColor[product as keyof typeof statusBarColor]} />
-            ) : (
-              <Suspense
-                fallback={
-                  <LoadingSpinner color={statusBarColor[product as keyof typeof statusBarColor]} />
-                }>
-                <FueldProductLists
-                  productType={product as string}
-                  showsVerticalScrollIndicator={false}
-                  scrollEventThrottle={16}
-                  data={filteredProducts}
-                />
-              </Suspense>
-            )}
+            <FueldProductLists
+              productType={product as string}
+              showsVerticalScrollIndicator={false}
+              scrollEventThrottle={16}
+              data={filteredProducts}
+            />
           </View>
         </View>
       </View>

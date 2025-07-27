@@ -9,7 +9,7 @@ import { activeStatsBarInfo } from '~/src/helper';
 import { statusBarColor } from '~/src/constant';
 import { StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-const SubProductList = lazy(() => import('./SubProductLists'));
+import SubProductList from './SubProductLists';
 
 export default function Subscription({
   subscription,
@@ -35,17 +35,12 @@ export default function Subscription({
         />
         <View style={styles.contentContainer}>
           <View style={{ flex: 1 }} zIndex={0}>
-            <Suspense
-              fallback={
-                <LoadingSpinner color={statusBarColor['fueld' as keyof typeof statusBarColor]} />
-              }>
-              <SubProductList
-                productType={'fueld' as string}
-                showsVerticalScrollIndicator={false}
-                scrollEventThrottle={16}
-                data={filteredProducts}
-              />
-            </Suspense>
+            <SubProductList
+              productType={'fueld' as string}
+              showsVerticalScrollIndicator={false}
+              scrollEventThrottle={16}
+              data={filteredProducts}
+            />
           </View>
         </View>
       </View>

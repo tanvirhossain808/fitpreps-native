@@ -17,16 +17,12 @@ export default function Home() {
   useFocusEffect(() => {
     setSubscriptionType(Number(subscription) === 1 ? true : false);
   });
-  const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(resetSubCart());
-  // }, []);
   switch (product) {
     case 'cookd':
-      return !subscriptionType ? (
+      return subscriptionType ? (
         <CookdSubscriptionContainer
           product={product as string}
-          subscription={!subscriptionType as boolean}
+          subscription={subscriptionType as boolean}
         />
       ) : (
         <NOnSubscriptionCookdProductsContainer

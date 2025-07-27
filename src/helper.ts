@@ -123,7 +123,7 @@ export function phpUnserialize(data: string): any {
       }
 
       default:
-        throw new Error('Unsupported or unknown type: ' + type);
+        return null;
     }
   }
 
