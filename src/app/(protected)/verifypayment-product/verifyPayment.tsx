@@ -1,7 +1,7 @@
 import React from 'react';
 import { WebView } from 'react-native-webview';
 import { ActivityIndicator } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { YStack } from 'tamagui';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -17,11 +17,13 @@ export default function VerifyPayment() {
       const hasPaymentSuccess = url.pathname.includes('payment-success');
       const paymentId = url.searchParams.get('id');
 
-      if (hasPaymentSuccess && paymentId) {
-        // console.log('🎉 Payment Success Detected!');
+      const hasPaymentComplete = currentUrl.includes('fitpreps')
+      if (hasPaymentComplete ) {
+     
+        console.log('🎉 Payment Success Detected!');
         // console.log('🧾 Payment ID:', paymentId);
         // 🚀 Redirect or handle success logic here
-        // Example: router.replace('/success') or Toast.show(...)
+        router.replace("/(protected)/(navigator)/(tabs)/meals")
       }
     } catch (err) {
       console.error('❌ URL parsing failed:', err);

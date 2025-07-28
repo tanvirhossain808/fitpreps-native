@@ -45,15 +45,15 @@ export function generateOrderData(params: {
   loyaltyPoints: number;
 } {
   const { user, cart, coupon, fitCouponData, detectedCountry } = params;
-
+  console.log("cart2",cart)
   // 1. Sub-totals
   const totalWeight = cart.reduce((w, i) => w + Number(i.quantity) * optimizer(i), 0); // grams
-  console.log(totalWeight, 'weight');
+  
   const totalCartIncl = cart.reduce(
     (s, i) => s + Number(i.quantity) * Number(i.metadata._price),
     0
   );
-  console.log(totalCartIncl, 'inc');
+  
   const supplementsIncl = cart.reduce((s, i) => {
     return i.categories.includes('Supplements')
       ? s + Number(i.quantity) * Number(i.metadata._price)

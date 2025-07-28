@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import { resetSubCart } from '~/src/store/slices/subcartSlice';
 
 export default function Home() {
-  const { product = 'cookd', subscription = false as boolean } = useLocalSearchParams();
+  const { product = 'fueld', subscription = false as boolean } = useLocalSearchParams();
   // console.log(product, subscription);
   const [subscriptionType, setSubscriptionType] = useState(false);
   useFocusEffect(() => {
@@ -19,7 +19,7 @@ export default function Home() {
   });
   switch (product) {
     case 'cookd':
-      return !subscriptionType ? (
+      return subscriptionType ? (
         <CookdSubscriptionContainer
           product={product as string}
           subscription={subscriptionType as boolean}

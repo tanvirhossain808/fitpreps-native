@@ -94,7 +94,7 @@ export default function Home() {
               </YStack>
               <LinearGradient
                 colors={['#FFF', '#D0FFDA']}
-                locations={[0.4684, 1.7464]}
+                locations={[0.4684, 1]}
                 start={{ x: 0.5, y: 0 }}
                 end={{ x: 0.5, y: 1 }}
                 style={{ flex: 1 }}>

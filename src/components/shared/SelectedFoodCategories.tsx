@@ -45,10 +45,11 @@ export default function SelectedFoodCategories({
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={{ paddingHorizontal: 16 }}
       renderItem={({ item }) => (
-        <YStack alignItems="center" justifyContent="space-between" mr={4} w={80} h={80}>
+        <YStack alignItems="center" justifyContent="space-between" mr={15} w={"auto"} h={80}>
           <XStack
             mr={item.name.includes('Minera') ? 'auto' : 0}
             justifyContent="center"
+            marginHorizontal={"auto"}
             borderWidth={1.5}
             borderColor={
               item.name === selectFoodCategory ? activeStatsBarInfo?.tentColor : 'transparent'
@@ -78,6 +79,7 @@ export default function SelectedFoodCategories({
             {item.name}
           </Text>
         </YStack>
+        
       )}
     />
   );

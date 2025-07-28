@@ -113,7 +113,7 @@ export default function IntroProductSlider() {
             onPress={() => router.push('/(navigator)/(tabs)/subscription')}
             color="white"
             bg="#FD4F01"
-            {...shadows.small}
+            // {...shadows.small}
             fontSize={16}
             fontWeight={700}
             px={20}>

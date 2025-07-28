@@ -83,11 +83,11 @@ export function CartAddress({
   const [error, setErrors] = useState(initialError);
   const inputStyle = {
     py: 10,
-    elevation: 2,
-    shadowColor: 'rgba(10, 13, 18, 0.05)',
-    shadowOffset: { width: 0, height: 1 },
-    shadowRadius: 2,
-    shadowOpacity: 1,
+    // elevation: 2,
+    // shadowColor: 'rgba(10, 13, 18, 0.05)',
+    // shadowOffset: { width: 0, height: 1 },
+    // shadowRadius: 2,
+    // shadowOpacity: 1,
     placeholderTextColor: '#8E95A2',
     backgroundColor: 'white',
     borderColor: '#EDEEF1',

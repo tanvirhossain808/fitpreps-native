@@ -234,7 +234,7 @@ export default function SubItemsList({
                   }
                 </Text>
               )}
-              <Text fontSize={12} fontWeight={500} color="#1E1F20">
+              <Text  fontSize={12} fontWeight={500} color="#1E1F20">
                 {phpUnserialize((item as Productsmakelijke)?.metadata?.nutretions_data)?.kcal &&
                   phpUnserialize((item as Productsmakelijke)?.metadata?.nutretions_data)?.kcal +
                     ' kCal |'}{' '}
@@ -244,6 +244,25 @@ export default function SubItemsList({
               </Text>
             </View>
             {quantity?.quantity && quantity?.quantity > 0 ? (
+              // <XStack
+              //   overflow="hidden"
+              //   borderWidth={1}
+              //   borderRadius={12}
+              //   borderColor="#FD4F01"
+              //   alignItems="center"
+              //   justifyContent="space-between">
+              //   <TouchableOpacity onPress={handleMinus}>
+              //     <XStack px="$2" py="$2" bg="#FFEDE5">
+              //       <AntDesign name="minus" size={24} color="#FD4F01" />
+              //     </XStack>
+              //   </TouchableOpacity>
+              //   <Text>{quantity?.quantity}</Text>
+              //   <TouchableOpacity onPress={handlePlus}>
+              //     <XStack px="$4" py="$2" bg="#FFEDE5">
+              //       <AntDesign name="plus" size={24} color="#FD4F01" />
+              //     </XStack>
+              //   </TouchableOpacity>
+              // </XStack>
               <XStack
                 overflow="hidden"
                 borderWidth={1}
@@ -252,14 +271,14 @@ export default function SubItemsList({
                 alignItems="center"
                 justifyContent="space-between">
                 <TouchableOpacity onPress={handleMinus}>
-                  <XStack px="$2" py="$2" bg="#FFEDE5">
-                    <AntDesign name="minus" size={24} color="#FD4F01" />
+                  <XStack px="16" py="10" bg="#FFEDE5">
+                    <AntDesign name="minus" size={18} color="#FD4F01" />
                   </XStack>
                 </TouchableOpacity>
                 <Text>{quantity?.quantity}</Text>
                 <TouchableOpacity onPress={handlePlus}>
-                  <XStack px="$4" py="$2" bg="#FFEDE5">
-                    <AntDesign name="plus" size={24} color="#FD4F01" />
+                  <XStack px="16" py="10" bg="#FFEDE5">
+                    <AntDesign name="plus" size={18} color="#FD4F01" />
                   </XStack>
                 </TouchableOpacity>
               </XStack>

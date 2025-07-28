@@ -67,7 +67,7 @@ export default function Home() {
           bg={'#fffdf6'}>
           <YStack flex={1} pb="$10">
             <TopSearchbar placeholder="Search here" />
-            <YStack flex={1} pt={'$12'}>
+            <YStack flex={1} pt={48}>
               <XStack justifyContent="center">
                 <Image source={require('public/images/fitpreps.png')} width={278} height={32} />
               </XStack>
@@ -102,7 +102,7 @@ export default function Home() {
               </YStack>
               <LinearGradient
                 colors={['#FFF', '#D0FFDA']}
-                locations={[0.4684, 1.7464]}
+                locations={[0.4684, 1]}
                 start={{ x: 0.5, y: 0 }}
                 end={{ x: 0.5, y: 1 }}
                 style={{ flex: 1 }}>

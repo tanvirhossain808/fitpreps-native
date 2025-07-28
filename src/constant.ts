@@ -145,42 +145,42 @@ export const selectedItems = [
 ];
 export const cookdFoodCategories = [
   {
-    name: 'All',
+    name: 'Alle',
     img: AllImg,
     id: 1,
     svg: () => createElement(AllFood),
     dutchName: 'Alle',
   },
   {
-    name: 'Bundles',
+    name: 'Maaltijdbundels',
     img: bundlesImg,
     id: 2,
     svg: () => createElement(AllFood),
     dutchName: 'Maaltijdbundels',
   },
   {
-    name: 'Chicken',
+    name: 'Kip',
     img: chickenImg,
     id: 3,
     svg: () => createElement(AllFood),
     dutchName: 'Kip',
   },
   {
-    name: 'Beef',
+    name: 'Rundvlees',
     img: beefImg,
     id: 4,
     svg: () => createElement(AllFood),
     dutchName: 'Rundvlees',
   },
   {
-    name: 'Fish',
+    name: 'Vis',
     img: fishImg,
     id: 5,
     svg: () => createElement(AllFood),
     dutchName: 'Vis',
   },
   {
-    name: 'Vegetarian',
+    name: 'Vegetarisch',
     img: vegetarianImg,
     id: 6,
     svg: () => createElement(AllFood),
@@ -201,39 +201,42 @@ export const cookdFoodCategories = [
 ];
 export const fueldSelectedCategories = [
   {
-    name: 'All',
+    name: 'Alle',
     img: '',
     id: 1,
     svg: () => createElement(AllFood),
     dutchName: 'Alle',
   },
   {
-    name: 'Weight Loss',
-    img: '',
-    id: 2,
-    svg: () => createElement(AllFood),
-    dutchName: 'Afvallen',
-  },
-  {
-    name: 'Meal Packs',
+    name: 'Maaltijdpakketten',
     img: '',
     id: 3,
     svg: () => createElement(Meal),
     dutchName: 'Maaltijdpakketten',
   },
   {
-    name: 'Muscle Gain',
+    name: 'Afvallen',
+    img: '',
+    id: 2,
+    svg: () => createElement(AllFood),
+    dutchName: 'Afvallen',
+  },
+  
+  {
+    name: 'Droogtrainen',
+    img: '',
+    id: 5,
+    svg: () => createElement(Cutting),
+    dutchName: 'Droogtrainen',
+  },
+  {
+    name: 'Spiermassa',
     img: '',
     id: 4,
     svg: () => createElement(MuscleGain),
     dutchName: 'Spiermassa',
   },
-  {
-    name: 'Cutting',
-    img: '',
-    id: 5,
-    svg: () => createElement(Cutting),
-  },
+  
   {
     name: 'Accessories',
     img: '',
@@ -242,7 +245,7 @@ export const fueldSelectedCategories = [
     dutchName: 'Accessoires',
   },
   {
-    name: 'Breakfast',
+    name: 'Ontbijt',
     img: '',
     id: 7,
     svg: () => createElement(Breakfast),
@@ -256,7 +259,7 @@ export const fueldSelectedCategories = [
     dutchName: 'Snack',
   },
   {
-    name: 'Cold-Pressed Juices',
+    name: 'Cold-Pressed Sappen',
     img: '',
     id: 9,
     svg: () => createElement(Juice),
@@ -1379,14 +1382,21 @@ export const statusBarColor = {
 };
 export const suppdSelectedCategories = [
   {
-    name: 'All',
+    name: 'Alle',
     id: 1,
     img: '',
     svg: SuppdAll,
     dutchName: 'Alle',
   },
   {
-    name: 'Protein',
+    name: 'Bundels',
+    id: 6,
+    img: '',
+    svg: Bundles,
+    dutchName: 'Bundels',
+  },
+  {
+    name: 'Eiwitten',
     id: 2,
     img: '',
     svg: Protein,
@@ -1413,13 +1423,7 @@ export const suppdSelectedCategories = [
     svg: Creatine,
     dutchName: 'Creatine',
   },
-  {
-    name: 'Bundles',
-    id: 6,
-    img: '',
-    svg: Bundles,
-    dutchName: 'Bundels',
-  },
+ 
 ];
 
 export const suppdProductCategories = {
@@ -1804,7 +1808,7 @@ export const shadows = {
     shadowColor: 'rgba(10, 13, 18, 0.05)',
     shadowOffset: { width: 0, height: 1 },
     shadowRadius: 2,
-    shadowOpacity: 1,
+    shadowOpacity: 0,
     elevation: 1,
   },
   violetShadow: {
@@ -1819,14 +1823,14 @@ export const shadows = {
     shadowColor: 'rgba(10, 13, 18, 0.1)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
-    shadowOpacity: 1,
+    shadowOpacity: 0,
     elevation: 2,
   },
   large: {
     shadowColor: 'rgba(10, 13, 18, 0.15)',
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 6,
-    shadowOpacity: 1,
+    shadowOpacity: 0,
     elevation: 4,
   },
 };

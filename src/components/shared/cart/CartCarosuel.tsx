@@ -31,11 +31,11 @@ export default function CartCarousel() {
             borderColor="#F7F8F8"
             borderWidth={1}
             borderRadius={12}
-            shadowColor="rgba(56, 58, 66, 0.2)"
-            shadowOffset={{ width: 2, height: 2 }}
-            shadowRadius={4}
-            shadowOpacity={1}
-            elevation={4}
+            shadowColor="rgba(213, 214, 222, 0.1)"
+            shadowOffset={{ width: 1, height: 1 }}
+            shadowRadius={1}
+            shadowOpacity={0.5}
+            elevation={1}
             backgroundColor="white">
             <XStack bg="#E5F8EA" borderRadius={4} p={9}>
               <Image source={item.img} width={107} height={107} />

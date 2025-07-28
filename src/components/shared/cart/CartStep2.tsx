@@ -427,8 +427,8 @@ const ConfirmAddress = ({
   const [purchaseSubMutation] = useSubPurchaseMutation();
   const token = useSelector((s: RootState) => s.user?.user?.token) || '';
   const user = useSelector((s: RootState) => s.user) || '';
-  const cartItems = useSelector((s: RootState) => s.subCart.subCartItems);
-  const subTotal = useSelector((s: RootState) => s.subCart.subTotal);
+  const cartItems = useSelector((s: RootState) => s.cart.cartItems);
+  const subTotal = useSelector((s: RootState) => s.cart.subTotal);
   const { orderData } = useOrderData({
     user: user?.user!.user,
     cart: Object.values(cartItems),

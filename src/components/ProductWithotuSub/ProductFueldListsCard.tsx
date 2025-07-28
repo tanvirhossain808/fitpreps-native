@@ -87,7 +87,7 @@ export default function ProductFueldListsCard({
   if ((item as SliderItem)?.type === 'slider') {
     return (
       <XStack w="100%" py={0} my={0}>
-        <SliderCarousel images={(item as SliderItem)?.images} productType={productType} />
+        <SliderCarousel images={(item as SliderItem)?.images} productType={"cookd"} />
       </XStack>
     );
   }
@@ -108,6 +108,7 @@ export default function ProductFueldListsCard({
           p={8}
           bg="white"
           gap={20}
+          h={325}
           borderColor="#B6BAC3"
           borderWidth={1}
           borderRadius={8}>
@@ -202,6 +203,7 @@ export default function ProductFueldListsCard({
             )}
             {productType === 'fueld' && (item as Productsmakelijke)?.eiwitten && (
               <YStack
+              
                 borderTopWidth={1}
                 borderLeftWidth={0.1}
                 borderRightWidth={0.1}
@@ -276,7 +278,7 @@ export default function ProductFueldListsCard({
                 ) : (
                 
                 )} */}
-                <Text fontSize={12} fontWeight={500} color="#1E1F20">
+                <Text mt={10} fontSize={12} fontWeight={500} color="#1E1F20">
                   {phpUnserialize((item as Productsmakelijke)?.metadata?.nutretions_data)?.kcal &&
                     phpUnserialize((item as Productsmakelijke)?.metadata?.nutretions_data)?.kcal +
                       ' kCal |'}{' '}
@@ -295,14 +297,14 @@ export default function ProductFueldListsCard({
                 alignItems="center"
                 justifyContent="space-between">
                 <TouchableOpacity onPress={handleMinus}>
-                  <XStack px="$2" py="$2" bg="#FFEDE5">
-                    <AntDesign name="minus" size={24} color="#FD4F01" />
+                  <XStack px="16" py="10" bg="#FFEDE5">
+                    <AntDesign name="minus" size={18} color="#FD4F01" />
                   </XStack>
                 </TouchableOpacity>
                 <Text>{quantity?.quantity}</Text>
                 <TouchableOpacity onPress={handlePlus}>
-                  <XStack px="$4" py="$2" bg="#FFEDE5">
-                    <AntDesign name="plus" size={24} color="#FD4F01" />
+                  <XStack px="16" py="10" bg="#FFEDE5">
+                    <AntDesign name="plus" size={18} color="#FD4F01" />
                   </XStack>
                 </TouchableOpacity>
               </XStack>

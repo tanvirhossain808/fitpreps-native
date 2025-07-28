@@ -88,12 +88,12 @@ export default function CartFoodList({
       </XStack>
 
       <XStack
-        shadowColor="#0A0D12"
-        shadowOffset={{ width: 0, height: 1 }}
-        shadowOpacity={0.05}
-        shadowRadius={2}
-        elevation={1}
-        maxHeight={40}
+        // shadowColor="#0A0D12"
+        // shadowOffset={{ width: 0, height: 1 }}
+        // shadowOpacity={0.05}
+        // shadowRadius={2}
+        // elevation={1}
+        maxHeight={36}
         maxWidth={112}
         flex={1}
         alignSelf="stretch"
@@ -104,15 +104,15 @@ export default function CartFoodList({
         justifyContent="center"
         bg="#FFEDE5">
         <TouchableOpacity style={{ padding: 8 }} onPress={() => handleMinus(item)}>
-          <AntDesign name="minus" size={24} color="#FD4F01" />
+          <AntDesign name="minus" size={18} color="#FD4F01" />
         </TouchableOpacity>
-        <XStack alignItems="center" justifyContent="center" height={'100%'} px="$3" bg="white">
+        <XStack alignItems="center" justifyContent="center" height={'100%'} px="14" bg="white">
           <Text fontSize={14} color="black" fontWeight={700}>
             {item?.quantity}
           </Text>
         </XStack>
         <TouchableOpacity style={{ padding: 8 }} onPress={() => handlePlus(item)}>
-          <AntDesign name="plus" size={24} color="#FD4F01" />
+          <AntDesign name="plus" size={18} color="#FD4F01" />
         </TouchableOpacity>
       </XStack>
     </XStack>
