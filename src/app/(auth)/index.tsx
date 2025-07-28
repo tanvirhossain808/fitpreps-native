@@ -24,11 +24,12 @@ export default function index() {
                 fontWeight={700}
                 color="white"
                 bg="#FD4F01"
-                shadowColor="rgba(10, 13, 18, 0.05)"
-                shadowOffset={{ width: 0, height: 1 }}
-                shadowRadius={2}
-                shadowOpacity={1}
-                elevation={0}>
+                // shadowColor="rgba(10, 13, 18, 0.05)"
+                // shadowOffset={{ width: 0, height: 1 }}
+                // shadowRadius={2}
+                // shadowOpacity={1}
+                // elevation={0}
+              >
                 Create Account
               </Button>
               <Button
@@ -37,11 +38,11 @@ export default function index() {
                 fontWeight={700}
                 color="#FD4F01"
                 bg="white"
-                shadowColor="rgba(10, 13, 18, 0.05)"
-                shadowOffset={{ width: 0, height: 1 }}
-                shadowRadius={2}
-                shadowOpacity={1}
-                elevation={0}
+                // shadowColor="rgba(10, 13, 18, 0.05)"
+                // shadowOffset={{ width: 0, height: 1 }}
+                // shadowRadius={2}
+                // shadowOpacity={1}
+                // elevation={0}
                 borderWidth={1}
                 borderColor="#FD4F01">
                 Log In

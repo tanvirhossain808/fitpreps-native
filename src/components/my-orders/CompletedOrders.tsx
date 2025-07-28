@@ -127,11 +127,12 @@ export default function CompletedOrders() {
               color="#FD4F01"
               fontSize={12}
               fontWeight={700}
-              shadowColor="rgba(10, 13, 18, 0.05)"
-              shadowOffset={{ width: 0, height: 1 }}
-              shadowOpacity={0.05}
-              shadowRadius={2}
-              elevation={1}>
+              // shadowColor="rgba(10, 13, 18, 0.05)"
+              // shadowOffset={{ width: 0, height: 1 }}
+              // shadowOpacity={0.05}
+              // shadowRadius={2}
+              // elevation={1}
+            >
               Leave a Review{' '}
             </Button>
             <Button
@@ -143,11 +144,12 @@ export default function CompletedOrders() {
               color="#FD4F01"
               fontSize={12}
               fontWeight={700}
-              shadowColor="rgba(10, 13, 18, 0.05)"
-              shadowOffset={{ width: 0, height: 1 }}
-              shadowOpacity={0.05}
-              shadowRadius={2}
-              elevation={1}>
+              // shadowColor="rgba(10, 13, 18, 0.05)"
+              // shadowOffset={{ width: 0, height: 1 }}
+              // shadowOpacity={0.05}
+              // shadowRadius={2}
+              // elevation={1}
+            >
               Reorder
             </Button>
           </XStack>

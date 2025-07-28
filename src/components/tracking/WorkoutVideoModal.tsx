@@ -104,8 +104,8 @@ export function WorkoutVideoModal({
           marginBottom={0}
           paddingBottom="$4"
           height="100%"
-          elevation={0}
-          shadowColor="transparent"
+          // elevation= {0}
+          // shadowColor="transparent"
           animation="quick"
           enterStyle={{ y: 1000, opacity: 0 }}
           exitStyle={{ y: 1000, opacity: 0 }}

@@ -98,11 +98,12 @@ export default function ProductScanner({
                 borderBottomColor="#EDEEF1"
                 // justifyContent="space-between"
                 width={width * 0.9}
-                shadowColor="#000"
-                shadowOffset={{ width: 0, height: 2 }}
-                shadowOpacity={0.1}
-                shadowRadius={8}
-                elevation={5}>
+                // shadowColor="#000"
+                // shadowOffset={{ width: 0, height: 2 }}
+                // shadowOpacity={0.1}
+                // shadowRadius={8}
+                // elevation={5}
+              >
                 <Juice />
                 <YStack>
                   <Text fontWeight={700} fontSize={14}>

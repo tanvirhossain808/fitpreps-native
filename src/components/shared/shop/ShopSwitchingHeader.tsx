@@ -31,11 +31,11 @@ export default function SwitchHeader({
         width={'50%'}
         color={selectCategory === 'Supplements' ? 'white' : '#1E1F20'}
         fontWeight={selectCategory === 'Supplements' ? 700 : 500}
-        shadowColor={selectCategory === 'Supplements' ? 'rgba(10, 13, 18, 0.05)' : 'transparent'}
-        shadowOffset={{ width: 0, height: 1 }}
-        shadowRadius={selectCategory === 'Supplements' ? 2 : 0}
-        shadowOpacity={selectCategory === 'Supplements' ? 1 : 0}
-        elevation={selectCategory === 'Supplements' ? 0.05 : 0}
+        // shadowColor={selectCategory === 'Supplements' ? 'rgba(10, 13, 18, 0.05)' : 'transparent'}
+        // shadowOffset={{ width: 0, height: 1 }}
+        // shadowRadius={selectCategory === 'Supplements' ? 2 : 0}
+        // shadowOpacity={selectCategory === 'Supplements' ? 1 : 0}
+        // elevation={selectCategory === 'Supplements' ? 0.05 : 0}
         bg={selectCategory === 'Supplements' ? bg : 'white'}>
         Supplements
       </Button>
@@ -45,11 +45,11 @@ export default function SwitchHeader({
         width={'50%'}
         color={selectCategory === 'Gym Wear' ? 'white' : '#1E1F20'}
         fontWeight={selectCategory === 'Gym Wear' ? 700 : 500}
-        shadowColor={selectCategory === 'Gym Wear' ? 'rgba(10, 13, 18, 0.05)' : 'transparent'}
-        shadowOffset={{ width: 0, height: 1 }}
-        shadowRadius={selectCategory === 'Gym Wear' ? 2 : 0}
-        shadowOpacity={selectCategory === 'Gym Wear' ? 1 : 0}
-        elevation={selectCategory === 'Gym Wear' ? 0.05 : 0}
+        // shadowColor={selectCategory === 'Gym Wear' ? 'rgba(10, 13, 18, 0.05)' : 'transparent'}
+        // shadowOffset={{ width: 0, height: 1 }}
+        // shadowRadius={selectCategory === 'Gym Wear' ? 2 : 0}
+        // shadowOpacity={selectCategory === 'Gym Wear' ? 1 : 0}
+        // elevation={selectCategory === 'Gym Wear' ? 0.05 : 0}
         bg={selectCategory === 'Gym Wear' ? bg : 'white'}>
         Gym Wear
       </Button>

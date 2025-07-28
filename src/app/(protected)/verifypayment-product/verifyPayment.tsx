@@ -17,13 +17,18 @@ export default function VerifyPayment() {
       const hasPaymentSuccess = url.pathname.includes('payment-success');
       const paymentId = url.searchParams.get('id');
 
-      const hasPaymentComplete = currentUrl.includes('fitpreps')
-      if (hasPaymentComplete ) {
-     
+      const hasPaymentComplete = currentUrl.includes('fitpreps');
+      if (hasPaymentComplete) {
         // console.log('🎉 Payment Success Detected!');
         // console.log('🧾 Payment ID:', paymentId);
         // 🚀 Redirect or handle success logic here
-        router.replace("/(protected)/(navigator)/(tabs)/meals")
+        router.replace({
+          pathname: '/orderplaced',
+          params: {
+            type: 'meals',
+            id: paymentId,
+          },
+        });
       }
     } catch (err) {
       console.error('❌ URL parsing failed:', err);

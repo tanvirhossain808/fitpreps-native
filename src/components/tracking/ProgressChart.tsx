@@ -52,10 +52,10 @@ export function ProgressChart() {
 
   return (
     <YStack
-      elevation="$0.5"
-      shadowColor="rgba(0,0,0,0.05)"
-      shadowRadius={2}
-      shadowOffset={{ width: 0, height: 1 }}
+      // elevation="$0.5"
+      // shadowColor="rgba(0,0,0,0.05)"
+      // shadowRadius={2}
+      // shadowOffset={{ width: 0, height: 1 }}
       gap="$3"
       p="$3"
       bg="#f4f7ff"

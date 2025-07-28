@@ -41,11 +41,11 @@ export default function TrackOrder() {
           </ScrollView>
           <YStack gap={10} px="$4" pb="$4">
             <Button
-              shadowColor="rgba(10, 13, 18, 0.05)"
-              shadowOffset={{ width: 0, height: 1 }}
-              shadowOpacity={1}
-              shadowRadius={2}
-              elevation={1}
+              // shadowColor="rgba(10, 13, 18, 0.05)"
+              // shadowOffset={{ width: 0, height: 1 }}
+              // shadowOpacity={1}
+              // shadowRadius={2}
+              // elevation={1}
               bg="#FFEDE5">
               <XStack alignItems="center" gap="$2">
                 <Message />
@@ -55,11 +55,11 @@ export default function TrackOrder() {
               </XStack>
             </Button>
             <Button
-              shadowColor="rgba(10, 13, 18, 0.05)"
-              shadowOffset={{ width: 0, height: 1 }}
-              shadowOpacity={1}
-              shadowRadius={2}
-              elevation={1}
+              // shadowColor="rgba(10, 13, 18, 0.05)"
+              // shadowOffset={{ width: 0, height: 1 }}
+              // shadowOpacity={1}
+              // shadowRadius={2}
+              // elevation={1}
               bg="white">
               <XStack alignItems="center" gap="$2">
                 <Phone />

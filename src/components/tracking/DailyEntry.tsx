@@ -20,10 +20,11 @@ export default function DailyEntry() {
         </Text>
         <XStack
           f={1}
-          shadowColor="rgba(0, 0, 0, 0.05)"
-          shadowRadius={2}
-          elevation={10}
-          shadowOffset={{ width: 0, height: 1 }}>
+          // shadowColor="rgba(0, 0, 0, 0.05)"
+          // shadowRadius={2}
+          // elevation={10}
+          // shadowOffset={{ width: 0, height: 1 }}
+        >
           <LinearGradient
             colors={['rgba(255, 255, 255, 0.60)', 'rgba(232, 239, 255, 0.60)']}
             start={[1, 0]}

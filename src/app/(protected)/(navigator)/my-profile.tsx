@@ -152,11 +152,12 @@ function ProfileFields({
             flex={1}
             px={14}
             py={10}
-            shadowColor="rgba(10, 13, 18, 0.05)"
-            shadowOpacity={1}
-            shadowOffset={{ width: 0, height: 1 }}
-            shadowRadius={2}
-            elevation="$1">
+            // shadowColor="rgba(10, 13, 18, 0.05)"
+            // shadowOpacity={1}
+            // shadowOffset={{ width: 0, height: 1 }}
+            // shadowRadius={2}
+            // elevation="$1"
+          >
             <Input
               onChangeText={setCurrentValue}
               minHeight={0}
@@ -194,11 +195,12 @@ function ProfileFields({
               fontWeight={700}
               bg="#FF7435"
               py={10}
-              shadowColor="rgba(10, 13, 18, 0.05)"
-              shadowOpacity={1}
-              shadowOffset={{ width: 0, height: 1 }}
-              shadowRadius={2}
-              elevation="$1">
+              // shadowColor="rgba(10, 13, 18, 0.05)"
+              // shadowOpacity={1}
+              // shadowOffset={{ width: 0, height: 1 }}
+              // shadowRadius={2}
+              // elevation="$1"
+            >
               Save Changes
             </Button>
             <Button

@@ -110,11 +110,12 @@ export default function PurchaseStep2({
                   borderWidth={1}
                   borderColor="#FD4F01"
                   backgroundColor="white"
-                  shadowColor="rgba(10, 13, 18, 0.05)"
-                  shadowOffset={{ width: 0, height: 1 }}
-                  shadowRadius={2}
-                  shadowOpacity={1}
-                  elevation={2}>
+                  // shadowColor="rgba(10, 13, 18, 0.05)"
+                  // shadowOffset={{ width: 0, height: 1 }}
+                  // shadowRadius={2}
+                  // shadowOpacity={1}
+                  // elevation={2}
+                >
                   Add New Address
                 </Button>
                 {addressLists?.length === 0 ? (

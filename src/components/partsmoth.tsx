@@ -87,12 +87,13 @@ export default function Home() {
                 flex={1}
                 minWidth={200}
                 borderRadius={20}
-                elevation={1}
+                // elevation={1}
                 justifyContent="space-between"
-                shadowColor="#0000000D"
-                shadowOffset={{ width: 0, height: 0.2 }}
-                shadowOpacity={0.05}
-                shadowRadius={1}>
+                // shadowColor="#0000000D"
+                // shadowOffset={{ width: 0, height: 0.2 }}
+                // shadowOpacity={0.05}
+                // shadowRadius={1}
+              >
                 <Input
                   placeholder="Search here"
                   flex={1}

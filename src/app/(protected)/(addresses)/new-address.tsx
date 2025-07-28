@@ -196,11 +196,11 @@ export default function NewAddress() {
                   onPress={() => router.back()}
                   // onPress={handleSubmit}
                   backgroundColor="white"
-                  elevation={2}
-                  shadowColor="#FF7435"
-                  shadowOffset={{ width: 0, height: 0 }}
-                  shadowOpacity={1}
-                  shadowRadius={2}
+                  // elevation={2}
+                  // shadowColor="#FF7435"
+                  // shadowOffset={{ width: 0, height: 0 }}
+                  // shadowOpacity={1}
+                  // shadowRadius={2}
                   borderRadius={8}
                   fontSize={16}
                   fontWeight={700}
@@ -227,11 +227,11 @@ export default function NewAddress() {
                   w="48%"
                   // onPress={handleSubmit}
                   backgroundColor="#FD4F01"
-                  elevation={2}
-                  shadowColor="#FF7435"
-                  shadowOffset={{ width: 0, height: 0 }}
-                  shadowOpacity={1}
-                  shadowRadius={2}
+                  // elevation={2}
+                  // shadowColor="#FF7435"
+                  // shadowOffset={{ width: 0, height: 0 }}
+                  // shadowOpacity={1}
+                  // shadowRadius={2}
                   borderRadius={8}
                   fontSize={16}
                   fontWeight={700}

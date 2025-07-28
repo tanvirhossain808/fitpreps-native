@@ -20,11 +20,11 @@ export default function CurrentLocation() {
             <YStack px="$4" py="$5" gap="$7">
               <XStack
                 width={'100%'}
-                shadowColor="rgba(10, 13, 18, 0.05)"
-                shadowOffset={{ width: 0, height: 1 }}
-                shadowOpacity={1}
-                shadowRadius={2}
-                elevation={1}
+                // shadowColor="rgba(10, 13, 18, 0.05)"
+                // shadowOffset={{ width: 0, height: 1 }}
+                // shadowOpacity={1}
+                // shadowRadius={2}
+                // elevation={1}
                 backgroundColor="white"
                 borderColor="#EDEEF1"
                 borderWidth={1}
