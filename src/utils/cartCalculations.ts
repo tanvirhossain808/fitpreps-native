@@ -31,11 +31,11 @@ export const parseSerialized = (str: string): Record<string, any> => {
 };
 
 export const weightOf = (item: Productsmakelijke): number => {
-  console.log(item, 'item');
+  // console.log(item, 'item');
   if (!item.metadata) return 500;
-  console.log('hey');
+  // console.log('hey');
   const nutri = item.metadata.nutretions_data;
-  console.log(nutri, 'nutri');
+  // console.log(nutri, 'nutri');
   if (nutri && isSerialized(nutri)) {
     const parsed = phpDeserializeStrings(nutri);
     return parsed.weight ? parseFloat(parsed.weight) : 500;

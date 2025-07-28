@@ -36,7 +36,6 @@ export default function SubDatePicker({
       setSelectedDate({ dateString: date } as any);
     }
   }, []);
-  console.log(date, 'ss');
   const toggleDatePicker = () => setShowDatePicker(!showDatePicker);
   const formatSelectedDate = (date: DateData | null) => {
     if (typeof date === 'string') {

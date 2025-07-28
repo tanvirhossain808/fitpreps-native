@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setStartDate } from '~/src/store/slices/subscriptionSlice';
 import { RootState } from '~/src/store';
 import { SubPlan } from '~/src/types/type';
+import { DateData } from 'react-native-calendars';
 
 export default function SubsPlan({ selectedSubPlan }: { selectedSubPlan: SubPlan }) {
   const { subscriptionType } = useLocalSearchParams() || {};
@@ -13,7 +14,8 @@ export default function SubsPlan({ selectedSubPlan }: { selectedSubPlan: SubPlan
   const handleDatePicker = (date: any) => {
     dispatch(setStartDate(date.dateString));
   };
-  const date = useSelector((s: RootState) => s.subPurchase.startDate);
+  const date: DateData | null = useSelector((s: RootState) => s.subPurchase.startDate);
+  console.log(date, 'dates');
   return (
     <YStack gap={12} mb="$5" justifyContent="space-between">
       <Saving isCommingSoon={true} />

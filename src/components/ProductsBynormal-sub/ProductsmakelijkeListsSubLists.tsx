@@ -71,6 +71,7 @@ export default function ProductsmakelijkeListsSubLists({
         _price: selectedProduct.selectedWeight?.price,
       },
     };
+    console.log(data, 'd');
     Toast.show({
       type: 'subCartToast',
       text1: 'Product added to cart',

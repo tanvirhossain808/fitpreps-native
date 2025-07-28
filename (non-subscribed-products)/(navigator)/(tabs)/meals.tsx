@@ -21,7 +21,12 @@ export default function Home() {
   });
   const { data: cookd, isLoading } = useGetSmakelijkeProductsQuery(null);
   const { data: fueld, isLoading: fueldLoading } = useGetProductsQuery(null);
+  // const { filteredProducts } = useProductFilters(
+  //   product === 'fueld' ? fueld : cookd,
+  //   product as string
+  // );
   const { filteredProducts } = useProductFilters(
+    // @ts-ignore
     product === 'fueld' ? fueld : cookd,
     product as string
   );

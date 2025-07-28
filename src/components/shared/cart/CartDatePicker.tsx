@@ -13,12 +13,12 @@ import { DateData } from 'react-native-calendars';
 export default function CartDatePicker({
   cartType = 'meals',
   handleDateSelect,
-  date = '',
+  date,
   isDisabled = false,
 }: {
   cartType?: string;
   handleDateSelect?: (date: any) => any;
-  date?: string;
+  date?: DateData | null;
   isDisabled?: boolean;
 }) {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -120,8 +120,10 @@ export default function CartDatePicker({
               bottom={0}>
               <DatePicker
                 toggleDatePicker={toggleDatePicker}
-                selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
+                date={date}
+                setDate={setSelectedDate}
+                // selectedDate={selectedDate}
+                // setSelectedDate={setSelectedDate}
               />
             </View>
           </Portal>

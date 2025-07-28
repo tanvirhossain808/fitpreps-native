@@ -18,11 +18,13 @@ import {
   setTotal,
 } from '~/src/store/slices/cartSlice';
 import { useOrderData } from '~/src/hooks/useOrderData';
+import { DateData } from 'react-native-calendars';
 export default function Cart() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [isShowMapModal, setShowMapModal] = useState<boolean>(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isEditAddress, setIsEditAddress] = useState(false);
+  const [date, setDate] = useState<DateData | null>(null);
   const { cartType = 'meals', subscriptionType } = useLocalSearchParams() || {};
   const { user } = useSelector((s: RootState) => s.user) || {};
   const cartItems = useSelector((s: RootState) => s.cart.cartItems);
@@ -39,7 +41,7 @@ export default function Cart() {
   useEffect(() => {
     dispatch(setCoupon(null));
   }, []);
-  console.log(orderData, 'datai');
+  // console.log(orderData, 'datai');
   useEffect(() => {
     dispatch(setSubTotal(orderData.subTotal));
     dispatch(setTotal(orderData.metadata._order_total));
@@ -70,6 +72,8 @@ export default function Cart() {
     0: (
       <CartStep1
         orderData={orderData}
+        date={date}
+        setDate={setDate}
         setCurrentStep={setCurrentStep}
         cartType={cartType as string}
       />

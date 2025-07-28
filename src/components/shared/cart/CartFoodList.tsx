@@ -15,7 +15,6 @@ export default function CartFoodList({
     quantity: number;
   };
 }) {
-  console.log(item, 'item');
   const dispatch = useDispatch();
   const cartItem = useSelector((s: RootState) => s.subCart.subCartItems[item._id]);
   // const quantity = useSelector((state: RootState) => {
@@ -25,7 +24,7 @@ export default function CartFoodList({
   //   return undefined;
   // });
   const handlePlus = (item: Productsmakelijke) => {
-    if (cartItem.categories.includes('Pakket Samenstellen')) {
+    if (item.categories.includes('Pakket Samenstellen')) {
       return Toast.show({
         type: 'minimumOrderAmountToast',
         text1: 'TRY OUT: artikel kan eenmalig besteld worden.',

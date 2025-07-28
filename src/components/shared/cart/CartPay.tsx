@@ -5,13 +5,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '~/src/store';
 import { setOrderData, setTotal } from '~/src/store/slices/cartSlice';
 import Toast from 'react-native-toast-message';
+import { DateData } from 'react-native-calendars';
 
 export default function CartPay({
   setCurrentStep,
   orderData,
+  date,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   orderData: any;
+  date: DateData | null;
 }) {
   // const dispatch = useDispatch();
   // useEffect(() => {
@@ -58,9 +61,18 @@ export default function CartPay({
       });
       return;
     }
+    if (!date) {
+      Toast.show({
+        type: 'error',
+        text1: 'Please select a date',
+        position: 'top',
+      });
+      return;
+    }
+    setCurrentStep(1);
     dispatch(setOrderData(orderData));
   };
-
+  console.log(date);
   return (
     <YStack flex={1} pb="$5">
       <XStack alignItems="center" justifyContent="space-between">
@@ -103,9 +115,8 @@ export default function CartPay({
         fontSize={16}
         fontWeight={700}
         color="white"
-        onPress={() => setCurrentStep(1)}
-        // onPress={handleCheckout}
-      >
+        // onPress={() => setCurrentStep(1)}
+        onPress={handleCheckout}>
         Checkout
       </Button>
     </YStack>

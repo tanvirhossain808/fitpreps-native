@@ -12,15 +12,21 @@ import Saving from './Saving';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '~/src/store';
 import { router } from 'expo-router';
+import { DateData } from 'react-native-calendars';
+import SubDatePicker from './Subscription/SubDatePicker';
 
 export default function CartStep1({
   setCurrentStep,
   cartType,
   orderData,
+  date,
+  setDate,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   cartType: string;
   orderData: any;
+  date: DateData | null;
+  setDate: React.Dispatch<React.SetStateAction<DateData | null>>;
 }) {
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state: RootState) => state.cart);
@@ -45,7 +51,7 @@ export default function CartStep1({
             <YStack>
               <Saving />
               <CartCarousel />
-              <FooterCart setCurrentStep={setCurrentStep} orderData={orderData} />
+              <FooterCart date={date} setCurrentStep={setCurrentStep} orderData={orderData} />
             </YStack>
           }
           ListEmptyComponent={() => (
@@ -73,7 +79,8 @@ export default function CartStep1({
           style={{ ...style.flastListContainer }}
           ListHeaderComponent={
             <YStack>
-              <CartDatePicker />
+              {/* <CartDatePicker handleDateSelect={setDate} date={date} /> */}
+              <SubDatePicker cartType="meals" date={date} setDate={setDate} />
             </YStack>
           }
           ListHeaderComponentStyle={{ marginBottom: 20 }}

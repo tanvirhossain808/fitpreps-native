@@ -132,7 +132,7 @@ function ProfileFields({
     setIsEdit(() => false);
     setCurrentValue(() => inputValue);
   };
-  console.log(inputValue, 'value');
+  // console.log(inputValue, 'value');
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}

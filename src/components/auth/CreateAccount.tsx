@@ -39,7 +39,7 @@ export default function CreateAccount() {
     })
       .unwrap()
       .then((data) => {
-        console.log(data, 'data');
+        // console.log(data, 'data');
         Toast.show({
           type: 'success',
           text1: data.message,

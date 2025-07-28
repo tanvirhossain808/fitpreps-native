@@ -1,5 +1,6 @@
 // redux/slices/subscriptionSlice.js
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { DateData } from 'react-native-calendars';
 
 // This interface defines the shape of all the form fields
 interface SubscriptionFormData {
@@ -39,7 +40,7 @@ interface SubscriptionState {
   sameAddress: boolean;
   isBusinessAccount: boolean;
   isSubmitting: boolean;
-  startDate: string;
+  startDate: DateData | null;
   formErrors: { [key: string]: string | undefined };
 }
 
@@ -78,7 +79,7 @@ const initialState: SubscriptionState = {
   sameAddress: true,
   isBusinessAccount: false,
   isSubmitting: false,
-  startDate: '',
+  startDate: null,
   formErrors: {},
 };
 
@@ -109,7 +110,7 @@ const subscriptionSlice = createSlice({
       state.isSubmitting = action.payload;
     },
     // Sets the selected delivery start date
-    setStartDate: (state, action: PayloadAction<string>) => {
+    setStartDate: (state, action: PayloadAction<DateData>) => {
       state.startDate = action.payload;
     },
     // Sets the form validation errors

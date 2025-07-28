@@ -18,11 +18,13 @@ import {
   setTotal,
 } from '~/src/store/slices/cartSlice';
 import { useOrderData } from '~/src/hooks/useOrderData';
+import { DateData } from 'react-native-calendars';
 export default function Cart() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [isShowMapModal, setShowMapModal] = useState<boolean>(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isEditAddress, setIsEditAddress] = useState(false);
+  const [date, setDate] = useState<DateData | null>(null);
   const { cartType = 'meals', subscriptionType } = useLocalSearchParams() || {};
   const { user } = useSelector((s: RootState) => s.user) || {};
   const cartItems = useSelector((s: RootState) => s.cart.cartItems);
@@ -35,11 +37,11 @@ export default function Cart() {
     fitCouponData: { discountAmount: 20 },
     detectedCountry: 'NL',
   });
+  console.log(cartItems, 'cartItems');
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setCoupon(null));
   }, []);
-  console.log(orderData, 'datai');
   useEffect(() => {
     dispatch(setSubTotal(orderData.subTotal));
     dispatch(setTotal(orderData.metadata._order_total));
@@ -54,7 +56,6 @@ export default function Cart() {
         userId: user.user._id,
         token: user.token,
       });
-      console.log(response, 'coupon data');
     }
     fetchData();
   }, [couponData]);
@@ -65,19 +66,24 @@ export default function Cart() {
   //   }
   //   dispatch(setSubTotal(sub));
   // }, [sub]);
-
+  console.log(cartItems, 'orderData');
   const cartSteps: { [key: number]: any } = {
     0: (
       <CartStep1
         orderData={orderData}
         setCurrentStep={setCurrentStep}
         cartType={cartType as string}
+        date={date}
+        setDate={setDate}
       />
     ),
     1: (
       <CartStep2
+        orderData={orderData}
         isAddressModalOpen={isAddressModalOpen}
         setIsAddressModalOpen={setIsAddressModalOpen}
+        date={date}
+        setDate={setDate}
         setCurrentStep={setCurrentStep}
         isEditAddress={isEditAddress}
         setIsEditAddress={setIsEditAddress}

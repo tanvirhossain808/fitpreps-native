@@ -12,14 +12,14 @@ import { resetSubCart } from '~/src/store/slices/subcartSlice';
 
 export default function Home() {
   const { product = 'cookd', subscription = false as boolean } = useLocalSearchParams();
-  console.log(product, subscription);
+  // console.log(product, subscription);
   const [subscriptionType, setSubscriptionType] = useState(false);
   useFocusEffect(() => {
     setSubscriptionType(Number(subscription) === 1 ? true : false);
   });
   switch (product) {
     case 'cookd':
-      return subscriptionType ? (
+      return !subscriptionType ? (
         <CookdSubscriptionContainer
           product={product as string}
           subscription={subscriptionType as boolean}

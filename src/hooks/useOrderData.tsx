@@ -26,6 +26,7 @@ const optimizer = (p: Productsmakelijke) => {
   if (!p.metadata) return 500;
   if (p.metadata.nutretions_data && isSerialized(p.metadata.nutretions_data)) {
     const weight = phpDeserializeStrings(p.metadata.nutretions_data).weight;
+    if (!weight) return 500;
     return weight;
   }
   return p.metadata.nutretions_data?.weight ?? 500;
@@ -47,7 +48,7 @@ export function generateOrderData(params: {
 
   // 1. Sub-totals
   const totalWeight = cart.reduce((w, i) => w + Number(i.quantity) * optimizer(i), 0); // grams
-
+  console.log(totalWeight, 'weight');
   const totalCartIncl = cart.reduce(
     (s, i) => s + Number(i.quantity) * Number(i.metadata._price),
     0

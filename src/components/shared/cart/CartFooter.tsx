@@ -3,13 +3,16 @@ import CartCarosuel from './CartCarosuel';
 import CartPay from './CartPay';
 import Saving from './Saving';
 import { useLocalSearchParams } from 'expo-router';
+import { DateData } from 'react-native-calendars';
 
 export default function FooterCart({
   setCurrentStep,
   orderData,
+  date,
 }: {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   orderData: any;
+  date: DateData | null;
 }) {
   const { cartType } = useLocalSearchParams() || {};
   return (
@@ -21,7 +24,7 @@ export default function FooterCart({
         </YStack>
       )}
       <YStack flex={1}>
-        <CartPay setCurrentStep={setCurrentStep} orderData={orderData} />
+        <CartPay setCurrentStep={setCurrentStep} orderData={orderData} date={date} />
       </YStack>
     </YStack>
   );
