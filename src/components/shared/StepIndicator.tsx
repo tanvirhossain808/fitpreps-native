@@ -60,7 +60,8 @@ export default function StepIndicator({
   }
   const handleBack = () => {
     if (currentStep === 0) {
-      return router.replace('/(tabs)/subscription');
+      // return router.replace('/(tabs)/subscription');
+      return router.back();
     }
     if (isShowMapModal && setShowMapModal) {
       setShowMapModal(false);
