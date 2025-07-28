@@ -20,7 +20,7 @@ export default function VerifyPayment() {
       const hasPaymentComplete = currentUrl.includes('fitpreps')
       if (hasPaymentComplete ) {
      
-        console.log('🎉 Payment Success Detected!');
+        // console.log('🎉 Payment Success Detected!');
         // console.log('🧾 Payment ID:', paymentId);
         // 🚀 Redirect or handle success logic here
         router.replace("/(protected)/(navigator)/(tabs)/meals")
