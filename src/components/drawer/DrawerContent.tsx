@@ -60,7 +60,7 @@ export default function DrawerContent({ navigation }: { navigation: DrawerNaviga
                 borderRadius={8}
                 bg="#FAFAFB"
                 elevationAndroid={1}
-                shadowColor="rgba(10, 13, 18, 0.10)"
+                shadowColor="rgba(221, 223, 227, 0.1)"
                 shadowRadius={2}
                 shadowOffset={{ width: 0, height: 1 }}
                 shadowOpacity={1}>

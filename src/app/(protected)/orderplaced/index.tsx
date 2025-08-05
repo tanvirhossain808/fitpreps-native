@@ -16,12 +16,13 @@ export default function OrderPlaced() {
   const [checkPayment] = useCheckPaymentMutation();
   const [isSuccess, setIsSuccess] = useState(false);
   const token = useSelector((s: RootState) => s.user.user?.token);
-  console.log(id, 'id');
+  
   useEffect(() => {
     checkPayment({ id, token })
       .unwrap()
       .then((res) => {
-        // console.log(res, 'ress');
+        console.log(res, 'ress');
+      
         if (res.status === 'processing' || res.status === 'completed') {
           setIsSuccess(true);
         } else {
@@ -30,6 +31,7 @@ export default function OrderPlaced() {
       })
       .catch((err) => {
         console.log(err);
+        setIsSuccess(false);
       });
   }, [id]);
   return (
@@ -96,7 +98,7 @@ export default function OrderPlaced() {
                     <Button
                       onPress={() => {
                         if (type === 'meals') {
-                          router.push('/(tabs)/meals');
+                          router.replace('/(tabs)/meals');
                         } else {
                           router.replace({
                             pathname: '/meals',
@@ -109,7 +111,7 @@ export default function OrderPlaced() {
                       borderRadius={8}
                       color="white"
                       fontWeight={700}>
-                      {type === 'meals' ? 'Track Order' : 'Proceed To Add Meals'}
+                      {type === 'meals' ? 'TERUG' : 'Proceed To Add Meals'}
                     </Button>
                   </XStack>
                 </YStack>

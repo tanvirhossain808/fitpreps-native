@@ -7,7 +7,10 @@ import { router } from 'expo-router';
 
 import CoinSubscriber from '../partials/CoinSubscriber';
 import WithoutCoinSubscriber from '../partials/WithoutCoinSubscriber';
+import { useSelector } from 'react-redux';
+import { RootState } from '~/src/store';
 export default function subscription() {
+  const subscription=useSelector((state:RootState)=>state.user.subscription)
   const haveCoin = false;
   return (
     <YStack f={1} bg="white">
@@ -33,7 +36,7 @@ export default function subscription() {
                 <Feather name="chevron-left" size={24} color="white" />
               </TouchableOpacity>
             </XStack>
-            {!haveCoin ? <CoinSubscriber /> : <WithoutCoinSubscriber />}
+            {subscription?._id ? <CoinSubscriber /> : <WithoutCoinSubscriber />}
           </YStack>
         </SafeAreaView>
       </ImageBackground>

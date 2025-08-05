@@ -7,13 +7,15 @@ import {
   increment,
   removeItem,
   setCoupon,
+  setDiscount,
   setShipping,
+  setShippingCountry,
   setTotal,
 } from '../store/slices/cartSlice';
 
 export function useCartLogic() {
   const dispatch = useDispatch();
-  const { cartItems, couponCode: coupon, discount } = useSelector((s: RootState) => s.cart);
+  const { cartItems, couponCode: coupon, discount, shippingCountry } = useSelector((s: RootState) => s.cart);
   const user = useSelector((s: RootState) => s.user.user);
 
   /* ---------- derived numbers ---------- */
@@ -34,9 +36,10 @@ export function useCartLogic() {
   /* ---------- business rules ---------- */
   const shippingFee = useMemo(() => {
     if (sub > 125) return 0;
-    const country = user?.user?.metadata?.shipping_country ?? 'NL';
+    // Use shipping country from cart state, fallback to user metadata, then default to NL
+    const country = shippingCountry || (user?.user?.metadata?.shipping_country ?? 'NL');
     return country === 'BE' ? 8.95 : 6.95;
-  }, [sub, user]);
+  }, [sub, shippingCountry, user]);
 
   const final = useMemo(
     () => Math.max(0, sub + shippingFee - discount),
@@ -49,10 +52,19 @@ export function useCartLogic() {
   const del = useCallback((id: string) => dispatch(removeItem(id)), [dispatch]);
   const total = useMemo(() => sub + tax + supps + shippingFee, [sub, tax, supps, shippingFee]);
   const setCouponCode = useCallback((code: string) => dispatch(setCoupon(code)), [dispatch]);
+  const setDiscountAmount = useCallback((amount: number) => dispatch(setDiscount(amount)), [dispatch]);
+  
   useEffect(() => {
     dispatch(setTotal(total));
   }, [total, dispatch]);
+  
   const updateShipping = useCallback((fee: number) => dispatch(setShipping(fee)), [dispatch]);
+  const updateShippingCountry = useCallback((country: string) => {
+    dispatch(setShippingCountry(country));
+    // Automatically update shipping fee based on new country
+    const newShippingFee = sub > 125 ? 0 : (country === 'BE' ? 8.95 : 6.95);
+    dispatch(setShipping(newShippingFee));
+  }, [dispatch, sub]);
 
   // const applyCoupon = useCallback((code: string) => dispatch(applyCouponAsync(code)), [dispatch]);
 
@@ -84,7 +96,10 @@ export function useCartLogic() {
     dec,
     del,
     setCouponCode,
+    setDiscountAmount,
     updateShipping,
+    updateShippingCountry,
+    shippingCountry,
     // applyCoupon,
     // placeOrder,
   };

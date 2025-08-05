@@ -61,9 +61,10 @@ export default function Login() {
                 borderColor="#EDEEF1"
                 backgroundColor="white"
                 shadowOffset={{ width: 0, height: 1 }}
-                shadowRadius={2}
-                shadowOpacity={1}
+                shadowRadius={1}
+                shadowOpacity={0.4}
                 elevation={0.4}
+                shadowColor="rgba(221, 223, 227, 0.1)"
                 borderWidth={0.6}>
                 <Input
                   onChangeText={setEmail}
@@ -94,8 +95,9 @@ export default function Login() {
                 backgroundColor="white"
                 shadowOffset={{ width: 0, height: 1 }}
                 shadowRadius={2}
-                shadowOpacity={1}
+                shadowOpacity={0.4}
                 elevation={0.4}
+                shadowColor="rgba(221, 223, 227, 0.1)"
                 borderWidth={0.6}>
                 <Input
                   p={0}
@@ -147,7 +149,7 @@ export default function Login() {
           color="white"
           fontWeight="700"
           borderRadius={8}
-          shadowColor="rgba(10, 13, 18, 0.05)"
+          shadowColor="rgba(186, 192, 202, 0.05)"
           shadowOffset={{ width: 0, height: 1 }}
           shadowRadius={2}
           shadowOpacity={1}

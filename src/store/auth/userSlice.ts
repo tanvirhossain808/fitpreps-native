@@ -7,10 +7,15 @@ const userSlice = createSlice({
     user: <LoginResponse | null>null,
     isLoading: <boolean>false,
     error: <string | null>null,
+    metadata: <any | null>null,
+    subscription: <any | null>null,
   },
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
+    },
+    setSubscription: (state, action) => {
+      state.subscription = action.payload;
     },
     setLoading: (state, action) => {
       state.isLoading = action.payload;
@@ -23,8 +28,11 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
+    setMetadata: (state, action) => {
+      state.metadata = action.payload;
+    },
   },
 });
 
-export const { setUser, setLoading, setError, clearUser } = userSlice.actions;
+export const { setUser, setLoading, setError, clearUser, setSubscription } = userSlice.actions;
 export default userSlice.reducer;

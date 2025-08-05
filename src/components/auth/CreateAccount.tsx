@@ -82,6 +82,7 @@ export default function CreateAccount() {
                 shadowRadius={2}
                 shadowOpacity={1}
                 elevation={0.4}
+                shadowColor="rgba(221, 223, 227, 0.1)"
                 borderWidth={0.6}>
                 <Input
                   value={formData[field.inputType as keyof FormDataType]}
@@ -116,6 +117,7 @@ export default function CreateAccount() {
                 shadowRadius={2}
                 shadowOpacity={1}
                 elevation={0.4}
+                shadowColor="rgba(221, 223, 227, 0.1)"
                 borderWidth={0.6}>
                 <Input
                   p={0}
@@ -184,7 +186,7 @@ export default function CreateAccount() {
           color="white"
           fontWeight="700"
           borderRadius={8}
-          shadowColor="rgba(10, 13, 18, 0.05)"
+          shadowColor="rgba(210, 214, 222, 0.05)"
           shadowOffset={{ width: 0, height: 1 }}
           shadowRadius={2}
           shadowOpacity={1}

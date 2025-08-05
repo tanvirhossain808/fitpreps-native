@@ -22,13 +22,23 @@ export default function SelectSubscriptionPlan({
       });
       return;
     } else {
+      // Calculate total cost and points similar to web version
+      const totalCost = plan.price;
+      const totalPoints = plan.coins + plan.bonusCoins;
+      const bonusPoints = plan.bonusCoins;
+      const regularPoints = plan.coins;
+      const originalPrice = plan.originalPrice;
+      
       router.push({
         pathname: '/subcription-purchase/purchase-sub-cart',
         params: {
-          selectedPlan: JSON.stringify(plan),
-          // cartType: 'subscription',
-          // subscriptionType: selectedPlan.name === 'Weekly plan' ? 'weekly' : 'monthly',
-          // packId: plan,
+          totalCost: totalCost.toString(),
+          totalPoints: totalPoints.toString(),
+          plan: selectedPlan.name === 'Weekly Plan' ? 'weekly' : 'monthly',
+          type: plan.title,
+          bonusPoints: bonusPoints.toString(),
+          regularPoints: regularPoints.toString(),
+          originalPrice: originalPrice.toString(),
         },
       });
     }

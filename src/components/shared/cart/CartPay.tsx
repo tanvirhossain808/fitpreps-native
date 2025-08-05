@@ -6,6 +6,7 @@ import { RootState } from '~/src/store';
 import { setOrderData, setTotal } from '~/src/store/slices/cartSlice';
 import Toast from 'react-native-toast-message';
 import { DateData } from 'react-native-calendars';
+import { useCartLogic } from '~/src/hooks/useCartLogic';
 
 export default function CartPay({
   setCurrentStep,
@@ -20,9 +21,21 @@ export default function CartPay({
   // useEffect(() => {
   //   dispatch(setTotal as any);
   // }, []);
-  const { total, subTotal, shipping, tax } = useSelector((s: RootState) => s.cart);
+  const { total, subTotal, tax, discount, couponCode: appliedCoupon } = useSelector((s: RootState) => s.cart);
   const cartItems = useSelector((s: RootState) => s.cart.cartItems);
+  const { shippingFee } = useCartLogic();
   const dispatch = useDispatch();
+  
+  // Debug logging
+  console.log('CartPay Debug:', {
+    appliedCoupon,
+    discount,
+    total,
+    subTotal,
+    shippingFee,
+    tax
+  });
+
   const handleCheckout = () => {
     const c = Object.values(cartItems);
     const isSupplimentInTheCart = c.find((data) => data.categories.includes('Supplements'));
@@ -95,9 +108,21 @@ export default function CartPay({
             Shipping cost
           </Text>
           <Text fontSize={14} fontWeight={500} color="#1E1F20">
-            €{(shipping + tax).toFixed(2)}
+            €{(shippingFee).toFixed(2)}
           </Text>
         </XStack>
+   
+        {/* Actual coupon display */}
+        {appliedCoupon && discount > 0 && (
+          <XStack alignItems="center" justifyContent="space-between">
+            <Text fontSize={14} fontWeight={500} color="#1E1F20">
+              Kortingscode: {appliedCoupon.code}
+            </Text>
+            <Text fontSize={14} fontWeight={500} color="#EF4444">
+              -€{discount.toFixed(2)}
+            </Text>
+          </XStack>
+        )}
       </YStack>
       <View my={'$2'} bg="#B6BAC3" height={1}></View>
       <XStack alignItems="center" justifyContent="space-between">

@@ -9,47 +9,89 @@ import StepIndicator from '../StepIndicator';
 import DatePicker from '~/src/components/shared/DatePicker';
 import DatePickerCalendar from 'public/images/calendar.svg';
 import { DateData } from 'react-native-calendars';
+import { 
+  getNextDay, 
+  generateHolidays, 
+  formatDateForDisplay,
+  getMarkedDates,
+  isHoliday
+} from '~/src/utils/datePickerUtils';
 
 export default function CartDatePicker({
   cartType = 'meals',
   handleDateSelect,
   date,
   isDisabled = false,
+  shippingCountry = 'NL',
 }: {
   cartType?: string;
   handleDateSelect?: (date: any) => any;
   date?: DateData | null;
   isDisabled?: boolean;
+  shippingCountry?: string;
 }) {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState<DateData | null>(null);
+  const [holidays, setHolidays] = useState<Date[]>([]);
+  const [defaultDate, setDefaultDate] = useState<string>('');
+
+  // Initialize holidays and default date
+  useEffect(() => {
+    const holidayDates = generateHolidays(shippingCountry);
+    setHolidays(holidayDates);
+    
+    // Set default date to next available delivery day
+    const nextDay = getNextDay();
+    setDefaultDate(nextDay);
+    
+    // If no date is selected, set the default
+    if (!selectedDate && !date) {
+      const defaultDateData = { dateString: nextDay } as DateData;
+      setSelectedDate(defaultDateData);
+      if (handleDateSelect) {
+        handleDateSelect(defaultDateData);
+      }
+    }
+  }, [shippingCountry]);
+
   useEffect(() => {
     if (!selectedDate) return;
-    if (!selectedDate) {
-    }
     if (handleDateSelect) {
       handleDateSelect(selectedDate);
     }
   }, [selectedDate]);
+
   useEffect(() => {
     if (date) {
-      setSelectedDate({ dateString: date } as any);
+      setSelectedDate({ dateString: date.dateString || date } as any);
     }
-  }, []);
-  console.log(selectedDate, 'sel');
+  }, [date]);
+
   const toggleDatePicker = () => setShowDatePicker(!showDatePicker);
+
   const formatSelectedDate = (date: DateData | null) => {
     if (typeof date === 'string') {
-      return date;
+      return formatDateForDisplay(date);
     }
-    if (!date) return 'Pick delivery date';
-    const dateObj = new Date(date.dateString);
-    return dateObj.toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-    });
+    if (!date) return 'Selecteer bezorgdatum';
+    return formatDateForDisplay(date.dateString);
   };
+
+  const handleDateChange = (day: any) => {
+    const selectedDateData = { dateString: day.dateString } as DateData;
+    setSelectedDate(selectedDateData);
+    setShowDatePicker(false);
+    
+    if (handleDateSelect) {
+      handleDateSelect(selectedDateData);
+    }
+  };
+
+  const markedDates = getMarkedDates(
+    selectedDate?.dateString || null, 
+    holidays
+  );
+
   return (
     <>
       <YStack flex={1} gap="$3">
@@ -68,10 +110,10 @@ export default function CartDatePicker({
             }}></LinearGradient>
 
           <Text fontSize={16} fontWeight={700} color="#1E1F20">
-            {cartType === 'meals' ? 'Pick Delivery Date' : 'Pick subscription start date'}
+            {cartType === 'meals' ? 'Selecteer bezorgdatum' : 'Selecteer abonnement startdatum'}
           </Text>
           <Text color="#FD4F01" fontWeight={500} fontSize={12}>
-            NOTE: We don’t deliver on Saturday and Sunday.
+            OPMERKING: We bezorgen niet op zaterdag en zondag.
           </Text>
           <TouchableOpacity
             disabled={isDisabled}
@@ -99,7 +141,7 @@ export default function CartDatePicker({
             onPress={() => setShowDatePicker(!showDatePicker)}>
             <DatePickerCalendar size={20} />
             <Text alignSelf="stretch" flex={1} color="#8E95A2" fontSize={14}>
-              {date ? date : formatSelectedDate(selectedDate)}
+              {date ? formatDateForDisplay(typeof date === 'string' ? date : date.dateString) : formatSelectedDate(selectedDate)}
             </Text>
             {showDatePicker ? (
               <Entypo name="chevron-small-up" size={20} color="#1E1F20" />
@@ -120,10 +162,8 @@ export default function CartDatePicker({
               bottom={0}>
               <DatePicker
                 toggleDatePicker={toggleDatePicker}
-                date={date}
-                setDate={setSelectedDate}
-                // selectedDate={selectedDate}
-                // setSelectedDate={setSelectedDate}
+                date={selectedDate || { dateString: defaultDate } as DateData}
+                setDate={handleDateChange}
               />
             </View>
           </Portal>

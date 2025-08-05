@@ -3,7 +3,7 @@ import Marker from 'public/images/marker-pin-01.svg';
 export default function CartPlaced() {
   return (
     <YStack gap="$3">
-      <XStack>
+      {/* <XStack>
         <XStack alignItems="center" gap="$1" minWidth={135}>
           <Marker />
           <Text color="#1E1F20" fontSize={16} fontWeight={500}>
@@ -28,7 +28,7 @@ export default function CartPlaced() {
             ABC Apartments, Street name, Block no., Area, City
           </Text>
         </XStack>
-      </XStack>
+      </XStack> */}
     </YStack>
   );
 }

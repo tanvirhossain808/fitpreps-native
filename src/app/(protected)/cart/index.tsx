@@ -19,35 +19,82 @@ import {
 } from '~/src/store/slices/cartSlice';
 import { useOrderData } from '~/src/hooks/useOrderData';
 import { DateData } from 'react-native-calendars';
+
+// Define form data interface
+interface CheckoutFormData {
+  billing_email: string;
+  billing_first_name: string;
+  billing_last_name: string;
+  billing_country: string;
+  billing_address_1: string;
+  billing_address_2: string;
+  billing_city: string;
+  billing_state: string;
+  billing_postcode: string;
+  billing_phone: string;
+  billing_company: string;
+  billing_company_kvk: string;
+  billing_company_vat: string;
+  shipping_email: string;
+  shipping_first_name: string;
+  shipping_last_name: string;
+  shipping_country: string;
+  shipping_address_1: string;
+  shipping_address_2: string;
+  shipping_city: string;
+  shipping_state: string;
+  shipping_postcode: string;
+  shipping_phone: string;
+  shipping_company: string;
+  shipping_company_kvk: string;
+  shipping_company_vat: string;
+  delivery_time: string;
+  paymentMethod: string;
+  customerType: 'individual' | 'business';
+  deliveryDate: string | null;
+}
+
 export default function Cart() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [isShowMapModal, setShowMapModal] = useState<boolean>(false);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [isEditAddress, setIsEditAddress] = useState(false);
   const [date, setDate] = useState<DateData | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<string | null>(null);
+  const [selectedSubPlan, setSelectedSubPlan] = useState<any>(null);
+  
+  // Add checkout form data state
+  const [checkoutFormData, setCheckoutFormData] = useState<CheckoutFormData | null>(null);
+  
   const { cartType = 'meals', subscriptionType } = useLocalSearchParams() || {};
   const { user } = useSelector((s: RootState) => s.user) || {};
   const cartItems = useSelector((s: RootState) => s.cart.cartItems);
   const couponCode = useSelector((s: RootState) => s.cart.couponCode);
+  const shippingCountry = useSelector((s: RootState) => s.cart.shippingCountry);
+  
   const [couponData, { isSuccess, isLoading, error }] = useVerifyCouponMutation();
   const { orderData, errors, loyaltyPoints } = useOrderData({
     user: user!.user,
     cart: Object.values(cartItems) as any,
     coupon: couponCode,
     fitCouponData: { discountAmount: 20 },
-    detectedCountry: 'NL',
+    detectedCountry: shippingCountry as any || 'NL',
   });
-  console.log(cartItems, 'cartItems');
+
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(setCoupon(null));
   }, []);
+
   useEffect(() => {
     dispatch(setSubTotal(orderData.subTotal));
     dispatch(setTotal(orderData.metadata._order_total));
     dispatch(setTax(orderData.metadata._order_shipping_tax));
-    dispatch(setShipping(orderData.metadata._order_shipping));
+    // Don't override shipping from useCartLogic - let it handle dynamic shipping
+    // dispatch(setShipping(orderData.metadata._order_shipping));
   }, [orderData]);
+
   useEffect(() => {
     async function fetchData() {
       if (!user) return;
@@ -59,14 +106,8 @@ export default function Cart() {
     }
     fetchData();
   }, [couponData]);
-  // const { sub, tax, shippingFee, discount, final } = useCartLogic();
-  // useEffect(() => {
-  //   if (sub > 125) {
-  //     dispatch(setShipping(0));
-  //   }
-  //   dispatch(setSubTotal(sub));
-  // }, [sub]);
-  console.log(cartItems, 'orderData');
+
+  // Steps configuration
   const cartSteps: { [key: number]: any } = {
     0: (
       <CartStep1
@@ -89,16 +130,39 @@ export default function Cart() {
         setIsEditAddress={setIsEditAddress}
         isShowMapModal={isShowMapModal}
         setShowMapModal={setShowMapModal}
+        selectedIndex={selectedIndex}
+        setSelectedIndex={setSelectedIndex}
+        selectedSubPlan={selectedSubPlan}
+        setSelectedSubPlan={setSelectedSubPlan}
+        onFormDataChange={setCheckoutFormData}
       />
     ),
-    2: <CartStep3 setCurrentStep={setCurrentStep} subsType={subscriptionType as string} />,
+    2: (
+      <CartStep3 
+        setCurrentStep={setCurrentStep} 
+        subsType={subscriptionType as string} 
+        checkoutFormData={checkoutFormData}
+      />
+    ),
   };
 
   const CurrentStep = cartSteps[currentStep] || cartSteps[0];
 
+  // Step titles for better UX
+  const getStepTitle = (step: number) => {
+    switch (step) {
+      case 0: return 'Winkelwagen';
+      case 1: return 'Bezorggegevens';
+      case 2: return 'Betalingssamenvatting';
+      default: return 'Checkout';
+    }
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <StatusBar style="dark" />
+      
+      {/* Step Indicator - Updated to show current step */}
       <StepIndicator
         cartType={cartType as string}
         setIsEditAddress={setIsEditAddress}
@@ -109,7 +173,11 @@ export default function Cart() {
         isAddressModalOpen={isAddressModalOpen}
         setIsAddressModalOpen={setIsAddressModalOpen}
         setShowMapModal={setShowMapModal}
+        stepTitle={getStepTitle(currentStep)}
+        totalSteps={3}
       />
+      
+      {/* Current Step Component */}
       {CurrentStep}
     </SafeAreaView>
   );

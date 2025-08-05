@@ -161,6 +161,7 @@ export interface LoginResponse {
   message: string;
   token: string;
   user: UserType;
+  metadata: any;
 }
 
 export type UserType = {
@@ -173,6 +174,7 @@ export type UserType = {
     last_name: string;
     woocommerce_reward_points: string;
     shipping_country?: string;
+     
   };
 };
 export type cartType = { [key: string]: Productsmakelijke & { quantity: number } };

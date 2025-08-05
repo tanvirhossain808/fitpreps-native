@@ -11,6 +11,8 @@ interface CartState {
   subTotal: number;
   tax: number;
   orderData: any;
+  fitCouponData: any;
+  shippingCountry: string;
 }
 
 const initialState: CartState = {
@@ -23,6 +25,8 @@ const initialState: CartState = {
   quantity: 0,
   tax: 0,
   orderData: {},
+  fitCouponData: null,
+  shippingCountry: 'NL',
 };
 
 const cartSlice = createSlice({
@@ -90,6 +94,9 @@ const cartSlice = createSlice({
     setQuantity: (state, action) => {
       state.quantity = action.payload;
     },
+    setShippingCountry: (state, action) => {
+      state.shippingCountry = action.payload;
+    },
   },
 });
 
@@ -106,4 +113,6 @@ export const {
   setOrderData,
   setTax,
   setTotal,
+  setQuantity,
+  setShippingCountry,
 } = cartSlice.actions;

@@ -4,7 +4,7 @@ import { RootState } from '../store';
 
 export default function Index() {
   const { user } = useSelector((state: RootState) => state.user);
-  console.log(user);
+
   if (user) {
     return <Redirect href="/(tabs)" />;
   }

@@ -1,84 +1,59 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
-import StepIndicator from '~/src/components/shared/StepIndicator';
 import { useEffect, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import PurchaseStep1 from './partials/purchase-sub/PurchaseStep-1';
-import PurchaseStep2 from './partials/purchase-sub/PurchaseStep-2';
-import PurchaseStep3 from './partials/purchase-sub/PurchaseStep-3';
-import { SubPlan as sp } from '~/src/types/type';
-import { useDispatch, useSelector } from 'react-redux';
-import { resetSubscriptionForm } from '~/src/store/slices/subscriptionSlice';
+import { useSelector } from 'react-redux';
 import { RootState } from '~/src/store';
+import { router } from 'expo-router';
+import Toast from 'react-native-toast-message';
+import SubscriptionCheckoutForm from './partials/purchase-sub/SubscriptionCheckoutForm';
 export default function PurchaseSubCart() {
-  const [currentStep, setCurrentStep] = useState<number>(0);
-  const [isShowMapModal, setShowMapModal] = useState<boolean>(false);
-  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
-  const [isEditAddress, setIsEditAddress] = useState(false);
-  const { selectedPlan: subPlan } = useLocalSearchParams() || {};
-  //selected index is the id of the selected address
-  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
-  const [selectedSubPlan, setSelectedSubPlan] = useState<sp>(
-    subPlan ? JSON.parse(subPlan as string) : null
-  );
-  console.log(selectedSubPlan, 'selectedSubPlan');
-  const dispatch = useDispatch();
-  useEffect(() => {
-    setSelectedSubPlan(subPlan ? JSON.parse(subPlan as string) : null);
-    return () => {
-      dispatch(resetSubscriptionForm());
-    };
-  }, [subPlan]);
-  const cartSteps: { [key: number]: any } = {
-    0: (
-      <PurchaseStep1
-        selectedSubPlan={selectedSubPlan}
-        setCurrentStep={setCurrentStep}
-        cartType={'meals' as string}
-      />
-    ),
-    1: (
-      <PurchaseStep2
-        selectedSubPlan={selectedSubPlan}
-        setSelectedSubPlan={setSelectedSubPlan}
-        selectedIndex={selectedAddressId}
-        setSelectedIndex={setSelectedAddressId}
-        isAddressModalOpen={isAddressModalOpen}
-        setIsAddressModalOpen={setIsAddressModalOpen}
-        setCurrentStep={setCurrentStep}
-        isEditAddress={isEditAddress}
-        setIsEditAddress={setIsEditAddress}
-        isShowMapModal={isShowMapModal}
-        setShowMapModal={setShowMapModal}
-      />
-    ),
-    2: (
-      <PurchaseStep3
-        selectedIndex={selectedAddressId as any}
-        setSelectedIndex={setSelectedAddressId as any}
-        setCurrentStep={setCurrentStep}
-        subsType={'subscription' as string}
-      />
-    ),
-  };
+  const { 
+    selectedPlan: subPlan,
+    totalCost,
+    totalPoints,
+    plan,
+    type,
+    bonusPoints,
+    regularPoints,
+    originalPrice
+  } = useLocalSearchParams() || {};
+  
+  const user = useSelector((state: RootState) => state.user.user?.user);
+  
+  console.log({
+    totalCost,
+    totalPoints,
+    plan,
+    type,
+    bonusPoints,
+    regularPoints,
+    originalPrice
+  }, 'subscription params');
 
-  const CurrentStep = cartSteps[currentStep] || cartSteps[0];
+  if (!plan) {
+    Toast.show({
+      type: 'error',
+      text1: 'Error',
+      text2: 'No subscription plan selected',
+    });
+    router.back();
+    return null;
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       <StatusBar style="dark" />
-      <StepIndicator
-        cartType={'subscription' as string}
-        setIsEditAddress={setIsEditAddress}
-        currentStep={currentStep}
-        setCurrentStep={setCurrentStep}
-        isEditAddress={isEditAddress}
-        isShowMapModal={isShowMapModal}
-        isAddressModalOpen={isAddressModalOpen}
-        setIsAddressModalOpen={setIsAddressModalOpen}
-        setShowMapModal={setShowMapModal}
+      <SubscriptionCheckoutForm
+        totalCost={totalCost as any}
+        totalPoints={totalPoints as any}
+        plan={plan}
+        type={type}
+        bonusPoints={bonusPoints as any}
+        regularPoints={regularPoints as any}
+        originalPrice={originalPrice as any}
+        user={user}
       />
-      {CurrentStep}
     </SafeAreaView>
   );
 }

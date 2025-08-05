@@ -20,6 +20,8 @@ type StepIndicatorProps = {
   setCurrentStep?: React.Dispatch<React.SetStateAction<number>>;
   cartType?: string;
   isSubsCribedProduct?: boolean;
+  stepTitle?: string;
+  totalSteps?: number;
 };
 
 export default function StepIndicator({
@@ -33,36 +35,59 @@ export default function StepIndicator({
   setCurrentStep,
   cartType,
   isSubsCribedProduct = false,
+  stepTitle,
+  totalSteps = 3,
 }: StepIndicatorProps) {
-  const labels = ['Select Date', 'Address', 'Payment'];
-  const labelsSubscribed = ['Select Date', 'Address'];
-  const stepCount = labels.length;
+  // Updated Dutch labels to match web checkout
+  const labels = ['Winkelwagen', 'Bezorggegevens', 'Betaling'];
+  const labelsSubscribed = ['Datum Selecteren', 'Adres'];
+  const stepCount = totalSteps || labels.length;
   let progressPercent = Math.round(((currentStep + 1) / stepCount) * 100);
 
-  let text = 'Cart';
+  // Use provided stepTitle or determine based on current state
+  let text = stepTitle || 'Checkout';
+
   useEffect(() => {
     if (isSubsCribedProduct) {
       progressPercent = Math.round((currentStep / stepCount) * 100);
     } else {
       progressPercent = Math.round(((currentStep + 1) / stepCount) * 100);
     }
-  }, [cartType]);
+  }, [cartType, currentStep, stepCount]);
 
-  if (isEditAddress && !isShowMapModal && cartType === 'meals') {
-    text = 'Edit Address';
-  } else if (isShowMapModal) {
-    text = 'Select Delivery Location';
-  } else if (isAddressModalOpen) {
-    text = 'Add New Address';
+  // Dynamic text based on current state
+  if (!stepTitle) {
+    if (isEditAddress && !isShowMapModal && cartType === 'meals') {
+      text = 'Adres Bewerken';
+    } else if (isShowMapModal) {
+      text = 'Bezorglocatie Selecteren';
+    } else if (isAddressModalOpen) {
+      text = 'Nieuw Adres Toevoegen';
+    } else if (cartType === 'subscription') {
+      text = 'Abonnement Kopen';
+    } else {
+      // Default step titles based on current step
+      switch (currentStep) {
+        case 0:
+          text = 'Winkelwagen';
+          break;
+        case 1:
+          text = 'Bezorggegevens';
+          break;
+        case 2:
+          text = 'Betalingssamenvatting';
+          break;
+        default:
+          text = 'Checkout';
+      }
+    }
   }
-  if (cartType === 'subscription') {
-    text = 'Buy Subscription';
-  }
+
   const handleBack = () => {
     if (currentStep === 0) {
-      // return router.replace('/(tabs)/subscription');
       return router.back();
     }
+    
     if (isShowMapModal && setShowMapModal) {
       setShowMapModal(false);
     } else if (isEditAddress && setIsAddressModalOpen && setIsEditAddress && !setShowMapModal) {
@@ -81,6 +106,7 @@ export default function StepIndicator({
       }
     }
   };
+
   return (
     <>
       <View p="$4">
@@ -90,7 +116,7 @@ export default function StepIndicator({
               <TouchableOpacity style={{ zIndex: 20 }} onPress={() => handleBack()}>
                 <AntDesign name="left" size={24} color="black" />
               </TouchableOpacity>
-              {text === 'Cart' || text === 'Buy Subscription' ? (
+              {text === 'Winkelwagen' || text === 'Abonnement Kopen' ? (
                 <Text fontSize={20} fontWeight={700}>
                   {text}
                 </Text>
@@ -131,7 +157,7 @@ export default function StepIndicator({
                     zIndex={1}
                     top={-8}
                     paddingHorizontal="$4">
-                    {labels.map((label, index) => {
+                    {labels.slice(0, stepCount).map((label, index) => {
                       let IconComponent: React.ElementType = Step1Active;
 
                       if (index === 0) {
@@ -148,7 +174,7 @@ export default function StepIndicator({
                       return (
                         <View key={index} alignItems="center" left={0}>
                           <IconComponent width={20} height={20} />
-                          <Text fontSize={12} color={color} marginTop="$1">
+                          <Text fontSize={12} color={color} marginTop="$1" textAlign="center">
                             {label}
                           </Text>
                         </View>
@@ -182,7 +208,7 @@ export default function StepIndicator({
                       return (
                         <View key={index} alignItems="center" left={0}>
                           <IconComponent width={20} height={20} />
-                          <Text fontSize={12} color={color} marginTop="$1">
+                          <Text fontSize={12} color={color} marginTop="$1" textAlign="center">
                             {label}
                           </Text>
                         </View>

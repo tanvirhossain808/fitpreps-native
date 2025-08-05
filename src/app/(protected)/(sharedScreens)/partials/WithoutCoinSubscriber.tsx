@@ -80,7 +80,7 @@ export default function WithoutCoinSubscriber() {
             fontSize={16}
             fontWeight={700}
             px="$5">
-            GetStarted
+            Get Started
           </Button>
         </XStack>
       </YStack>
