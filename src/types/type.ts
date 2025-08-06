@@ -174,7 +174,6 @@ export type UserType = {
     last_name: string;
     woocommerce_reward_points: string;
     shipping_country?: string;
-     
   };
 };
 export type cartType = { [key: string]: Productsmakelijke & { quantity: number } };
@@ -268,4 +267,28 @@ export type AddressType = {
     country: string;
   };
   addressType: string;
+};
+export type Order = {
+  _id: string;
+  user_id: string;
+  createdAt: string;
+  updatedAt: string;
+  ipAddress: string;
+  status: 'cancelled' | 'processing' | 'completed'; // e.g., 'cancelled'
+  total: string; // if you plan to use as number, change to number
+  totalWeight: number;
+  metadata: {
+    _cart_discount: number;
+    _billing_email: string;
+    _billing_first_name: string;
+    _billing_last_name: string;
+    _billing_country: string;
+    _billing_address_1: string;
+    _billing_address_2: string;
+    _billing_city: string;
+    _billing_state: string;
+    _billing_postcode: string;
+    [key: string]: any; // in case metadata can have more keys
+  };
+  items: Array<any>; // replace `any` with actual item type if known
 };

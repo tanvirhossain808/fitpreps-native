@@ -4,18 +4,65 @@ import { FlatList } from 'react-native-gesture-handler';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import CheckCircle from 'public/images/orders/check-circle-broken.svg';
 import { router } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { Order } from '~/src/types/type';
+import { baseUrl } from '~/src/constants/baseConstant';
+import { useSelector } from 'react-redux';
+import { RootState } from '~/src/store';
+import { formatToCustomDateString } from '~/src/helper';
 export default function CompletedOrders() {
+  const [orders, setOrdersData] = useState<Order[]>([]);
+  const user = useSelector((s: RootState) => s.user.user);
   const truncateText = (text: string) => {
-    if (text.length > 19) {
+    if (text?.length > 19) {
       return text.substring(0, 19) + '...';
     }
     return text;
   };
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    const fetchOrderData = async () => {
+      try {
+        const response = await fetch(baseUrl + '/api/orders/order?userId=' + user.user._id, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.status !== 200) {
+          throw new Error('Error');
+        }
+        const data = await response.json();
+        if (data.message === 'Invalid Token') {
+          console.log('error');
+        }
+        const processingData = data.filter((order: Order) => order.status === 'completed');
+        setOrdersData(processingData);
+      } catch (error) {
+        console.log(error, 'de');
+      }
+    };
+    // reset();
+
+    // reset();
+    // fetchOrderStatus({
+    //   id: user.user._id,
+    //   token: user.token,
+    // });
+    fetchOrderData();
+    // return () => {
+    //   console.log('hey');
+    // };
+  }, []);
   return (
     <FlatList
       ListFooterComponent={<View h={300}></View>}
       contentContainerStyle={style.flatlist}
-      data={pendingOrder}
+      data={orders}
       showsVerticalScrollIndicator={false}
       keyExtractor={(_, i) => i.toString()}
       renderItem={({ item, index }) => (
@@ -55,13 +102,13 @@ export default function CompletedOrders() {
                   params: {},
                 })
               }>
-              <Image src={require('public/images/orderfood.png')} width={60} height={60} />
+              <Image src={item.items[0].meta._thumbnail} width={60} height={60} />
             </TouchableOpacity>
             <YStack flex={1}>
-              <Text fontSize={12} color="#383A42">
+              <Text fontSize={12} color="#383A42" numberOfLines={1}>
                 Order Number:{' '}
                 <Text color="#1E1F20" fontWeight={500}>
-                  {item.orderNumber}
+                  {item._id}
                 </Text>
               </Text>
               <XStack width="100%" alignSelf="stretch" justifyContent="space-between" mt="$1">
@@ -73,20 +120,20 @@ export default function CompletedOrders() {
                     })
                   }>
                   <Text color="#1E1F20" fontSize={14} fontWeight={500}>
-                    {truncateText(item.name)}
+                    {truncateText(item.items[0].order_item_name)}
                   </Text>
                 </TouchableOpacity>
                 <XStack alignItems="center" gap={4}>
-                  <Text>{item.balance}</Text>
-                  <Coin />
+                  <Text>${item.total}</Text>
+                  {/* <Coin /> */}
                 </XStack>
               </XStack>
               <XStack flex={1} justifyContent="space-between" mt="$1">
                 <Text fontSize={14} color="#1E1F20">
-                  {item.date}
+                  {formatToCustomDateString(item.createdAt)}
                 </Text>
                 <Text fontSize={14} color="#1E1F20">
-                  {item.amount}
+                  {item.items.length}
                 </Text>
               </XStack>
             </YStack>
@@ -100,7 +147,7 @@ export default function CompletedOrders() {
               />
               <XStack px={9} py="$2" bg="white" borderRadius={4}>
                 <Text color="#8E95A2" fontWeight={500} fontSize={12}>
-                  +3
+                  {item.items.length}{' '}
                 </Text>
               </XStack>
             </XStack>

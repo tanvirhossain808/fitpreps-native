@@ -21,6 +21,7 @@ Content-Type: application/json
     "email": "t@t.com",
     "password": "password"
 }
+###
 
 ${process.env.NEXT_PUBLIC_BACKEND_URI}/api/orders/order?userId=${user.userId}
  async function fetchOrdersData() {
@@ -43,11 +44,13 @@ ${process.env.NEXT_PUBLIC_BACKEND_URI}/api/orders/order?userId=${user.userId}
             throw error;
         }
     }
+
+
 ###
 
-get {{baseUrl}}/api/orders/order?userId=67e2a75fc6c55d0533dc64a3
+get {{baseUrl}}/api/orders/order?userId=67e2a75fc6c55d0533dc64a3dfs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODczZGRjMTdhMjNmOTcwOTc0MDg2MDgiLCJpYXQiOjE3NTI1OTcxMDcsImV4cCI6MTc1MzIwMTkwN30.HWI7TyuEbifOJph-lt_jGE4gcooPx2Zg2jJyu-QmUGE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODczZGRjMTdhMjNmOTcwOTc0MDg2MDgiLCJpYXQiOjE3NTQ1MDU3ODAsImV4cCI6MTc1NTExMDU4MH0.6uZL5BnWOm_ANsMspmE1wKkFLsMegP7oXPfYv52dRMo
 
 ### coupon verification code
 

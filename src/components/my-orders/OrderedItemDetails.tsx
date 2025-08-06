@@ -1,34 +1,35 @@
 import { Image, Text, XStack, YStack } from 'tamagui';
-import { truncateText } from '~/src/helper';
+import { formatToCustomDateString, truncateText } from '~/src/helper';
 import Coin from 'public/images/coin.svg';
-export default function OrderedItemDetails() {
+import { Order } from '~/src/types/type';
+export default function OrderedItemDetails({ ordersData }: { ordersData: Order }) {
   return (
     <>
       <XStack gap="$2">
-        <Image src={require('public/images/orderfood.png')} width={60} height={60} />
+        <Image src={ordersData.items[0].meta._thumbnail} width={60} height={60} />
         <YStack flex={1}>
-          <Text fontSize={12} color="#383A42">
+          <Text fontSize={12} color="#383A42" numberOfLines={1}>
             Order Number:{' '}
             <Text color="#1E1F20" fontWeight={500}>
-              FA234VUE34Q6D
+              {ordersData._id}
             </Text>
           </Text>
 
           <XStack width="100%" alignSelf="stretch" justifyContent="space-between" mt="$1">
             <Text color="#1E1F20" fontSize={14} fontWeight={500}>
-              {truncateText('Beef Teriyaki Noodles', 19)}
+              {truncateText(ordersData.items[0].order_item_name, 19)}
             </Text>
             <XStack alignItems="center" gap={4}>
-              <Text>1260</Text>
-              <Coin />
+              <Text>${ordersData.total}</Text>
+              {/* <Coin /> */}
             </XStack>
           </XStack>
           <XStack flex={1} justifyContent="space-between" mt="$1">
             <Text fontSize={14} color="#1E1F20">
-              7 April, 01:20 pm
+              {formatToCustomDateString(ordersData.createdAt)}
             </Text>
             <Text fontSize={14} color="#1E1F20">
-              5 items
+              {ordersData.items.length}
             </Text>
           </XStack>
         </YStack>
@@ -41,7 +42,7 @@ export default function OrderedItemDetails() {
         />
         <XStack px={9} py="$2" bg="white" borderRadius={4}>
           <Text color="#8E95A2" fontWeight={500} fontSize={12}>
-            +3
+            {ordersData.items.length}
           </Text>
         </XStack>
       </XStack>

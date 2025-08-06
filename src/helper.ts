@@ -136,3 +136,15 @@ export function getFormattedDate() {
     year: 'numeric',
   }).format(Date.now());
 }
+export function formatToCustomDateString(isoDate: string): string {
+  const date = new Date(isoDate);
+
+  const day = date.getUTCDate();
+  const month = date.toLocaleString('en-US', { month: 'long', timeZone: 'UTC' });
+  let hours = date.getUTCHours();
+  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12 || 12; // convert to 12-hour format
+
+  return `${day} ${month} ${hours}:${minutes}${ampm}`;
+}

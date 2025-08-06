@@ -4,18 +4,67 @@ import { FlatList } from 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
 import OrderedItemDetails from './OrderedItemDetails';
 import { router } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '~/src/store';
+// import { useLazyCheckOrdersStatusQuery } from '~/src/store/apiSlices/checkOrdersStatusSlice';
+import { baseUrl } from '~/src/constants/baseConstant';
+import { Order } from '~/src/types/type';
 export default function CurrentOrders() {
+  const [ordersData, setOrdersData] = useState<Order[]>([]);
+  const user = useSelector((s: RootState) => s?.user?.user);
   const truncateText = (text: string) => {
     if (text.length > 19) {
       return text.substring(0, 19) + '...';
     }
     return text;
   };
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    const fetchOrderData = async () => {
+      try {
+        const response = await fetch(baseUrl + '/api/orders/order?userId=' + user.user._id, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.status !== 200) {
+          throw new Error('Error');
+        }
+        const data = await response.json();
+        if (data.message === 'Invalid Token') {
+          console.log('error');
+        }
+        const processingData = data.filter((order: Order) => order.status === 'processing');
+        setOrdersData(processingData);
+      } catch (error) {
+        console.log(error, 'de');
+      }
+    };
+    // reset();
+
+    // reset();
+    // fetchOrderStatus({
+    //   id: user.user._id,
+    //   token: user.token,
+    // });
+    fetchOrderData();
+    // return () => {
+    //   console.log('hey');
+    // };
+  }, []);
+  // console.log(user);
   return (
     <FlatList
       ListFooterComponent={<View h={300}></View>}
       contentContainerStyle={style.flatlist}
-      data={pendingOrder}
+      data={ordersData}
       showsVerticalScrollIndicator={false}
       keyExtractor={(_, i) => i.toString()}
       renderItem={({ item, index }) => (
@@ -48,7 +97,7 @@ export default function CurrentOrders() {
             Out for delivery
           </Text>
           <YStack mt="$3">
-            <OrderedItemDetails />
+            <OrderedItemDetails ordersData={item} />
           </YStack>
 
           <YStack
