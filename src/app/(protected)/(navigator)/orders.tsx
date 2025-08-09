@@ -46,8 +46,8 @@ export default function Orders() {
           setIsLoading(false);
           console.log('error');
         }
-        const processingData = data.filter((order: Order) => order.status !== 'completed');
-        setOrdersData(processingData);
+        // const processingData = data.filter((order: Order) => order.status !== 'completed');
+        setOrdersData(data);
         setIsLoading(false);
       } catch (error) {
         console.log(error, 'de');
@@ -84,10 +84,16 @@ export default function Orders() {
             </Button>
           </XStack>
           {buttonStatus === 'current' && (
-            <CurrentOrders ordersData={ordersData} isLoading={isLoading} />
+            <CurrentOrders
+              ordersData={ordersData.filter((order: Order) => order.status === 'processing')}
+              isLoading={isLoading}
+            />
           )}
           {buttonStatus === 'completed' && (
-            <CompletedOrders isLoading={isLoading} ordersData={ordersData} />
+            <CompletedOrders
+              isLoading={isLoading}
+              ordersData={ordersData.filter((order: Order) => order.status !== 'processing')}
+            />
           )}
         </YStack>
       </SafeAreaView>
