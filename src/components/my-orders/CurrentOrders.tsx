@@ -10,9 +10,15 @@ import { RootState } from '~/src/store';
 // import { useLazyCheckOrdersStatusQuery } from '~/src/store/apiSlices/checkOrdersStatusSlice';
 import { baseUrl } from '~/src/constants/baseConstant';
 import { Order } from '~/src/types/type';
-export default function CurrentOrders() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [ordersData, setOrdersData] = useState<Order[]>([]);
+export default function CurrentOrders({
+  ordersData,
+  isLoading,
+}: {
+  ordersData: Order[];
+  isLoading: boolean;
+}) {
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [ordersData, setOrdersData] = useState<Order[]>([]);
   const user = useSelector((s: RootState) => s?.user?.user);
   const truncateText = (text: string) => {
     if (text.length > 19) {
@@ -21,51 +27,6 @@ export default function CurrentOrders() {
     return text;
   };
 
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
-
-    const fetchOrderData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(baseUrl + '/api/orders/order?userId=' + user.user._id, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        if (response.status !== 200) {
-          setIsLoading(false);
-          throw new Error('Error');
-        }
-        const data = await response.json();
-        if (data.message === 'Invalid Token') {
-          setIsLoading(false);
-          console.log('error');
-        }
-        const processingData = data.filter((order: Order) => order.status !== 'completed');
-        setOrdersData(processingData);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error, 'de');
-        setIsLoading(false);
-      }
-    };
-    // reset();
-
-    // reset();
-    // fetchOrderStatus({
-    //   id: user.user._id,
-    //   token: user.token,
-    // });
-    fetchOrderData();
-    // return () => {
-    //   console.log('hey');
-    // };
-  }, []);
-  // console.log(user);
   return (
     <>
       {isLoading ? (
@@ -119,8 +80,8 @@ export default function CurrentOrders() {
                 <Button
                   onPress={() =>
                     router.push({
-                      pathname: '/(protected)/(orders)/track-order',
-                      params: { trackingNumber: 'ASDGH234GAS24s' },
+                      pathname: '/(protected)/(orders)/order-details',
+                      params: { orderedItems: JSON.stringify(item), yo: 1 },
                     })
                   }
                   mt="$2"
@@ -135,7 +96,7 @@ export default function CurrentOrders() {
                   shadowOpacity={0.05}
                   shadowRadius={2}
                   elevation={1}>
-                  Track Order
+                  See order details
                 </Button>
               </YStack>
             </YStack>

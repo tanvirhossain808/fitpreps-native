@@ -10,60 +10,22 @@ import { baseUrl } from '~/src/constants/baseConstant';
 import { useSelector } from 'react-redux';
 import { RootState } from '~/src/store';
 import { formatToCustomDateString } from '~/src/helper';
-export default function CompletedOrders() {
-  const [orders, setOrdersData] = useState<Order[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+export default function CompletedOrders({
+  ordersData,
+  isLoading,
+}: {
+  ordersData: Order[];
+  isLoading: boolean;
+}) {
   const user = useSelector((s: RootState) => s.user.user);
+  console.log(isLoading, 'isLoading');
   const truncateText = (text: string) => {
     if (text?.length > 19) {
       return text.substring(0, 19) + '...';
     }
     return text;
   };
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
-
-    const fetchOrderData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(baseUrl + '/api/orders/order?userId=' + user.user._id, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        if (response.status !== 200) {
-          setIsLoading(false);
-          throw new Error('Error');
-        }
-        const data = await response.json();
-        if (data.message === 'Invalid Token') {
-          setIsLoading(false);
-          console.log('error');
-        }
-        const processingData = data.filter((order: Order) => order.status !== 'completed');
-        setOrdersData(processingData);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error, 'de');
-        setIsLoading(false);
-      }
-    };
-    // reset();
-
-    // reset();
-    // fetchOrderStatus({
-    //   id: user.user._id,
-    //   token: user.token,
-    // });
-    fetchOrderData();
-    // return () => {
-    //   console.log('hey');
-    // };
-  }, []);
+  console.log(ordersData, 'order data');
   return (
     <>
       {isLoading ? (
@@ -74,7 +36,7 @@ export default function CompletedOrders() {
         <FlatList
           ListFooterComponent={<View h={300}></View>}
           contentContainerStyle={style.flatlist}
-          data={orders}
+          data={ordersData}
           showsVerticalScrollIndicator={false}
           keyExtractor={(_, i) => i.toString()}
           renderItem={({ item, index }) => (
@@ -128,7 +90,7 @@ export default function CompletedOrders() {
                       onPress={() =>
                         router.push({
                           pathname: '/(protected)/(orders)/order-details',
-                          params: {},
+                          params: { orderedItems: JSON.stringify(item), yo: 1 },
                         })
                       }>
                       <Text color="#1E1F20" fontSize={14} fontWeight={500}>
@@ -177,7 +139,7 @@ export default function CompletedOrders() {
                 borderBottomColor="#B6BAC3"
                 py="$3"
                 borderBottomWidth={index < pendingOrder.length - 1 ? 1 : 0}>
-                <Button
+                {/* <Button
                   mt="$2"
                   width="48%"
                   bg="white"
@@ -193,10 +155,10 @@ export default function CompletedOrders() {
                   // elevation={1}
                 >
                   Leave a Review{' '}
-                </Button>
+                </Button> */}
                 <Button
                   mt="$2"
-                  width="48%"
+                  width="100%"
                   bg="white"
                   borderWidth={1}
                   borderColor="#FD4F01"
