@@ -14,7 +14,7 @@ export default function VerifyPayment() {
     try {
       const url = new URL(currentUrl);
 
-      const hasPaymentSuccess = url.pathname.includes('payment-success');
+      const hasPaymentSuccess = url.pathname.includes('fitpreps.nl');
       const paymentId = url.searchParams.get('id');
 
       if (hasPaymentSuccess && paymentId) {
@@ -22,6 +22,7 @@ export default function VerifyPayment() {
         // console.log('🧾 Payment ID:', paymentId);
         // 🚀 Redirect or handle success logic here
         // Example: router.replace('/success') or Toast.show(...)
+
       }
     } catch (err) {
       console.error('❌ URL parsing failed:', err);

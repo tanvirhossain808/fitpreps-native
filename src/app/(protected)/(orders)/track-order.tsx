@@ -7,6 +7,7 @@ import OrderedItemDetails from '~/src/components/my-orders/OrderedItemDetails';
 import OrderStepper from '~/src/components/my-orders/OrderStepper';
 import Message from 'public/images/message.svg';
 import Phone from 'public/images/phone.svg';
+
 export default function TrackOrder() {
   const { trackingNumber } = useLocalSearchParams() || {};
   return (
@@ -25,6 +26,7 @@ export default function TrackOrder() {
                   </Text>
                 </Text>
                 <YStack>
+                {/* @ts-ignore */}
                   <OrderedItemDetails />
                 </YStack>
               </YStack>

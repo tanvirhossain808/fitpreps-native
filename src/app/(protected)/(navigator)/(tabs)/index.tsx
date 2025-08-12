@@ -13,8 +13,11 @@ import HomeIntroVideoSlider from '~/src/components/home/HomeIntroVideoSlider';
 import ReviewSlider from '~/src/components/home/ReviewSlider';
 import WeeklyOffer from '~/src/components/home/WeeklyOffer';
 import Toast from 'react-native-toast-message';
+import { useSelector } from 'react-redux';
+import { RootState } from '~/src/store';
 export default function Home() {
   const [selectCategory, setSelectedCategory] = useState<number | null>(null);
+  const subscription=useSelector((s:RootState)=>s.user.subscription)
   useEffect(() => {
     const backAction = () => {
       if (!router.canGoBack()) {
@@ -34,6 +37,18 @@ export default function Home() {
     //   router.push({
     //     pathname: pathName as any,
     //     params: { product: path, subscription: true as boolean },
+    //   });
+    // }
+    // if (subscription && pathName === '/(sharedScreens)/subscription') {
+    //   router.push({
+    //     pathname: '/(sharedScreens)/subscription' as any,
+    //     params: { product: path, subscription: true as any },
+    //   });
+    //   return;
+    // } else {
+    //   router.push({
+    //     pathname: pathName as any,
+    //     params: { product: path },
     //   });
     // }
     console.log('press');

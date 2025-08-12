@@ -9,6 +9,7 @@ const userSlice = createSlice({
     error: <string | null>null,
     metadata: <any | null>null,
     subscription: <any | null>null,
+    points: <any | null>null,
   },
   reducers: {
     setUser: (state, action) => {

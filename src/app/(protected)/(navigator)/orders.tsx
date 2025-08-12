@@ -85,7 +85,7 @@ export default function Orders() {
           </XStack>
           {buttonStatus === 'current' && (
             <CurrentOrders
-              ordersData={ordersData.filter((order: Order) => order.status === 'processing')}
+              ordersData={ordersData}
               isLoading={isLoading}
             />
           )}

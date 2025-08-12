@@ -292,7 +292,7 @@ export default function SubscriptionCheckoutForm({
       const result = await response.json();
       if (result.checkoutUrl) {
         router.push({
-          pathname: '/verifyPayment/verifyPayment',
+          pathname: '/subVerifyPayment/subVerifyPayment',
           params: {
             redirectUrl: result.checkoutUrl,
           },

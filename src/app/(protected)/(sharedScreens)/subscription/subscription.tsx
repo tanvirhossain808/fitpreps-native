@@ -36,7 +36,7 @@ export default function subscription() {
                 <Feather name="chevron-left" size={24} color="white" />
               </TouchableOpacity>
             </XStack>
-            {subscription?._id ? <CoinSubscriber /> : <WithoutCoinSubscriber />}
+            {subscription?._id ? <CoinSubscriber subscription={subscription} /> : <WithoutCoinSubscriber />}
           </YStack>
         </SafeAreaView>
       </ImageBackground>

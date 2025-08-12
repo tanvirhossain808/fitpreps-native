@@ -288,7 +288,7 @@ export default function Saving({ isCommingSoon = false }: { isCommingSoon?: bool
 
   return (
     <YStack gap="$3" mt={12}>
-      <Text color="#1E1F20" fontWeight={700} fontSize={16}>
+      {/* <Text color="#1E1F20" fontWeight={700} fontSize={16}>
         Kortingscode
       </Text>
       <XStack alignItems="center" gap="$2">
@@ -334,7 +334,7 @@ export default function Saving({ isCommingSoon = false }: { isCommingSoon?: bool
           bg="white">
           {isLoading ? 'Toepassen...' : 'Toepassen'}
         </Button>
-      </XStack>
+      </XStack> */}
     </YStack>
   );
 }

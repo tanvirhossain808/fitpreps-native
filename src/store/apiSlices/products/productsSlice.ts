@@ -13,7 +13,7 @@ const productSlice = rootApiSlice.injectEndpoints({
             ...p,
             metadata: {
               ...p.metadata,
-              coin: parseInt(p.metadata._price) * 10,
+              coin: (parseFloat(p?.metadata?._price) * 10).toFixed(0),
             },
           }));
         return {

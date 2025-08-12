@@ -3,8 +3,11 @@ import { Button, Text, XStack, YStack } from 'tamagui';
 import Coin from 'public/images/coin.svg';
 import { shadows } from '~/src/constant';
 import { router } from 'expo-router';
+import { useSelector } from 'react-redux';
+import { RootState } from '~/src/store';
+export default function CoinSubscriber({ subscription }: { subscription: any }) {
+  const  user  = useSelector((s: RootState) => s.user.user?.user);
 
-export default function CoinSubscriber() {
   return (
     <YStack gap="$5" borderRadius={20} bg="white" px="$3" py="$5" mb={40}>
       <YStack gap="$3">
@@ -17,7 +20,7 @@ export default function CoinSubscriber() {
           </Text>
           <XStack alignItems="center" gap={4}>
             <Text color="#FD4F01" fontWeight={700} fontSize={16}>
-              X
+              {user?.points || 0}
             </Text>
             <Coin />
           </XStack>
@@ -32,7 +35,7 @@ export default function CoinSubscriber() {
             router.push({
               pathname: '/(protected)/(navigator)/(tabs)/meals',
               // @ts-ignore
-              params: { product: 'fueld', subscription: true as boolean },
+              params: { product: 'fueld', subscription: 1 },
             })
           }
           color="white"

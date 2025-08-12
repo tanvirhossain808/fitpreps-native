@@ -15,13 +15,11 @@ import SubDatePicker from '~/src/components/shared/cart/Subscription/SubDatePick
 import { DateData } from 'react-native-calendars';
 
 export default function CartStep1({
-  setCurrentStep,
   cartType,
   orderData,
   date,
   setDate,
 }: {
-  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   cartType: string;
   orderData: any;
   date: DateData | null;
@@ -47,10 +45,9 @@ export default function CartStep1({
         ListFooterComponent={
           <YStack>
             <Saving isCommingSoon={true} />
-            <CartCarousel />
+            {/* <CartCarousel /> */}
             <SubscribeFooter
               selectedDate={date}
-              setCurrentStep={setCurrentStep}
               orderData={orderData}
             />
           </YStack>

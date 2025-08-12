@@ -175,6 +175,7 @@ export type UserType = {
     woocommerce_reward_points: string;
     shipping_country?: string;
   };
+  points: any;
 };
 export type cartType = { [key: string]: Productsmakelijke & { quantity: number } };
 

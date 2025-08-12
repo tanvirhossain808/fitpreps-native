@@ -9,11 +9,9 @@ import { resetSubCart, SubEmptyCart } from '~/src/store/slices/subcartSlice';
 import { DateData } from 'react-native-calendars';
 
 export default function SubscribeFooter({
-  setCurrentStep,
   orderData,
   selectedDate,
 }: {
-  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   orderData: any;
   selectedDate: DateData | null;
 }) {
@@ -30,7 +28,6 @@ export default function SubscribeFooter({
       <YStack flex={1}>
         <SubscribedProductsPay
           selectedDate={selectedDate}
-          setCurrentStep={setCurrentStep}
           orderData={{}}
         />
       </YStack>

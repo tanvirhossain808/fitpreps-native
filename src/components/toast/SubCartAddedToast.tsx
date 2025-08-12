@@ -3,7 +3,11 @@ import Coin from 'public/images/coin.svg';
 import { TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { ToastProps } from 'react-native-toast-message';
+import { useSelector } from 'react-redux';
+import { RootState } from '~/src/store';
 export default function SubCartAddedToast({ props }: { props: ToastProps & { quantity: number } }) {
+  const  user  = useSelector((s: RootState) => s.user.user?.user);
+  const total=useSelector((s:RootState)=>s.subCart.subTotal)
   return (
     <>
       <YStack
@@ -14,21 +18,21 @@ export default function SubCartAddedToast({ props }: { props: ToastProps & { qua
         borderBottomEndRadius={12}
         borderBottomLeftRadius={12}>
         <YStack>
-          <XStack bg="#FFDADF" py="$2" px="$3">
+          {/* <XStack bg="#FFDADF" py="$2" px="$3">
             <Text color="#FD4F01" textAlign="center" fontSize={14} fontWeight={700}>
               Insufficient points!
             </Text>
-          </XStack>
+          </XStack> */}
           <XStack pt="$2" px="$4" w="100%" alignItems="center" justifyContent="space-between">
             <YStack gap="$1">
               <XStack alignItems="center" gap="$1">
                 <Text color="#1E1F20" fontWeight={700} fontSize={16}>
-                  5
+                {total}
                 </Text>
                 <Coin />
               </XStack>
               <Text fontSize={14} color="#1E1F20">
-                out of 690 left
+                out of {user?.points} left
               </Text>
             </YStack>
             <Button
@@ -51,14 +55,14 @@ export default function SubCartAddedToast({ props }: { props: ToastProps & { qua
         </YStack>
         <XStack bg="#FFEDE5">
           <Text color="#FD4F01" textAlign="center" px="$2" fontSize={14} fontWeight={500}>
-            You still have 510 points to spend, grab more meals!
+            You still have {user?.points-total} points to spend, grab more meals!
           </Text>
         </XStack>
         <XStack alignItems="center" gap="$1" justifyContent="center">
           <Text fontSize={12} color="#FD4F01" fontWeight={500}>
             Get points here.
           </Text>
-          <TouchableOpacity onPress={() => router.push('/sub-cart/subsProductsCart')}>
+          {/* <TouchableOpacity onPress={() => router.push('/sub-cart/subsProductsCart')}>
             <Text
               color="#FD4F01"
               fontSize={14}
@@ -67,7 +71,7 @@ export default function SubCartAddedToast({ props }: { props: ToastProps & { qua
               textDecorationLine="underline">
               Buy Subscription Plan
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </XStack>
       </YStack>
     </>
