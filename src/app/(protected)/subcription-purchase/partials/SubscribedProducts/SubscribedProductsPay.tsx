@@ -94,7 +94,7 @@ export default function SubscribedProductsPay({
           startDate: selectedDate.dateString,
         }),
       });
-   
+ 
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
@@ -105,7 +105,7 @@ export default function SubscribedProductsPay({
             text1: 'Bestelling geplaatst!',
             text2: 'Je abonnement is succesvol gestart.',
           });
-          router.push('/subscription');
+          router.push('/(protected)/(sharedScreens)/subscription/subscription');
         } else {
           throw new Error(data.message || 'Bestelling mislukt');
         }

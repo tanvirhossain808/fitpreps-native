@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Coupon, Productsmakelijke } from '~/src/types/type';
+import { Coupon, Productsmakelijke, GymwearProduct } from '~/src/types/type';
 
 interface CartState {
-  cartItems: { [key: string]: Productsmakelijke & { quantity: number } };
+  cartItems: { [key: string]: (Productsmakelijke | GymwearProduct) & { quantity: number } };
   couponCode: Coupon | null;
   discount: number;
   quantity: number;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { WebView } from 'react-native-webview';
 import { ActivityIndicator } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { YStack } from 'tamagui';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,7 +10,7 @@ export default function VerifyPayment() {
   const handleNavigationChange = (navState: any) => {
     const currentUrl = navState.url;
     console.log('🔗 Navigated to:', currentUrl);
-
+ const router = useRouter();
     try {
       const url = new URL(currentUrl);
 
@@ -22,7 +22,13 @@ export default function VerifyPayment() {
         // console.log('🧾 Payment ID:', paymentId);
         // 🚀 Redirect or handle success logic here
         // Example: router.replace('/success') or Toast.show(...)
-
+        router.replace({
+          pathname: '/orderplaced',
+          params: {
+            type: 'subscription',
+            id: paymentId,
+          },
+        });
       }
     } catch (err) {
       console.error('❌ URL parsing failed:', err);

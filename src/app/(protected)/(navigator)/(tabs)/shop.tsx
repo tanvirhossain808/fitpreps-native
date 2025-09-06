@@ -6,13 +6,17 @@ import { YStack } from 'tamagui';
 import LoadingSpinner from '~/src/components/shared/Loading';
 import ProductHeader from '~/src/components/shared/ProductHeader';
 import ProductLists from '~/src/components/ProductWithotuSub/ProductLists';
+import DynamicProductLists from '~/src/components/ProductWithotuSub/DynamicProductLists';
 import GymProductsForWomen from '~/src/components/shared/shop/GymProductsForWomen';
+import DynamicGymProductsForWomen from '~/src/components/shared/shop/DynamicGymProductsForWomen';
 import ShopByCategoryList from '~/src/components/shop/ShopByCategoryList';
 import { suppdProductCategories } from '~/src/constant';
 
 import { activeStatsBarInfo } from '~/src/helper';
 import useProductFilters from '~/src/hooks/useProductFilters';
+import useGymwearFilters from '~/src/hooks/useGymwearFilters';
 import { useGetSupplementsQuery } from '~/src/store/apiSlices/products/supplementsSlice';
+import { useGetGymwearQuery } from '~/src/store/apiSlices/products/gymwearSlice';
 import { FoodOfItem, fueld, SliderItem, suppd } from '~/src/types/type';
 
 export const unstable_settings = {
@@ -47,13 +51,25 @@ export default function Shop() {
   }, [productType, selectCategory, product]);
   const statusBarInfo = activeStatsBarInfo(selectCategory === 'Supplements' ? 'suppd' : 'shaped');
   const { data, isLoading } = useGetSupplementsQuery(null);
+  const { data: gymwearData, isLoading: isGymwearLoading } = useGetGymwearQuery(undefined);
   const { filteredProducts } = useProductFilters(data, productType as string);
+  const { filteredProducts: filteredGymwearProducts } = useGymwearFilters(gymwearData || []);
+  
+  // Debug logging
+  console.log('Shop - State:', {
+    selectCategory,
+    productType,
+    gender,
+    product,
+    shouldShowGymwear: selectCategory === 'Gym Wear',
+    shouldShowDynamicGymwear: selectCategory === 'Gym Wear' && (gender === 'female' || gender === 'male')
+  });
   return (
     <YStack flex={1}>
       <StatusBar style="dark" />
       <YStack flex={1} bg="white">
         <ProductHeader
-          data={filteredProducts}
+          data={selectCategory === 'Gym Wear' ? filteredGymwearProducts : filteredProducts}
           gender={gender}
           setGender={setGender}
           selectCategory={selectCategory as string}
@@ -64,21 +80,12 @@ export default function Shop() {
           }
           insets={insets}
         />
-        {isLoading ? (
+        {(isLoading || (selectCategory === 'Gym Wear' && isGymwearLoading)) ? (
           <LoadingSpinner color={statusBarInfo?.color as string} />
         ) : (
           <>
             {selectCategory !== 'Gym Wear' && gender === null ? (
-              // <Suspense fallback={<LoadingSpinner color={statusBarInfo?.color as string} />}>
-              //   <ProductLists
-              //     isLoading={isLoading}
-              //     data={filteredProducts}
-              //     productType={product as string}
-              //     showsVerticalScrollIndicator={false}
-              //     scrollEventThrottle={16}
-              //   />
-              // </Suspense>
-              <ProductLists
+              <DynamicProductLists
                 isLoading={isLoading}
                 data={filteredProducts}
                 productType={product as string}
@@ -92,7 +99,18 @@ export default function Shop() {
                 )}
                 {selectCategory === 'Gym Wear' && gender === 'female' && (
                   <YStack flex={1}>
-                    <GymProductsForWomen />
+                    <DynamicGymProductsForWomen 
+                      data={filteredGymwearProducts}
+                      isLoading={isGymwearLoading}
+                    />
+                  </YStack>
+                )}
+                {selectCategory === 'Gym Wear' && gender === 'male' && (
+                  <YStack flex={1}>
+                    <DynamicGymProductsForWomen 
+                      data={filteredGymwearProducts}
+                      isLoading={isGymwearLoading}
+                    />
                   </YStack>
                 )}
               </YStack>

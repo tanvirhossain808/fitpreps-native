@@ -69,6 +69,39 @@ export interface GymProduct {
   discount: string;
 }
 
+export interface GymwearProduct {
+  _id: string;
+  gymwearId: number;
+  name: string;
+  description: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  product_slug: string;
+  category: string;
+  color: string;
+  sizes: string[];
+  metadata: {
+    _price: string;
+    _stock: string;
+    total_sales: string;
+    badges: string[];
+    _product_background_color?: string;
+  };
+  files: {
+    url: string;
+  }[];
+  thumbnail: {
+    id: number;
+    url: string;
+  };
+  // Add fields to make it compatible with cart system
+  type?: 'gymwear';
+  categories?: string[];
+  productId?: number;
+  quantity?: number;
+}
+
 export type AppRoute =
   | '/(navigator)/index'
   | '/(navigator)/(tabs)/index'

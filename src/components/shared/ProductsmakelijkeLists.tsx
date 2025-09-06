@@ -1,6 +1,6 @@
 import { Button, Text, View, XStack, YStack, Image } from 'tamagui';
 import SliderCarousel from './SliderCarousel';
-import { Productsmakelijke, SliderItem } from '~/src/types/type';
+import { Productsmakelijke, SliderItem, GymwearProduct } from '~/src/types/type';
 import { LinearGradient } from 'expo-linear-gradient';
 import { badgesColor } from '~/src/constants/colorConstants';
 import SelectPrice from './SelectPrice';
@@ -20,12 +20,35 @@ export default function ProductsmakelijkeLists({
   productType,
   index,
 }: {
-  item: Productsmakelijke | SliderItem | { type: 'dummy' };
+  item: Productsmakelijke | SliderItem | GymwearProduct | { type: 'dummy' };
   productType: string;
   index: number;
 }) {
   const [selectedProduct, setSelectProduct] = useState<Productsmakelijke | any>();
   const [openSelectedProduct, setOpenSelectedProduct] = useState(false);
+
+  // Helper function to get image source for different product types
+  const getImageSource = () => {
+    if (productType === 'shaped' || productType === 'gymwear') {
+      const gymwearItem = item as GymwearProduct;
+      if (gymwearItem?.files?.length > 0) {
+        return baseUrl + `/uploads/${gymwearItem.files[0].url}`;
+      }
+      if (gymwearItem?.thumbnail?.url) {
+        return baseUrl + `/uploads/${gymwearItem.thumbnail.url}`;
+      }
+      return null;
+    } else {
+      const productItem = item as Productsmakelijke;
+      if (productItem?.files?.length > 0) {
+        return baseUrl + `/uploads/${productItem.files[0].url}`;
+      }
+      if (productItem?.thumbnail?.url) {
+        return productItem.thumbnail.url;
+      }
+      return null;
+    }
+  };
 
   const dispatch = useDispatch();
   const quantity = useSelector((state: RootState) => {
@@ -39,7 +62,7 @@ export default function ProductsmakelijkeLists({
     if (productType === 'cookd') {
       const selectedWeight = item as Productsmakelijke;
       // console.log(selectedWeight?.metadata?.weight_options, 'selectedWeight');
-      if (quantity) {
+      if (quantity && 'selectedWeight' in quantity) {
         const selectedProduct = selectedWeight.metadata.weight_options?.find(
           (w) => w.weight === quantity.selectedWeight?.weight
         );
@@ -55,10 +78,10 @@ export default function ProductsmakelijkeLists({
   }, [productType, item]);
   // console.log(selectedProduct);
   const handlePlus = () => {
-    const productData = { ...item } as Productsmakelijke;
     let data;
 
     if (productType === 'cookd') {
+      const productData = { ...item } as Productsmakelijke;
       data = {
         ...productData,
         selectedWeight: selectedProduct.selectedWeight,
@@ -68,8 +91,16 @@ export default function ProductsmakelijkeLists({
           // _coin: selectedProduct.selectedWeight?.coin,
         },
       };
+    } else if (productType === 'shaped' || productType === 'gymwear') {
+      const gymwearData = { ...item } as GymwearProduct;
+      data = {
+        ...gymwearData,
+        type: 'gymwear' as const,
+        categories: [gymwearData.category],
+        productId: gymwearData.gymwearId,
+      };
     } else {
-      data = productData;
+      data = { ...item } as Productsmakelijke;
     }
 
     Toast.show({
@@ -85,7 +116,11 @@ export default function ProductsmakelijkeLists({
   };
   const handleMinus = () => {
     if (quantity?.quantity && quantity.quantity > 0) {
-      dispatch(decrement(item as Productsmakelijke));
+      if (productType === 'shaped' || productType === 'gymwear') {
+        dispatch(decrement(item as GymwearProduct));
+      } else {
+        dispatch(decrement(item as Productsmakelijke));
+      }
     }
   };
   if ((item as SliderItem)?.type === 'slider') {
@@ -100,7 +135,7 @@ export default function ProductsmakelijkeLists({
   }
   return (
     <>
-      {item.type === 'dummy1' ? (
+      {(item as any).type === 'dummy1' ? (
         <View h={0} />
       ) : (
         <YStack
@@ -123,23 +158,20 @@ export default function ProductsmakelijkeLists({
             width={'100%'}
             alignSelf="stretch"
             flex={1}
-            bg={productBg[productType as keyof typeof productBg]}
+            bg={productBg[productType as keyof typeof productBg] || '#F5F5F5'}
             borderRadius={4}>
             <Image
               source={{
-                uri:
-                  (item as Productsmakelijke)?.files?.length > 0
-                    ? baseUrl + `/uploads/${(item as Productsmakelijke)?.files[0]?.url}`
-                    : (item as Productsmakelijke)?.thumbnail?.url,
+                uri: getImageSource() || '',
               }}
               width={115}
               height="auto"
               aspectRatio={1}
               resizeMode="cover"
             />
-            {(item as Productsmakelijke)?.metadata?.badges && (
+            {((item as Productsmakelijke)?.metadata?.badges || (item as GymwearProduct)?.metadata?.badges) && (
               <XStack top={4} gap={2} left={6} position="absolute">
-                {(item as Productsmakelijke)?.metadata?.badges?.map((badge, i) => {
+                {((item as Productsmakelijke)?.metadata?.badges || (item as GymwearProduct)?.metadata?.badges)?.map((badge, i) => {
                   if (badge === 'Premium') {
                     return (
                       <LinearGradient
@@ -250,7 +282,7 @@ export default function ProductsmakelijkeLists({
               color="#1E1F20"
               numberOfLines={2}
               ellipsizeMode="tail">
-              {(item as Productsmakelijke)?.name}
+              {(item as Productsmakelijke)?.name || (item as GymwearProduct)?.name}
             </Text>
             {(item as Productsmakelijke)?.metadata?.weight_options !== undefined && (
               <View>
@@ -312,13 +344,17 @@ export default function ProductsmakelijkeLists({
                   </XStack>
                 ) : (
                   <Text fontSize={14} fontWeight={700} color="#FD4F01">
-                    {/*      <Coin /> */} €{(item as Productsmakelijke)?.metadata?._price}
+                    {/*      <Coin /> */} €{(item as Productsmakelijke)?.metadata?._price || (item as GymwearProduct)?.metadata?._price}
                   </Text>
                 )}
 
-                {(item as Productsmakelijke).categories.includes('Supplements') ? (
+                {(item as Productsmakelijke).categories?.includes('Supplements') ? (
                   <Text mt={10} fontSize={12} fontWeight={500} color="#1E1F20">
                     {(item as Productsmakelijke)?.metadata?.dose}
+                  </Text>
+                ) : productType === 'shaped' || productType === 'gymwear' ? (
+                  <Text fontSize={12} fontWeight={500} color="#1E1F20">
+                    {(item as GymwearProduct)?.category}
                   </Text>
                 ) : (
                   <Text fontSize={12} fontWeight={500} color="#1E1F20">

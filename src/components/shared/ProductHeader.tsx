@@ -88,11 +88,7 @@ export default function ProductHeader({
                   <SortButton updateSortBy={updateSortBy} />
                 </XStack>
                 <Text fontSize={11} color="#25272C">
-                  {data.length <= 4
-                    ? data.length - 3 < 0
-                      ? 0
-                      : data.length - 3
-                    : data?.length - 2}{' '}
+                  {data.length}{' '}
                   meal preps to explore
                 </Text>
               </XStack>

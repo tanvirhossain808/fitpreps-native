@@ -268,54 +268,39 @@ export const fueldSelectedCategories = [
 ];
 export const shapedSelecteCategories = [
   {
-    name: 'All',
+    name: 'Alle Gymwear',
     img: ShappedAll,
     svg: () => createElement(AllFood),
     id: 1,
-    dutchName: 'Alle',
+    dutchName: 'Alle Gymwear',
+  },
+  {
+    name: 'Tops',
+    img: ShappedTops,
+    svg: () => createElement(AllFood),
+    id: 2,
+    dutchName: 'Tops',
+  },
+  {
+    name: 'Bra\'s',
+    img: ShappedSportsBras,
+    svg: () => createElement(AllFood),
+    id: 3,
+    dutchName: 'Bra\'s',
   },
   {
     name: 'Leggings',
     img: ShappedLeggins,
     svg: () => createElement(AllFood),
-    id: 8,
+    id: 4,
     dutchName: 'Leggings',
   },
   {
-    img: ShappedShorts,
     name: 'Shorts',
-    svg: () => createElement(AllFood),
-    id: 2,
-  },
-  {
-    img: ShappedSportsBras,
-    name: 'Sports Bras ',
-    svg: () => createElement(AllFood),
-    id: 3,
-  },
-  {
-    img: ShappedTops,
-    name: 'Tops',
-    svg: () => createElement(AllFood),
-    id: 4,
-  },
-  {
-    img: ShappedAll,
-    name: 'Sportjacks',
+    img: ShappedShorts,
     svg: () => createElement(AllFood),
     id: 5,
-  },
-  {
-    img: ShappedAll,
-    name: 'Hoodies ',
-    svg: () => createElement(AllFood),
-    id: 6,
-  },
-  {
-    img: ShappedAll,
-    name: 'Accessories ',
-    svg: () => createElement(AllFood),
-    id: 7,
+    dutchName: 'Shorts',
   },
 ];
 

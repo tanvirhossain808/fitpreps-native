@@ -7,6 +7,16 @@ import Title from '../shared/Title';
 import ShopGymWearCarosel from './ShopGymWearCarosel';
 import ShopByCategory from './ShopByCategory';
 import Entypo from '@expo/vector-icons/Entypo';
+import { useGetGymwearQuery } from '~/src/store/apiSlices/products/gymwearSlice';
+import { GymwearProduct } from '~/src/types/type';
+import { baseUrl } from '~/src/constants/baseConstant';
+import LoadingSpinner from '../shared/Loading';
+import { useDispatch, useSelector } from 'react-redux';
+import { increment, decrement } from '~/src/store/slices/cartSlice';
+import { RootState } from '~/src/store';
+import Toast from 'react-native-toast-message';
+import { TouchableOpacity } from 'react-native';
+import { shadows } from '~/src/constant';
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = width - 32;
 const CARD_HEIGHT = 310;
@@ -23,6 +33,8 @@ type ItemType = {
   name: string;
   discount: string;
   price: string;
+  originalPrice?: string;
+  originalProduct?: GymwearProduct;
 };
 
 type SectionType = {
@@ -37,6 +49,62 @@ export default function BestSellerSection({
   data: SectionType[];
   setGender: Dispatch<React.SetStateAction<'male' | 'female' | null>>;
 }) {
+  const { data: gymwearData, isLoading, error } = useGetGymwearQuery(undefined);
+
+  // Transform gymwear data into sections
+  const dynamicSections = React.useMemo(() => {
+    if (!gymwearData) return [];
+
+    // Group products by category
+    const categoryGroups = gymwearData
+      .filter((item: GymwearProduct) => item.status === 'publish')
+      .reduce((groups: { [key: string]: GymwearProduct[] }, item: GymwearProduct) => {
+        const category = item.category;
+        if (!groups[category]) {
+          groups[category] = [];
+        }
+        groups[category].push(item);
+        return groups;
+      }, {});
+
+    // Convert to section format
+    return Object.entries(categoryGroups).map(([category, products]) => ({
+      name: category,
+      items: (products as GymwearProduct[]).map((product: GymwearProduct) => ({
+        badge: product.metadata.badges?.[0] || 'New',
+        img: product.files && product.files.length > 0 
+          ? { uri: `${baseUrl}/uploads/${product.files[0].url}` }
+          : require('../../../public/images/shop/shapped/img/all.png'),
+        badgeBg: product.metadata._product_background_color || '#FD4F01',
+        color: '#FD4F01',
+        subBadgeBg: '#F0F0F0',
+        subBadgeColor: '#666',
+        subBadge: product.category,
+        ratings: '4.5',
+        name: product.name,
+        discount: '20%',
+        price: `€${parseFloat(product.metadata._price || '0').toFixed(2)}`,
+        originalPrice: `€${(parseFloat(product.metadata._price || '0') * 1.2).toFixed(2)}`,
+        // Store original product data for cart functionality
+        originalProduct: product,
+      })),
+    }));
+  }, [gymwearData]);
+
+  if (isLoading) {
+    return <LoadingSpinner color="#FD4F01" />;
+  }
+
+  if (error) {
+    return (
+      <YStack flex={1} alignItems="center" justifyContent="center" p={20}>
+        <Text fontSize={16} color="#FD4F01" textAlign="center">
+          Failed to load gymwear products
+        </Text>
+      </YStack>
+    );
+  }
+
   return (
     <FlatList
       style={{ flex: 1 }}
@@ -46,7 +114,7 @@ export default function BestSellerSection({
           <ShopGymWearCarosel />
         </YStack>
       }
-      data={data}
+      data={dynamicSections}
       keyExtractor={(_, index) => `section-${index}`}
       renderItem={({ item }) => <SingleCarouselSection section={item} />}
       showsVerticalScrollIndicator={false}
@@ -58,6 +126,35 @@ export default function BestSellerSection({
 function SingleCarouselSection({ section }: { section: SectionType }) {
   const carouselRef = useRef<any>(null);
   const [currentIndex, setCurrentIndex] = React.useState(0);
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+
+  // Cart functions
+  const handleAddToCart = (product: GymwearProduct) => {
+    const cartProduct = {
+      ...product,
+      type: 'gymwear' as const,
+      categories: [product.category],
+      productId: product.gymwearId,
+    };
+    
+    dispatch(increment(cartProduct));
+    
+    Toast.show({
+      type: 'success',
+      text1: 'Product added to cart',
+      text2: `${product.name} has been added to your cart`,
+      position: 'bottom',
+    });
+  };
+
+  const handleRemoveFromCart = (product: GymwearProduct) => {
+    dispatch(decrement(product));
+  };
+
+  const getCartQuantity = (productId: string) => {
+    return cartItems[productId]?.quantity || 0;
+  };
 
   const handleNext = () => {
     if (currentIndex < groupedItems.length - 1) {
@@ -83,7 +180,7 @@ function SingleCarouselSection({ section }: { section: SectionType }) {
   }, [] as ItemType[][]);
 
   return (
-    <YStack gap={12} flex={1}>
+    <YStack gap={12} flex={1} paddingBottom={60}>
       <XStack alignItems="center" justifyContent="space-between">
         <Title text={section.name} />
         <XStack gap="$2">
@@ -144,7 +241,7 @@ function SingleCarouselSection({ section }: { section: SectionType }) {
                     source={item.img}
                     resizeMode="cover"
                   />
-                  <Text
+                  {/* <Text
                     top={4}
                     left={4}
                     color={item.color}
@@ -153,7 +250,7 @@ function SingleCarouselSection({ section }: { section: SectionType }) {
                     bg={item.badgeBg}
                     position="absolute">
                     {item.badge}
-                  </Text>
+                  </Text> */}
                   <XStack
                     alignItems="center"
                     bg="white"
@@ -190,11 +287,13 @@ function SingleCarouselSection({ section }: { section: SectionType }) {
                   <XStack alignItems="center" justifyContent="space-between">
                     <XStack alignItems="center" gap={4}>
                       <Text color="#FD4F01" fontSize={14} fontWeight={700}>
-                        €XX
+                        {item.price}
                       </Text>
-                      <Text fontSize={14} color="#383A42">
-                        €XX
-                      </Text>
+                      {item.originalPrice && (
+                        <Text fontSize={14} color="#383A42" textDecorationLine="line-through">
+                          {item.originalPrice}
+                        </Text>
+                      )}
                     </XStack>
                     {item.discount && (
                       <Text
@@ -209,6 +308,47 @@ function SingleCarouselSection({ section }: { section: SectionType }) {
                       </Text>
                     )}
                   </XStack>
+                  
+                  {/* Cart Controls */}
+                  {item.originalProduct && (
+                    <YStack mt={8}>
+                      {getCartQuantity(item.originalProduct._id) > 0 ? (
+                        <XStack
+                          overflow="hidden"
+                          borderWidth={1}
+                          borderRadius={12}
+                          borderColor="#FD4F01"
+                          alignItems="center"
+                          justifyContent="space-between">
+                          <TouchableOpacity onPress={() => handleRemoveFromCart(item.originalProduct!)}>
+                            <XStack px="16" py="10" bg="#FFEDE5">
+                              <AntDesign name="minus" size={18} color="#FD4F01" />
+                            </XStack>
+                          </TouchableOpacity>
+                          <Text fontSize={16} fontWeight={600} color="#FD4F01" px={16}>
+                            {getCartQuantity(item.originalProduct._id)}
+                          </Text>
+                          <TouchableOpacity onPress={() => handleAddToCart(item.originalProduct!)}>
+                            <XStack px="16" py="10" bg="#FFEDE5">
+                              <AntDesign name="plus" size={18} color="#FD4F01" />
+                            </XStack>
+                          </TouchableOpacity>
+                        </XStack>
+                      ) : (
+                        <Button
+                          fontSize={15}
+                          color="white"
+                          fontWeight={700}
+                          {...shadows.small}
+                          bg="#FD4F01"
+                          borderRadius={8}
+                          onPress={() => handleAddToCart(item.originalProduct!)}
+                          width="100%">
+                          Add
+                        </Button>
+                      )}
+                    </YStack>
+                  )}
                 </YStack>
               </YStack>
             ))}
